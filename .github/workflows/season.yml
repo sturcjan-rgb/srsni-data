@@ -1,0 +1,21 @@
+name: season-scraper
+on:
+  schedule:
+    - cron: "5 */2 * * *"   # every 2 hours
+  workflow_dispatch:
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: npm ci || npm install
+      - run: node season-scraper.mjs
+      - name: commit if changed
+        run: |
+          git config user.name "srsni-bot"
+          git config user.email "bot@srsni.local"
+          git add data/season-*.json
+          git diff --cached --quiet || git commit -m "chore: season data refresh"
+          git push
