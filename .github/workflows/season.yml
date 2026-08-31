@@ -1,15 +1,17 @@
 name: season-scraper
 on:
   schedule:
-    - cron: "5 */2 * * *"   # every 2 hours
+    - cron: "5 */2 * * *"   # každé 2 hodiny
   workflow_dispatch:
 jobs:
   scrape:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: "20" }
+        with: { node-version: "22" }
       - run: npm ci || npm install
       - run: node season-scraper.mjs
       - name: commit if changed
