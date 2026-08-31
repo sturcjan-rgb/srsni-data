@@ -9,93 +9,71 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#12161c;
-    --panel:#1a2029;
-    --panel-2:#212a35;
-    --line:#2c3644;
-    --ink:#eef2f6;
-    --muted:#8896a5;
-    --home:#f2b705;      /* Sršni — amber */
-    --home-dim:#5a4a12;
-    --away:#4ea1d3;      /* soupeř — slate blue */
-    --away-dim:#254456;
-    --good:#4ccf8f;
-    --bad:#e2604a;
-    --court:#141a12;
+    --bg:#12161c;--panel:#1a2029;--panel-2:#212a35;--line:#2c3644;
+    --ink:#eef2f6;--muted:#8896a5;
+    --home:#f2b705;--away:#4ea1d3;--good:#4ccf8f;--bad:#e2604a;--court:#141a12;
   }
   *{box-sizing:border-box}
   html,body{margin:0}
-  body{
-    background:var(--bg);color:var(--ink);
-    font-family:'Inter',system-ui,sans-serif;
-    font-size:15px;line-height:1.5;
-    -webkit-font-smoothing:antialiased;
-  }
-  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 80px}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 20px 40px}
   h1,h2,h3{font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.01em;margin:0}
   .num{font-family:'Oswald',sans-serif;font-variant-numeric:tabular-nums}
 
-  /* ---- loader / input bar ---- */
-  .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;
-    background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:22px}
-  .bar label{color:var(--muted);font-size:13px}
-  .bar input{background:var(--bg);border:1px solid var(--line);color:var(--ink);
-    border-radius:8px;padding:9px 11px;font-size:14px;font-family:'Oswald';width:130px}
-  .bar button{background:var(--home);color:#221a00;border:0;border-radius:8px;
-    padding:10px 18px;font-family:'Oswald';font-size:15px;font-weight:600;cursor:pointer;letter-spacing:.02em}
+  .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:22px}
+  .bar label.lb{color:var(--muted);font-size:13px}
+  .bar input#gid{background:var(--bg);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:9px 11px;font-size:14px;font-family:'Oswald';width:120px}
+  .bar button{background:var(--home);color:#221a00;border:0;border-radius:8px;padding:10px 16px;font-family:'Oswald';font-size:15px;font-weight:600;cursor:pointer;letter-spacing:.02em}
   .bar button:hover{filter:brightness(1.07)}
   .bar button.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
   .hint{color:var(--muted);font-size:13px;flex-basis:100%}
-  #paste{display:none;width:100%;min-height:120px;margin-top:10px;background:var(--bg);
-    border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:10px;font-family:ui-monospace,monospace;font-size:12px}
+  #paste{display:none;width:100%;min-height:120px;margin-top:10px;background:var(--bg);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:10px;font-family:ui-monospace,monospace;font-size:12px}
   .err{color:var(--bad);font-size:13px;flex-basis:100%}
+  .err a{color:var(--home)}
 
-  /* ---- scoreboard hero ---- */
-  .hero{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;
-    background:linear-gradient(180deg,var(--panel-2),var(--panel));
-    border:1px solid var(--line);border-radius:16px;padding:22px 26px;margin-bottom:14px}
-  .team{display:flex;align-items:center;gap:12px}
-  .team.away{justify-content:flex-end;text-align:right}
-  .team img{width:46px;height:46px;object-fit:contain}
-  .team .tn{font-family:'Oswald';font-size:19px;font-weight:500;line-height:1.1}
-  .team .tc{color:var(--muted);font-size:12px}
-  .score{font-family:'Oswald';font-weight:700;font-size:60px;line-height:1;
-    display:flex;align-items:baseline;gap:14px}
-  .score .h{color:var(--home)} .score .a{color:var(--away)} .score .sep{color:var(--muted);font-size:34px}
-  .qline{grid-column:1/-1;display:flex;justify-content:center;gap:6px;margin-top:14px;color:var(--muted);font-size:13px}
-  .qline .q{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:3px 9px;font-family:'Oswald'}
+  .control{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,var(--bg) 72%,rgba(18,22,28,0));padding:10px 0 14px;margin-bottom:6px}
+  .control .inner{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+  .control .toprow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .control .clock{font-family:'Oswald';font-weight:600;font-size:18px;color:var(--muted);white-space:nowrap}
+  .control .clock b{color:var(--ink)}
+  .control .sc{font-family:'Oswald';font-weight:700;font-size:26px;white-space:nowrap}
+  .control .sc .h{color:var(--home)} .control .sc .a{color:var(--away)} .control .sc .s{color:var(--muted);font-size:18px}
+  .control .lead{font-family:'Oswald';font-size:14px;color:var(--muted)}
+  .control .btns{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+  .control .btns button{background:var(--bg);border:1px solid var(--line);color:var(--muted);border-radius:7px;padding:6px 10px;font-family:'Oswald';font-size:13px;cursor:pointer}
+  .control .btns button:hover{color:var(--ink)}
+  canvas#leadCanvas{width:100%;height:auto;display:block;margin-top:10px;border-radius:8px;background:var(--court)}
+  input#scrub{width:100%;margin:10px 0 2px;accent-color:var(--home)}
+  .qmarks{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;font-family:'Oswald';padding:0 2px}
 
   .dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px}
   .dot.h{background:var(--home)} .dot.a{background:var(--away)}
-
-  section{margin-top:30px}
+  section{margin-top:26px}
   .sec-h{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;border-bottom:1px solid var(--line);padding-bottom:8px}
-  .sec-h h2{font-size:22px}
+  .sec-h h2{font-size:21px}
   .sec-h .sub{color:var(--muted);font-size:13px}
 
-  /* ---- four factors ---- */
   .factors{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
   .ff{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
   .ff .lbl{color:var(--muted);font-size:12.5px;margin-bottom:10px}
   .ff .row{display:flex;justify-content:space-between;align-items:center;margin:6px 0}
   .ff .row .who{font-size:12px;color:var(--muted);width:44px}
   .ff .v{font-family:'Oswald';font-size:20px;font-weight:600;width:64px;text-align:right}
-  .ff .track{flex:1;height:7px;background:var(--bg);border-radius:4px;margin:0 10px;overflow:hidden;position:relative}
+  .ff .track{flex:1;height:7px;background:var(--bg);border-radius:4px;margin:0 10px;overflow:hidden}
   .ff .fill{height:100%;border-radius:4px}
   .ff .fill.h{background:var(--home)} .ff .fill.a{background:var(--away)}
 
   .ratings{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:12px}
   .rc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;text-align:center}
-  .rc .big{font-family:'Oswald';font-size:34px;font-weight:700;line-height:1}
+  .rc .big{font-family:'Oswald';font-size:32px;font-weight:700;line-height:1}
   .rc .cap{color:var(--muted);font-size:12px;margin-top:6px}
 
-  /* ---- shot chart ---- */
   .charts{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-  @media(max-width:820px){.charts{grid-template-columns:1fr}.factors{grid-template-columns:1fr 1fr}.hero{grid-template-columns:1fr}.team.away{justify-content:flex-start;text-align:left}.score{justify-content:center;margin:10px 0}}
+  @media(max-width:820px){.charts{grid-template-columns:1fr}.factors{grid-template-columns:1fr 1fr}}
   .chartcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
   .chartcard h3{font-size:16px;margin-bottom:4px}
   .chartcard .csub{color:var(--muted);font-size:12px;margin-bottom:10px}
-  canvas{width:100%;height:auto;display:block;border-radius:8px;background:var(--court)}
+  canvas.shot{width:100%;height:auto;display:block;border-radius:8px;background:var(--court)}
   .zones{margin-top:12px;display:flex;flex-direction:column;gap:6px}
   .zrow{display:flex;align-items:center;gap:10px;font-size:13px}
   .zrow .zn{flex:1;color:var(--muted)}
@@ -107,11 +85,10 @@
   .mk{width:10px;height:10px;border-radius:50%}
   .mk.made{background:var(--good)} .mk.miss{background:transparent;border:1.5px solid var(--bad)}
 
-  /* ---- tables ---- */
   .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
   table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:640px}
   th,td{padding:9px 11px;text-align:right;white-space:nowrap}
-  th{background:var(--panel-2);color:var(--muted);font-weight:500;font-size:12px;position:sticky;top:0;cursor:default}
+  th{background:var(--panel-2);color:var(--muted);font-weight:500;font-size:12px}
   th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--panel)}
   th:first-child{background:var(--panel-2)}
   tr:nth-child(even) td{background:var(--panel-2)}
@@ -120,24 +97,12 @@
   td .sh{color:var(--muted);font-family:'Oswald';font-size:12px;margin-left:4px}
   .num-cell{font-family:'Oswald';font-variant-numeric:tabular-nums}
   .pos{color:var(--good)} .neg{color:var(--bad)}
-  .tabs{display:flex;gap:8px;margin-bottom:12px}
-  .tabs button{background:var(--panel);border:1px solid var(--line);color:var(--muted);
-    border-radius:8px;padding:7px 14px;font-family:'Oswald';cursor:pointer;font-size:14px}
+  .tabs{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  .tabs button{background:var(--panel);border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:7px 14px;font-family:'Oswald';cursor:pointer;font-size:14px}
   .tabs button.on{background:var(--home);color:#221a00;border-color:var(--home)}
   .tabs button.on.away{background:var(--away);color:#0a1a22;border-color:var(--away)}
-
-  /* lineups */
   .lu td.lu-players{text-align:left;white-space:normal;min-width:220px;font-size:12.5px}
   .caption{color:var(--muted);font-size:12.5px;margin-top:10px}
-  /* scrub readout */
-  #scrubOut{display:grid;grid-template-columns:auto 1fr 1fr;gap:14px;align-items:center;margin-top:12px}
-  #scrubOut .sc-time{font-family:'Oswald';font-size:15px;color:var(--muted);white-space:nowrap}
-  #scrubOut .sc-score{font-family:'Oswald';font-size:34px;font-weight:700;white-space:nowrap}
-  #scrubOut .sc-score .h{color:var(--home)} #scrubOut .sc-score .a{color:var(--away)} #scrubOut .sc-score .s{color:var(--muted);font-size:22px}
-  #scrubOut .sc-lu{font-size:12.5px;line-height:1.45}
-  #scrubOut .sc-lu b{font-family:'Oswald';font-weight:500}
-  #scrubOut .sc-lu.h b{color:var(--home)} #scrubOut .sc-lu.a b{color:var(--away)}
-  @media(max-width:820px){#scrubOut{grid-template-columns:1fr}}
   .hidden{display:none}
 </style>
 </head>
@@ -145,11 +110,14 @@
 <div class="wrap">
 
   <div class="bar">
-    <label for="gid">ID zápasu</label>
+    <label class="lb" for="gid">ID zápasu</label>
     <input id="gid" value="2705709" inputmode="numeric">
-    <button id="load">Načíst data</button>
-    <button id="togglePaste" class="ghost">Vložit JSON ručně</button>
-    <span class="hint" id="hint">Stáhne <code>data.json</code> z FIBA LiveStats. Když prohlížeč fetch zablokuje (CORS), použij „Vložit JSON ručně".</span>
+    <button id="load">Načíst online</button>
+    <label style="border:1px solid var(--line);border-radius:8px;padding:9px 14px;cursor:pointer;color:var(--home);font-family:'Oswald'">
+      Nahrát data.json<input id="file" type="file" accept=".json,application/json" style="display:none">
+    </label>
+    <button id="togglePaste" class="ghost">…nebo vložit ručně</button>
+    <span class="hint" id="hint">Otevři odkaz, ulož (Ctrl+S) a nahraj přes „Nahrát data.json". Online načtení často blokuje CORS.</span>
     <div class="err hidden" id="err"></div>
     <textarea id="paste" placeholder="Sem vlož celý obsah data.json…"></textarea>
     <button id="parsePaste" class="ghost hidden" style="margin-top:8px">Zpracovat vložený JSON</button>
@@ -157,48 +125,56 @@
 
   <div id="app" class="hidden">
 
-    <!-- HERO -->
-    <div class="hero" id="hero"></div>
+    <div class="control">
+      <div class="inner">
+        <div class="toprow">
+          <span class="clock" id="cClock">Q1 10:00</span>
+          <span class="sc" id="cScore"><span class="h">0</span><span class="s"> : </span><span class="a">0</span></span>
+          <span class="lead" id="cLead"></span>
+          <span class="btns">
+            <button data-jump="start">⏮ začátek</button>
+            <button data-jump="q1">Q1</button>
+            <button data-jump="q2">Q2</button>
+            <button data-jump="q3">Q3</button>
+            <button data-jump="q4">Q4</button>
+            <button data-jump="end">konec ⏭</button>
+          </span>
+        </div>
+        <canvas id="leadCanvas" width="1120" height="120"></canvas>
+        <input id="scrub" type="range" min="0" max="2400" value="2400" step="1">
+        <div class="qmarks" id="qmarks"></div>
+      </div>
+    </div>
 
-    <!-- FOUR FACTORS + RATINGS -->
-    <section>
-      <div class="sec-h"><h2>Four Factors</h2><span class="sub">čtyři faktory vítězství — nezávislé na tempu</span></div>
+    <div class="sec-h" style="border:0;margin-bottom:6px">
+      <span class="sub" id="teamsLine"></span>
+    </div>
+
+    <section style="margin-top:8px">
+      <div class="sec-h"><h2>Four Factors</h2><span class="sub">stav k vybranému času — nezávislé na tempu</span></div>
       <div class="factors" id="factors"></div>
       <div class="ratings" id="ratings"></div>
       <div class="caption" id="paceNote"></div>
     </section>
 
-    <!-- SHOT CHARTS -->
     <section>
-      <div class="sec-h"><h2>Střelecké mapy</h2><span class="sub">souřadnice střel + zónová efektivita (eFG%)</span></div>
+      <div class="sec-h"><h2>Střelecké mapy</h2><span class="sub">jen střely do vybraného času + zónová eFG%</span></div>
       <div class="charts" id="charts"></div>
     </section>
 
-    <!-- LINEUPS -->
     <section>
-      <div class="sec-h"><h2>Sestavy na hřišti (on/off)</h2><span class="sub">složeno z play-by-play — nejúspěšnější dvojice, trojice i pětky</span></div>
+      <div class="sec-h"><h2>Sestavy na hřišti (on/off)</h2><span class="sub">on/off do vybraného času — dvojice, trojice, pětky</span></div>
       <div class="tabs" id="luTabs"></div>
       <div class="tabs" id="luSize"></div>
       <div class="tblwrap"><table class="lu" id="luTable"></table></div>
       <div class="caption" id="luNote"></div>
     </section>
 
-    <!-- PLAYERS -->
     <section>
-      <div class="sec-h"><h2>Hráči — rozšířeně</h2><span class="sub">TS%, eFG%, +/−, vynucené fauly, body v paintu</span></div>
+      <div class="sec-h"><h2>Hráči — rozšířeně</h2><span class="sub">box score přepočtený k vybranému času</span></div>
       <div class="tabs" id="plTabs"></div>
       <div class="tblwrap"><table id="plTable"></table></div>
-      <div class="caption">TS% = pravá střelecká úspěšnost (počítá i trojky a šestky). FD = vynucené fauly soupeře. ±/40 = plus-minus přepočtený na 40 minut.</div>
-    </section>
-
-    <!-- TIMELINE -->
-    <section>
-      <div class="sec-h"><h2>Průběh zápasu</h2><span class="sub">posuvník časem — skóre, vedení a pětka na hřišti v daném okamžiku</span></div>
-      <div class="chartcard" style="padding:18px 20px">
-        <canvas id="leadCanvas" width="1120" height="220"></canvas>
-        <input id="scrub" type="range" min="0" max="100" value="100" step="1" style="width:100%;margin:14px 0 4px;accent-color:var(--home)">
-        <div id="scrubOut"></div>
-      </div>
+      <div class="caption">Vše kumulováno z play-by-play k času posuvníku. TS% = pravá střelecká úspěšnost, FD = vynucené fauly, Paint = body v pásmu (z pozice střely), ±/40 = plus-minus na 40 min.</div>
     </section>
 
   </div>
@@ -206,174 +182,246 @@
 
 <script>
 const HOME='#f2b705', AWAY='#4ea1d3';
-let DATA=null;
+let DATA=null, ENGINE=null, STATE=null;
 
-/* ---------------- fetch / load ---------------- */
 const $=id=>document.getElementById(id);
-$('load').onclick=()=>loadById($('gid').value.trim());
-$('togglePaste').onclick=()=>{
-  const p=$('paste'), b=$('parsePaste');
-  const show=p.style.display!=='block';
-  p.style.display=show?'block':'none';
-  b.classList.toggle('hidden',!show);
-};
-$('parsePaste').onclick=()=>{
-  try{ render(JSON.parse($('paste').value)); showErr(''); }
-  catch(e){ showErr('JSON se nepodařilo přečíst: '+e.message); }
-};
 function showErr(m){
   const e=$('err');
-  if(m && m.includes('http')){
-    const url=m.match(/https?:\/\/\S+/)[0];
-    e.innerHTML=m.replace(url,'')+'<a href="'+url+'" target="_blank" rel="noopener" style="color:var(--home)">otevřít data.json ↗</a>';
-  }else{ e.textContent=m; }
+  if(m && /https?:\/\//.test(m)){const url=m.match(/https?:\/\/\S+/)[0];e.innerHTML=m.replace(url,'')+'<a href="'+url+'" target="_blank" rel="noopener">otevřít data.json ↗</a>';}
+  else e.textContent=m;
   e.classList.toggle('hidden',!m);
 }
 
-async function loadById(id){
+$('load').onclick=()=>loadById($('gid').value.trim(),false);
+$('togglePaste').onclick=()=>{const p=$('paste'),b=$('parsePaste');const s=p.style.display!=='block';p.style.display=s?'block':'none';b.classList.toggle('hidden',!s);};
+$('parsePaste').onclick=()=>{try{render(decodeParse($('paste').value));showErr('');}catch(e){showErr('JSON se nepodařilo přečíst: '+e.message);}};
+$('file').onchange=e=>{
+  const f=e.target.files[0]; if(!f)return; $('hint').textContent='Načítám '+f.name+'…';
+  const r=new FileReader();
+  r.onload=()=>{try{const j=decodeParse(r.result);if(!j.tm)throw new Error('nevypadá to jako FIBA data.json');render(j);showErr('');$('hint').textContent='Načteno ze souboru '+f.name+'.';}
+    catch(err){showErr('Soubor se nepodařilo přečíst: '+err.message);$('hint').textContent='';}};
+  r.readAsArrayBuffer(f);
+};
+function mojiScore(s){return (s.match(/Ã.|Å.|Â.|â€|Ä.|Ð/g)||[]).length;}
+function fixText(s){const b=mojiScore(s);if(!b)return s;let f;try{f=new TextDecoder('utf-8').decode(Uint8Array.from([...s].map(c=>c.charCodeAt(0)&0xff)));}catch(e){return s;}return (mojiScore(f)<b&&!(f.includes('\uFFFD')&&!s.includes('\uFFFD')))?f:s;}
+function decodeParse(input){let t=typeof input==='string'?input:new TextDecoder('utf-8').decode(input);return JSON.parse(fixText(t));}
+
+async function loadById(id,quiet){
   if(!/^\d+$/.test(id)){showErr('ID musí být číslo.');return;}
-  showErr(''); $('hint').textContent='Načítám…';
+  showErr('');$('hint').textContent='Načítám…';
   const url=`https://fibalivestats.dcd.shared.geniussports.com/data/${id}/data.json`;
-  // pořadí pokusů: přímo → několik veřejných CORS proxy (běží v prohlížeči uživatele)
-  const attempts=[
-    {label:'přímo', u:url},
-    {label:'proxy corsproxy.io', u:'https://corsproxy.io/?url='+encodeURIComponent(url)},
-    {label:'proxy allorigins', u:'https://api.allorigins.win/raw?url='+encodeURIComponent(url)},
-    {label:'proxy thingproxy', u:'https://thingproxy.freeboard.io/fetch/'+url},
+  const tries=[
+    'https://api.codetabs.com/v1/proxy/?quest='+url,
+    url,
+    'https://corsproxy.io/?url='+encodeURIComponent(url),
+    'https://api.allorigins.win/raw?url='+encodeURIComponent(url),
   ];
-  for(const a of attempts){
-    try{
-      $('hint').textContent='Načítám ('+a.label+')…';
-      const r=await fetch(a.u,{cache:'no-store'});
-      if(!r.ok) throw new Error('HTTP '+r.status);
-      const buf=await r.arrayBuffer();
-      const txt=new TextDecoder('utf-8').decode(buf);
-      const json=JSON.parse(txt);
-      if(!json.tm) throw new Error('neplatná data');
-      render(json);
-      $('hint').textContent='Data načtena ('+a.label+').';
-      showErr('');
-      return;
-    }catch(e){ /* zkus další */ }
+  for(const u of tries){
+    try{const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw 0;const j=decodeParse(await r.arrayBuffer());if(!j.tm)throw 0;render(j);$('hint').textContent='Data načtena online.';showErr('');return;}catch(e){}
   }
-  // vše selhalo → otevři ruční vložení
-  const p=$('paste'), b=$('parsePaste');
-  p.style.display='block'; b.classList.remove('hidden');
   $('hint').textContent='';
-  showErr('Automatické stažení neprošlo (CORS). Otevři tento odkaz v novém panelu, označ vše (Ctrl+A), zkopíruj a vlož níže: '+url);
+  if(!quiet){const p=$('paste'),b=$('parsePaste');p.style.display='block';b.classList.remove('hidden');}
+  showErr('Online načtení neprošlo (CORS). Otevři odkaz, ulož a nahraj přes „Nahrát data.json": '+url);
 }
 
-/* ---------------- helpers ---------------- */
 const gtSec=s=>{const[m,x]=s.split(':').map(Number);return m*60+x;};
 const pct=(a,b)=>b?100*a/b:0;
-const f1=x=>x.toFixed(1);
+const f1=x=>(Math.round(x*10)/10).toFixed(1);
 const signed=x=>(x>0?'+':'')+x;
+function nameMap(t){const m={};for(const k in t.pl)m[k]=t.pl[k].shirtNumber+' '+t.pl[k].name;return m;}
 
-/* possessions estimate */
-function poss(t){return t.tot_sFieldGoalsAttempted - t.tot_sReboundsOffensive + t.tot_sTurnovers + 0.44*t.tot_sFreeThrowsAttempted;}
-
-/* ---------------- render ---------------- */
-function render(d){
-  DATA=d; $('app').classList.remove('hidden');
-  const h=d.tm['1'], a=d.tm['2'];
-  renderHero(d,h,a);
-  renderFactors(h,a);
-  renderRatings(d,h,a);
-  renderCharts(h,a);
-  renderLineups(d,h,a);
-  renderPlayers(h,a);
-  renderTimeline(d,h,a);
-  window.scrollTo({top:0});
-}
-
-function renderHero(d,h,a){
-  const q=(t,n)=>`<span class="q">${t['p'+n+'_score']??'–'}</span>`;
-  $('hero').innerHTML=`
-    <div class="team home">
-      ${h.logoT?.url?`<img src="${h.logoT.url}">`:''}
-      <div><div class="tn">${h.name}</div><div class="tc">${h.coach||''}</div></div>
-    </div>
-    <div class="score"><span class="h num">${h.score}</span><span class="sep">:</span><span class="a num">${a.score}</span></div>
-    <div class="team away">
-      <div><div class="tn">${a.name}</div><div class="tc">${a.coach||''}</div></div>
-      ${a.logoT?.url?`<img src="${a.logoT.url}">`:''}
-    </div>
-    <div class="qline">
-      <span><span class="dot h"></span>${h.shortName}</span>
-      ${[1,2,3,4].map(n=>q(h,n)).join('')}
-      <span style="width:14px"></span>
-      ${[1,2,3,4].map(n=>q(a,n)).join('')}
-      <span><span class="dot a"></span>${a.shortName}</span>
-    </div>`;
-}
-
-function renderFactors(h,a){
-  const ph=poss(h), pa=poss(a);
-  const eFG=t=>pct(t.tot_sFieldGoalsMade+0.5*t.tot_sThreePointersMade,t.tot_sFieldGoalsAttempted);
-  const tov=t=>pct(t.tot_sTurnovers,t.tot_sFieldGoalsAttempted+0.44*t.tot_sFreeThrowsAttempted+t.tot_sTurnovers);
-  const orb=(t,o)=>pct(t.tot_sReboundsOffensive,t.tot_sReboundsOffensive+o.tot_sReboundsDefensive);
-  const ftr=t=>pct(t.tot_sFreeThrowsMade,t.tot_sFieldGoalsAttempted);
-  const F=[
-    {l:'eFG% — efektivní úspěšnost',hv:eFG(h),av:eFG(a),hi:true,suf:'%'},
-    {l:'TOV% — ztrátovost',hv:tov(h),av:tov(a),hi:false,suf:'%'},
-    {l:'ORB% — útočné doskoky',hv:orb(h,a),av:orb(a,h),hi:true,suf:'%'},
-    {l:'FT Rate — chození na čáru',hv:ftr(h),av:ftr(a),hi:true,suf:'%'},
-  ];
-  $('factors').innerHTML=F.map(f=>{
-    const mx=Math.max(f.hv,f.av,1);
-    // "hi:true" = vyšší je lepší pro domácí; obarvíme lepší hodnotu
-    const hBetter=f.hi? f.hv>=f.av : f.hv<=f.av;
-    return `<div class="ff"><div class="lbl">${f.l}</div>
-      <div class="row"><span class="who">Sršni</span>
-        <div class="track"><div class="fill h" style="width:${100*f.hv/mx}%"></div></div>
-        <span class="v" style="color:${hBetter?'var(--good)':'var(--ink)'}">${f1(f.hv)}${f.suf}</span></div>
-      <div class="row"><span class="who">soupeř</span>
-        <div class="track"><div class="fill a" style="width:${100*f.av/mx}%"></div></div>
-        <span class="v" style="color:${!hBetter?'var(--good)':'var(--ink)'}">${f1(f.av)}${f.suf}</span></div>
-    </div>`;
-  }).join('');
-}
-
-function renderRatings(d,h,a){
-  const ph=poss(h), pa=poss(a);
-  const avgP=(ph+pa)/2;
-  const pace=40*avgP/ (parseInt(d.period)>=4?40:d.period*10); // hrací minuty
-  const ortgH=100*h.score/ph, ortgA=100*a.score/pa;
-  const cards=[
-    {big:f1((ph+pa)/2),cap:'Pace (držení / tým)'},
-    {big:f1(ortgH),cap:'Off. rating Sršni',col:HOME},
-    {big:f1(ortgA),cap:'Off. rating soupeř',col:AWAY},
-    {big:signed(Math.round(ortgH-ortgA)),cap:'Net rating Sršni',col:ortgH>=ortgA?'var(--good)':'var(--bad)'},
-    {big:h.tot_sPointsInThePaint+'/'+a.tot_sPointsInThePaint,cap:'Body v paintu (S/soupeř)'},
-    {big:h.tot_sPointsFromTurnovers+'/'+a.tot_sPointsFromTurnovers,cap:'Body ze ztrát soupeře'},
-  ];
-  $('ratings').innerHTML=cards.map(c=>`<div class="rc"><div class="big" style="color:${c.col||'var(--ink)'}">${c.big}</div><div class="cap">${c.cap}</div></div>`).join('');
-  $('paceNote').textContent=`Odhad držení: FGA − ORB + TO + 0,44×FTA = ${f1(ph)} (Sršni) / ${f1(pa)} (soupeř). Rating = body na 100 držení.`;
-}
-
-/* ---------------- shot chart ---------------- */
-// normalizace: všechny střely na jeden koš (vlevo). Koš ≈ (5.2, 50) v 0–100.
-function normShot(s){let x=s.x,y=s.y; if(x>50){x=100-x;y=100-y;} return {x,y,made:s.r===1,three:s.actionType==='3pt',sub:s.subType};}
-function distM(x,y){const dx=(x-5.2)/100*28, dy=(y-50)/100*15; return Math.hypot(dx,dy);}
-function zoneOf(sh){
-  if(sh.three){ return (sh.x<13 && Math.abs(sh.y-50)>32)?'Trojka z rohu':'Trojka z oblouku'; }
-  return distM(sh.x,sh.y)<4 ? 'Dvojka v paintu' : 'Střední dvojka';
+function normShot(s){let x=s.x,y=s.y;if(x>50){x=100-x;y=100-y;}return {x,y};}
+function distM(x,y){const dx=(x-5.2)/100*28,dy=(y-50)/100*15;return Math.hypot(dx,dy);}
+function isPaint(nx,ny){return distM(nx,ny)<4;}
+function zoneOf(nx,ny,three){
+  if(three) return (nx<13 && Math.abs(ny-50)>32)?'Trojka z rohu':'Trojka z oblouku';
+  return distM(nx,ny)<4 ? 'Dvojka v paintu':'Střední dvojka';
 }
 const ZONES=['Dvojka v paintu','Střední dvojka','Trojka z rohu','Trojka z oblouku'];
 
-function renderCharts(h,a){
+/* ================= ENGINE ================= */
+function buildEngine(d){
+  const pl=d.periodLength||10;
+  const pbp=[...d.pbp].sort((a,b)=>a.actionNumber-b.actionNumber);
+  const elapsedOf=e=>((e.period-1)*pl*60)+(pl*60-gtSec(e.gt));
+  const elByAction={};
+  pbp.forEach(e=>elByAction[e.actionNumber]=elapsedOf(e));
+  const shots={1:[],2:[]}, shotByAction={};
+  [1,2].forEach(t=>{
+    (d.tm[String(t)].shot||[]).forEach(s=>{
+      const n=normShot(s);
+      shots[t].push({x:n.x,y:n.y,made:s.r===1,three:s.actionType==='3pt',
+        el:(s.actionNumber in elByAction)?elByAction[s.actionNumber]:((s.per-1)*pl*60)});
+      shotByAction[s.actionNumber]={x:n.x,y:n.y};
+    });
+  });
+  const starters={1:[],2:[]};
+  [1,2].forEach(t=>{const pls=d.tm[String(t)].pl;for(const k in pls)if(pls[k].starter===1)starters[t].push(k);});
+  const lead=[{el:0,m:0}];
+  pbp.forEach(e=>{const s1=+e.s1,s2=+e.s2;if(!isNaN(s1)&&!isNaN(s2))lead.push({el:elapsedOf(e),m:s1-s2});});
+  const total=Math.max.apply(null,pbp.map(elapsedOf));
+  return {d,pl,pbp,elapsedOf,shots,shotByAction,starters,lead,total,
+    nm:{1:nameMap(d.tm['1']),2:nameMap(d.tm['2'])},tm:{1:d.tm['1'],2:d.tm['2']}};
+}
+
+function blankStat(){return {fga:0,fgm:0,tpa:0,tpm:0,fta:0,ftm:0,oreb:0,dreb:0,reb:0,ast:0,to:0,stl:0,blk:0,pf:0,foulon:0,pts:0,paint:0,fast:0,second:0};}
+
+function computeState(T){
+  const E=ENGINE;
+  const team={1:blankStat(),2:blankStat()};
+  const P={1:{},2:{}};
+  const pget=(t,p)=>P[t][p]||(P[t][p]=Object.assign(blankStat(),{pm:0,secs:0}));
+  const on={1:new Set(E.starters[1]),2:new Set(E.starters[2])};
+  const stints={1:{},2:{}};
+  const keyOf=s=>[...s].map(Number).sort((a,b)=>a-b).join('-');
+  let prevEl=0,ps1=0,ps2=0;
+
+  function credit(el,s1,s2){
+    const dt=Math.max(0,el-prevEl),dh=s1-ps1,da=s2-ps2;
+    for(const t of[1,2]){
+      if(on[t].size===5){const k=keyOf(on[t]);const st=stints[t][k]||(stints[t][k]={secs:0,pf:0,pa:0});
+        st.secs+=dt;if(t===1){st.pf+=dh;st.pa+=da;}else{st.pf+=da;st.pa+=dh;}}
+      for(const p of on[t]){const pp=pget(t,p);pp.secs+=dt;pp.pm+=(t===1?dh-da:da-dh);}
+    }
+  }
+
+  for(const e of E.pbp){
+    const el=E.elapsedOf(e);
+    if(el>T) break;
+    const s1=+e.s1,s2=+e.s2;
+    credit(el,isNaN(s1)?ps1:s1,isNaN(s2)?ps2:s2);
+    const t=e.tno,at=e.actionType,ok=e.success===1,q=e.qualifier||[],pno=e.pno;
+    if(t===1||t===2){
+      const TM=team[t], pp=(pno?pget(t,pno):null);
+      if(at==='2pt'||at==='3pt'){
+        const three=at==='3pt';
+        TM.fga++; if(pp)pp.fga++; if(three){TM.tpa++;if(pp)pp.tpa++;}
+        if(ok){TM.fgm++;if(pp)pp.fgm++;if(three){TM.tpm++;if(pp)pp.tpm++;}
+          const pts=three?3:2;TM.pts+=pts;if(pp)pp.pts+=pts;
+          if(q.includes('fastbreak')){TM.fast+=pts;if(pp)pp.fast+=pts;}
+          if(q.includes('2ndchance')){TM.second+=pts;if(pp)pp.second+=pts;}
+          const sh=E.shotByAction[e.actionNumber];
+          if(!three && sh && isPaint(sh.x,sh.y)){TM.paint+=2;if(pp)pp.paint+=2;}
+        }
+      } else if(at==='freethrow'){
+        TM.fta++;if(pp)pp.fta++;
+        if(ok){TM.ftm++;if(pp)pp.ftm++;TM.pts++;if(pp)pp.pts++;
+          if(q.includes('fastbreak')){TM.fast++;if(pp)pp.fast++;}
+          if(q.includes('2ndchance')){TM.second++;if(pp)pp.second++;}}
+      } else if(at==='rebound'){
+        if(e.subType==='offensive'){TM.oreb++;if(pp)pp.oreb++;}
+        else if(e.subType==='defensive'){TM.dreb++;if(pp)pp.dreb++;}
+        if(pp)pp.reb++;
+      }
+      else if(at==='assist'){TM.ast++;if(pp)pp.ast++;}
+      else if(at==='turnover'){TM.to++;if(pp)pp.to++;}
+      else if(at==='steal'){TM.stl++;if(pp)pp.stl++;}
+      else if(at==='block'){TM.blk++;if(pp)pp.blk++;}
+      else if(at==='foul'){TM.pf++;if(pp)pp.pf++;}
+      else if(at==='foulon'){TM.foulon++;if(pp)pp.foulon++;}
+    }
+    if(at==='substitution'){const s=on[e.tno],p=String(e.pno);if(e.subType==='in')s.add(p);else if(e.subType==='out')s.delete(p);}
+    prevEl=el;ps1=isNaN(s1)?ps1:s1;ps2=isNaN(s2)?ps2:s2;
+  }
+
+  const shots={1:[],2:[]};
+  for(const t of[1,2])for(const sh of E.shots[t])if(sh.el<=T)shots[t].push(sh);
+
+  let lastE=null;for(const e of E.pbp){if(E.elapsedOf(e)<=T)lastE=e;else break;}
+  const period=lastE?lastE.period:1;
+  const gtLeft=E.pl*60-(T-(period-1)*E.pl*60);
+  const mm=Math.max(0,Math.floor(gtLeft/60)),ss=Math.max(0,Math.round(gtLeft%60));
+  return {team,P,stints,on,s1:ps1,s2:ps2,shots,T,
+    clock:(period<=4?'Q'+period:'OT'+(period-4))+' '+mm+':'+String(ss).padStart(2,'0')};
+}
+
+/* ================= RENDER ================= */
+function render(d){
+  DATA=d; ENGINE=buildEngine(d); $('app').classList.remove('hidden');
+  const h=ENGINE.tm[1], a=ENGINE.tm[2];
+  $('teamsLine').innerHTML=`<span class="dot h"></span>${h.name} &nbsp;vs&nbsp; <span class="dot a"></span>${a.name} — ${h.coach||''} / ${a.coach||''}`;
+  const sc=$('scrub'); sc.max=Math.floor(ENGINE.total); sc.value=ENGINE.total;
+  sc.oninput=()=>schedule(+sc.value);
+  document.querySelectorAll('.control .btns button').forEach(b=>b.onclick=()=>{
+    const map={start:0,q1:ENGINE.pl*60,q2:ENGINE.pl*120,q3:ENGINE.pl*180,q4:ENGINE.pl*240,end:ENGINE.total};
+    const v=Math.min(map[b.dataset.jump]!=null?map[b.dataset.jump]:ENGINE.total,ENGINE.total);
+    sc.value=v; refresh(v);
+  });
+  drawQmarks();
+  setupLineupTabs(); setupPlayerTabs();
+  refresh(ENGINE.total);
+  window.scrollTo({top:0});
+}
+
+let rafP=false,pend=0;
+function schedule(T){pend=T;if(rafP)return;rafP=true;requestAnimationFrame(()=>{rafP=false;refresh(pend);});}
+function refresh(T){
+  STATE=computeState(T);
+  updateControl(T);
+  renderFactors(); renderRatings(); renderCharts(); drawLU(); drawPlayers(); drawLead(T);
+}
+
+function updateControl(T){
+  $('cClock').innerHTML='<b>'+STATE.clock+'</b>';
+  $('cScore').innerHTML=`<span class="h">${STATE.s1}</span><span class="s"> : </span><span class="a">${STATE.s2}</span>`;
+  const diff=STATE.s1-STATE.s2;
+  $('cLead').textContent=diff===0?'nerozhodně':(diff>0?ENGINE.tm[1].shortName+' +'+diff:ENGINE.tm[2].shortName+' +'+(-diff));
+}
+function drawQmarks(){
+  const n=Math.round(ENGINE.total/(ENGINE.pl*60));let h='';
+  for(let i=0;i<=n;i++)h+='<span>'+(i===0?'0':(i<=4?'Q'+i:'OT'))+'</span>';
+  $('qmarks').innerHTML=h;
+}
+
+function renderFactors(){
+  const h=STATE.team[1],a=STATE.team[2];
+  const eFG=t=>pct(t.fgm+0.5*t.tpm,t.fga);
+  const tov=t=>pct(t.to,t.fga+0.44*t.fta+t.to);
+  const orb=(t,o)=>pct(t.oreb,t.oreb+o.dreb);
+  const ftr=t=>pct(t.ftm,t.fga);
+  const F=[
+    {l:'eFG% — efektivní úspěšnost',hv:eFG(h),av:eFG(a),hi:true},
+    {l:'TOV% — ztrátovost',hv:tov(h),av:tov(a),hi:false},
+    {l:'ORB% — útočné doskoky',hv:orb(h,a),av:orb(a,h),hi:true},
+    {l:'FT Rate — chození na čáru',hv:ftr(h),av:ftr(a),hi:true},
+  ];
+  $('factors').innerHTML=F.map(f=>{
+    const mx=Math.max(f.hv,f.av,1),hB=f.hi?f.hv>=f.av:f.hv<=f.av;
+    return `<div class="ff"><div class="lbl">${f.l}</div>
+      <div class="row"><span class="who">Sršni</span><div class="track"><div class="fill h" style="width:${100*f.hv/mx}%"></div></div><span class="v" style="color:${hB?'var(--good)':'var(--ink)'}">${f1(f.hv)}%</span></div>
+      <div class="row"><span class="who">soupeř</span><div class="track"><div class="fill a" style="width:${100*f.av/mx}%"></div></div><span class="v" style="color:${!hB?'var(--good)':'var(--ink)'}">${f1(f.av)}%</span></div>
+    </div>`;
+  }).join('');
+}
+function possOf(t){return t.fga - t.oreb + t.to + 0.44*t.fta;}
+function renderRatings(){
+  const h=STATE.team[1],a=STATE.team[2];
+  const ph=possOf(h),pa=possOf(a);
+  const oh=ph?100*h.pts/ph:0, oa=pa?100*a.pts/pa:0;
+  const cards=[
+    {big:f1((ph+pa)/2),cap:'Pace (držení / tým)'},
+    {big:ph?f1(oh):'—',cap:'Off. rating Sršni',col:HOME},
+    {big:pa?f1(oa):'—',cap:'Off. rating soupeř',col:AWAY},
+    {big:(ph&&pa)?signed(Math.round(oh-oa)):'—',cap:'Net rating Sršni',col:oh>=oa?'var(--good)':'var(--bad)'},
+    {big:h.paint+'/'+a.paint,cap:'Body v paintu (S/soupeř)'},
+    {big:h.fast+'/'+a.fast,cap:'Rychlé protiútoky (body)'},
+  ];
+  $('ratings').innerHTML=cards.map(c=>`<div class="rc"><div class="big" style="color:${c.col||'var(--ink)'}">${c.big}</div><div class="cap">${c.cap}</div></div>`).join('');
+  $('paceNote').textContent=`Držení (odhad): FGA−ORB+TO+0,44×FTA = ${f1(ph)} / ${f1(pa)}. Rating = body na 100 držení. Vše k času ${STATE.clock}.`;
+}
+
+function renderCharts(){
   $('charts').innerHTML='';
-  [[h,'home',HOME],[a,'away',AWAY]].forEach(([t,cls,col])=>{
-    const shots=(t.shot||[]).map(normShot);
+  [[1,HOME],[2,AWAY]].forEach(([t,col])=>{
+    const tm=ENGINE.tm[t], shots=STATE.shots[t];
     const card=document.createElement('div');card.className='chartcard';
-    const zAgg={}; ZONES.forEach(z=>zAgg[z]={m:0,att:0,three:z.startsWith('Trojka')});
-    shots.forEach(sh=>{const z=zoneOf(sh);zAgg[z].att++;if(sh.made)zAgg[z].m++;});
-    card.innerHTML=`<h3>${t.shortName}</h3><div class="csub">${shots.length} střel z pole (bez šestek)</div>
-      <canvas width="560" height="360"></canvas>
+    const zAgg={};ZONES.forEach(z=>zAgg[z]={m:0,att:0,three:z.startsWith('Trojka')});
+    shots.forEach(sh=>{const z=zoneOf(sh.x,sh.y,sh.three);zAgg[z].att++;if(sh.made)zAgg[z].m++;});
+    card.innerHTML=`<h3>${tm.shortName}</h3><div class="csub">${shots.length} střel z pole do ${STATE.clock}</div>
+      <canvas class="shot" width="560" height="360"></canvas>
       <div class="leg"><span><span class="mk made"></span>proměněná</span><span><span class="mk miss"></span>minutá</span></div>
       <div class="zones">${ZONES.map(z=>{const zz=zAgg[z];const e=zz.att?pct(zz.m+(zz.three?0.5*zz.m:0),zz.att):0;
-        return `<div class="zrow"><span class="zn">${z}</span>
-          <span class="zv">${zz.m}/${zz.att}</span>
+        return `<div class="zrow"><span class="zn">${z}</span><span class="zv">${zz.m}/${zz.att}</span>
           <span class="zbar"><i style="width:${zz.att?100*zz.m/zz.att:0}%;background:${col}"></i></span>
           <span class="zv" style="width:52px;text-align:right;color:${e>=50?'var(--good)':e>=40?'var(--ink)':'var(--muted)'}">${zz.att?f1(e)+'%':'—'}</span></div>`;
       }).join('')}</div>`;
@@ -381,259 +429,113 @@ function renderCharts(h,a){
     drawCourt(card.querySelector('canvas'),shots);
   });
 }
-
 function drawCourt(cv,shots){
-  const ctx=cv.getContext('2d'), W=cv.width, H=cv.height;
-  const L=28, Wd=15;                 // reálné rozměry (m) celého hřiště
-  const drawLenM=14;                 // ukazujeme půlku (14 m)
-  const sx=W/drawLenM, sy=H/Wd;      // metry -> px
-  const mx=x=>(x/100*L)*sx;          // norm x(0-100 délky) -> px
-  const my=y=>(y/100*Wd)*sy;
+  const ctx=cv.getContext('2d'),W=cv.width,H=cv.height,L=28,Wd=15,drawLen=14,sx=W/drawLen,sy=H/Wd;
+  const mx=x=>(x/100*L)*sx,my=y=>(y/100*Wd)*sy;
   ctx.clearRect(0,0,W,H);
-  ctx.strokeStyle='#3a4a34';ctx.lineWidth=2;
-  ctx.strokeRect(1,1,W-2,H-2);
-  const hoopX=mx(5.2), hoopY=my(50);
-  // vysunutí koše (1.575 m od baseline už zhruba sedí)
-  ctx.beginPath();ctx.arc(hoopX,hoopY,sx*0.225,0,7);ctx.stroke(); // obroučka
-  ctx.beginPath();ctx.moveTo(mx(0),my(50)-sx*0.9);ctx.lineTo(mx(0),my(50)+sx*0.9);ctx.stroke(); // backboard proxy
-  // vymezené území (key) ~ 4.9 x 5.8 m
-  const keyW=5.8*sy, keyLen=4.9*sx, keyTop=(H-keyW)/2;
+  ctx.strokeStyle='#3a4a34';ctx.lineWidth=2;ctx.strokeRect(1,1,W-2,H-2);
+  const hoopX=mx(5.2),hoopY=my(50),r=6.75*sx;
+  ctx.beginPath();ctx.arc(hoopX,hoopY,sx*0.22,0,7);ctx.stroke();
+  const keyW=4.9*sy,keyLen=5.8*sx,keyTop=(H-keyW)/2;
   ctx.strokeRect(1,keyTop,keyLen,keyW);
-  ctx.beginPath();ctx.arc(1+keyLen,H/2,1.8*sy,-Math.PI/2,Math.PI/2);ctx.stroke(); // kruh na TČ
-  // 3pt oblouk (r=6.75 m od koše) + rovné části v rozích
-  ctx.beginPath();
-  const r=6.75*sx;
-  ctx.moveTo(mx(0), hoopY - 6.6*sy);
-  ctx.lineTo(1.2*sx, hoopY - 6.6*sy);
-  ctx.arc(hoopX,hoopY,r, -Math.acos(( -4.0)/6.75)+0, Math.acos((-4.0)/6.75), false);
-  ctx.stroke();
-  // jednodušší spolehlivý oblouk:
+  ctx.beginPath();ctx.arc(1+keyLen,H/2,1.8*sy,-Math.PI/2,Math.PI/2);ctx.stroke();
   ctx.beginPath();ctx.arc(hoopX,hoopY,r,-1.05,1.05);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(mx(0),hoopY-6.6*sy);ctx.lineTo(hoopX+r*Math.cos(-1.05)*0+1.5*sx,hoopY-6.6*sy);ctx.stroke();
-  // tečky
-  shots.forEach(s=>{
-    const x=mx(s.x), y=my(s.y);
-    ctx.beginPath();ctx.arc(x,y,4.5,0,7);
-    if(s.made){ctx.fillStyle='#4ccf8f';ctx.fill();}
-    else{ctx.strokeStyle='#e2604a';ctx.lineWidth=1.6;ctx.stroke();}
-  });
+  ctx.beginPath();ctx.moveTo(mx(0),hoopY-6.6*sy);ctx.lineTo(mx(4.5),hoopY-6.6*sy);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(mx(0),hoopY+6.6*sy);ctx.lineTo(mx(4.5),hoopY+6.6*sy);ctx.stroke();
+  shots.forEach(s=>{const x=mx(s.x),y=my(s.y);ctx.beginPath();ctx.arc(x,y,4.5,0,7);
+    if(s.made){ctx.fillStyle='#4ccf8f';ctx.fill();}else{ctx.strokeStyle='#e2604a';ctx.lineWidth=1.6;ctx.stroke();}});
 }
 
-/* ---------------- lineups from PBP ---------------- */
-function buildLineups(d){
-  const pbp=[...d.pbp].sort((x,y)=>x.actionNumber-y.actionNumber);
-  const on={1:new Set(),2:new Set()};
-  for(const tno of [1,2]){
-    const pls=d.tm[String(tno)].pl;
-    for(const k in pls) if(pls[k].starter===1) on[tno].add(k);
-  }
-  const pl=d.periodLength||10;
-  const stints={1:{},2:{}};
-  const timeline=[];
-  let prevEl=0, prevS1=0, prevS2=0;
-  const elapsed=e=>((e.period-1)*pl*60)+(pl*60-gtSec(e.gt));
-  const keyOf=set=>[...set].map(Number).sort((a,b)=>a-b).join('-');
-  function credit(el,s1,s2){
-    const dt=el-prevEl; const dh=s1-prevS1, da=s2-prevS2;
-    if(dt<=0 && dh===0 && da===0) return;
-    for(const tno of [1,2]){
-      if(on[tno].size!==5) continue;
-      const k=keyOf(on[tno]);
-      const st=stints[tno][k]||(stints[tno][k]={secs:0,pf:0,pa:0});
-      st.secs+=Math.max(0,dt);
-      if(tno===1){st.pf+=dh;st.pa+=da;} else {st.pf+=da;st.pa+=dh;}
-    }
-  }
-  for(const e of pbp){
-    const el=elapsed(e), s1=+e.s1||prevS1, s2=+e.s2||prevS2;
-    credit(el,s1,s2);
-    if(e.actionType==='substitution'){
-      const set=on[e.tno]; const p=String(e.pno);
-      if(e.subType==='in') set.add(p); else if(e.subType==='out') set.delete(p);
-    }
-    // snapshot stavu PO zpracování akce
-    timeline.push({el, s1, s2, period:e.period, gt:e.gt,
-      on1:[...on[1]], on2:[...on[2]]});
-    prevEl=el;prevS1=s1;prevS2=s2;
-  }
-  const last=pbp[pbp.length-1];
-  credit(elapsed(last), +last.s1, +last.s2);
-  return {stints, timeline, total:elapsed(last), pl};
+function drawLead(T){
+  const cv=$('leadCanvas'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+  ctx.clearRect(0,0,W,H);
+  const Ld=ENGINE.lead,total=ENGINE.total,pl=ENGINE.pl;
+  const padL=30,padR=8,padT=8,padB=8,pw=W-padL-padR,ph=H-padT-padB;
+  let mAbs=6;Ld.forEach(p=>mAbs=Math.max(mAbs,Math.abs(p.m)));
+  const X=el=>padL+pw*el/total,Y=m=>padT+ph*(0.5-0.5*m/mAbs);
+  ctx.strokeStyle='#2c3644';ctx.lineWidth=1;ctx.fillStyle='#6c7a89';ctx.font='10px Oswald';
+  const nQ=Math.round(total/(pl*60));
+  for(let i=0;i<=nQ;i++){const x=X(Math.min(i*pl*60,total));ctx.beginPath();ctx.moveTo(x,padT);ctx.lineTo(x,padT+ph);ctx.stroke();}
+  ctx.strokeStyle='#3a4756';ctx.beginPath();ctx.moveTo(padL,Y(0));ctx.lineTo(W-padR,Y(0));ctx.stroke();
+  ctx.fillText('+'+mAbs,2,Y(mAbs)+8);ctx.fillText('-'+mAbs,2,Y(-mAbs));
+  function area(sign,color){ctx.beginPath();ctx.moveTo(X(0),Y(0));let py=Y(0);
+    for(const p of Ld){const x=X(p.el);const mm=sign>0?Math.max(0,p.m):Math.min(0,p.m);ctx.lineTo(x,py);ctx.lineTo(x,Y(mm));py=Y(mm);}
+    ctx.lineTo(X(total),Y(0));ctx.closePath();ctx.fillStyle=color;ctx.fill();}
+  area(1,'rgba(242,183,5,.28)');area(-1,'rgba(78,161,211,.28)');
+  ctx.strokeStyle='#cbd5e0';ctx.lineWidth=1.4;ctx.beginPath();let py=Y(0),first=true;
+  for(const p of Ld){const x=X(p.el);if(first){ctx.moveTo(x,Y(0));first=false;}ctx.lineTo(x,py);ctx.lineTo(x,Y(p.m));py=Y(p.m);}
+  ctx.stroke();
+  const mxp=X(Math.min(T,total));ctx.strokeStyle='#f2b705';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(mxp,padT);ctx.lineTo(mxp,padT+ph);ctx.stroke();
 }
 
-/* z 5-členných stintů odvodí dvojice/trojice/pětky */
-function combos(arr,k){
-  const res=[]; (function go(start,acc){
-    if(acc.length===k){res.push(acc.slice());return;}
-    for(let i=start;i<arr.length;i++){acc.push(arr[i]);go(i+1,acc);acc.pop();}
-  })(0,[]); return res;
-}
-function deriveCombos(stints5,size){
-  if(size===5) return stints5;
-  const out={};
-  for(const [key,v] of Object.entries(stints5)){
-    const players=key.split('-');
-    if(players.length<size) continue;
-    for(const c of combos(players,size)){
-      const k=c.join('-');
-      const s=out[k]||(out[k]={secs:0,pf:0,pa:0});
-      s.secs+=v.secs; s.pf+=v.pf; s.pa+=v.pa;
-    }
-  }
-  return out;
-}
-
-function nameMap(t){const m={};for(const k in t.pl)m[k]=t.pl[k].shirtNumber+' '+t.pl[k].name;return m;}
-let LU=null, LUteam=1, LUsize=5;
-const SIZE_MIN={2:300,3:180,5:60}; // min. sekund na hřišti podle velikosti
-const SIZE_LABEL={2:'Dvojice',3:'Trojice',5:'Pětky'};
-function renderLineups(d,h,a){
-  LU=buildLineups(d);
+/* ---------- lineups ---------- */
+let LUteam=1,LUsize=5;
+const SIZE_MIN={2:120,3:90,5:45},SIZE_LABEL={2:'Dvojice',3:'Trojice',5:'Pětky'};
+function combos(arr,k){const r=[];(function go(s,a){if(a.length===k){r.push(a.slice());return;}for(let i=s;i<arr.length;i++){a.push(arr[i]);go(i+1,a);a.pop();}})(0,[]);return r;}
+function deriveCombos(st,size){if(size===5)return st;const o={};for(const[key,v]of Object.entries(st)){const ps=key.split('-');if(ps.length<size)continue;for(const c of combos(ps,size)){const k=c.join('-');const s=o[k]||(o[k]={secs:0,pf:0,pa:0});s.secs+=v.secs;s.pf+=v.pf;s.pa+=v.pa;}}return o;}
+function setupLineupTabs(){
+  const h=ENGINE.tm[1],a=ENGINE.tm[2];
   $('luTabs').innerHTML=`<button class="on" data-t="1">${h.shortName}</button><button data-t="2">${a.shortName}</button>`;
-  $('luTabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{LUteam=+b.dataset.t;
-    $('luTabs').querySelectorAll('button').forEach(x=>x.classList.remove('on','away'));
-    b.classList.add('on'); if(LUteam===2)b.classList.add('away'); drawLU(d);});
+  $('luTabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{LUteam=+b.dataset.t;syncTabs('luTabs',b);drawLU();});
   $('luSize').innerHTML=[2,3,5].map(s=>`<button data-s="${s}" class="${s===LUsize?'on':''}">${SIZE_LABEL[s]}</button>`).join('');
-  $('luSize').querySelectorAll('button').forEach(b=>b.onclick=()=>{LUsize=+b.dataset.s;
-    $('luSize').querySelectorAll('button').forEach(x=>x.classList.remove('on','away'));
-    b.classList.add('on'); if(LUteam===2)b.classList.add('away'); drawLU(d);});
-  drawLU(d);
+  $('luSize').querySelectorAll('button').forEach(b=>b.onclick=()=>{LUsize=+b.dataset.s;syncTabs('luSize',b);drawLU();});
 }
-function drawLU(d){
-  const t=d.tm[String(LUteam)], nm=nameMap(t);
-  const data=deriveCombos(LU.stints[LUteam],LUsize);
-  const minSec=SIZE_MIN[LUsize];
+function syncTabs(id,btn){$(id).querySelectorAll('button').forEach(x=>x.classList.remove('on','away'));btn.classList.add('on');if(LUteam===2)btn.classList.add('away');}
+function drawLU(){
+  if(!STATE)return;
+  const nm=ENGINE.nm[LUteam], data=deriveCombos(STATE.stints[LUteam],LUsize), minSec=SIZE_MIN[LUsize];
   const rows=Object.entries(data).map(([k,v])=>{
-    const players=k.split('-').map(p=>nm[p]||('#'+p)).join(', ');
-    const min=v.secs/60;
-    const per40=min>0?(v.pf-v.pa)*40/min:0;
-    return {players,min,pm:v.pf-v.pa,pf:v.pf,pa:v.pa,per40};
-  }).filter(r=>r.min*60>=minSec).sort((a,b)=>b.per40-a.per40 || b.min-a.min);
+    const players=k.split('-').map(p=>nm[p]||('#'+p)).join(', ');const min=v.secs/60;
+    return {players,min,pm:v.pf-v.pa,pf:v.pf,pa:v.pa,per40:min>0?(v.pf-v.pa)*40/min:0};
+  }).filter(r=>r.min*60>=minSec).sort((a,b)=>b.per40-a.per40||b.min-a.min);
   const th=[SIZE_LABEL[LUsize],'Min','Body +','Body −','+/−','±/40'];
   $('luTable').innerHTML=`<thead><tr>${th.map((x,i)=>`<th${i===0?' style="text-align:left"':''}>${x}</th>`).join('')}</tr></thead>
-    <tbody>${rows.map(r=>`<tr>
-      <td class="lu-players">${r.players}</td>
-      <td class="num-cell">${f1(r.min)}</td>
-      <td class="num-cell">${r.pf}</td>
-      <td class="num-cell">${r.pa}</td>
+    <tbody>${rows.map(r=>`<tr><td class="lu-players">${r.players}</td>
+      <td class="num-cell">${f1(r.min)}</td><td class="num-cell">${r.pf}</td><td class="num-cell">${r.pa}</td>
       <td class="num-cell ${r.pm>0?'pos':r.pm<0?'neg':''}">${signed(r.pm)}</td>
-      <td class="num-cell ${r.per40>0?'pos':r.per40<0?'neg':''}">${signed(Math.round(r.per40))}</td>
-    </tr>`).join('')||`<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">Žádná ${SIZE_LABEL[LUsize].toLowerCase()} neodehrála ${minSec}s pohromadě.</td></tr>`}</tbody>`;
-  $('luNote').textContent=`Seřazeno podle ±/40 (plus-minus na 40 min). Minimální doba pohromadě: ${minSec} s. Kombinace jsou odvozené z pětek na hřišti — tj. kolik daná ${SIZE_LABEL[LUsize].toLowerCase()==='pětky'?'pětka':SIZE_LABEL[LUsize].toLowerCase().replace('e','e')} společně uhrála.`;
+      <td class="num-cell ${r.per40>0?'pos':r.per40<0?'neg':''}">${signed(Math.round(r.per40))}</td></tr>`).join('')
+      ||`<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">Zatím nikdo neodehrál ${minSec}s pohromadě.</td></tr>`}</tbody>`;
+  $('luNote').textContent=`Seřazeno podle ±/40. Min. čas pohromadě ${minSec}s. Stav k ${STATE.clock}.`;
 }
 
-/* ---------------- players ---------------- */
+/* ---------- players ---------- */
 let PLteam=1;
-function renderPlayers(h,a){
+function setupPlayerTabs(){
+  const h=ENGINE.tm[1],a=ENGINE.tm[2];
   $('plTabs').innerHTML=`<button class="on" data-t="1">${h.shortName}</button><button data-t="2">${a.shortName}</button>`;
-  $('plTabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{PLteam=+b.dataset.t;
-    $('plTabs').querySelectorAll('button').forEach(x=>x.classList.remove('on','away'));
-    b.classList.add('on'); if(PLteam===2)b.classList.add('away'); drawPlayers();});
-  drawPlayers();
+  $('plTabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{PLteam=+b.dataset.t;$('plTabs').querySelectorAll('button').forEach(x=>x.classList.remove('on','away'));b.classList.add('on');if(PLteam===2)b.classList.add('away');drawPlayers();});
 }
 function drawPlayers(){
-  const t=DATA.tm[String(PLteam)];
-  const players=Object.values(t.pl).filter(p=>gtSec(p.sMinutes)>0)
-    .sort((x,y)=>y.sPoints-x.sPoints);
+  if(!STATE)return;
+  const tm=ENGINE.tm[PLteam], pls=tm.pl, S=STATE.P[PLteam];
+  const rows=Object.keys(pls).map(pno=>({pno,info:pls[pno],st:S[pno]||Object.assign(blankStat(),{pm:0,secs:0})}))
+    .filter(r=>r.st.secs>0||r.st.fga>0||r.st.pts>0).sort((a,b)=>b.st.pts-a.st.pts);
   const th=['Hráč','Min','Body','TS%','eFG%','REB','AS','TO','FD','Paint','+/−','±/40'];
-  const rows=players.map(p=>{
-    const ts=pct(p.sPoints, 2*(p.sFieldGoalsAttempted+0.44*p.sFreeThrowsAttempted));
-    const efg=pct(p.sFieldGoalsMade+0.5*p.sThreePointersMade, p.sFieldGoalsAttempted);
-    const min=gtSec(p.sMinutes)/60;
-    const per40=min>0?p.sPlusMinusPoints*40/min:0;
+  const body=rows.map(r=>{
+    const p=r.st, min=p.secs/60;
+    const ts=(p.fga+0.44*p.fta)?pct(p.pts,2*(p.fga+0.44*p.fta)):0;
+    const efg=p.fga?pct(p.fgm+0.5*p.tpm,p.fga):0;
+    const per40=min>0?p.pm*40/min:0;
     return `<tr>
-      <td class="name">${p.shirtNumber} ${p.name}${p.starter?'<span class="sh">S</span>':''}</td>
+      <td class="name">${r.info.shirtNumber} ${r.info.name}${r.info.starter?'<span class="sh">S</span>':''}</td>
       <td class="num-cell">${f1(min)}</td>
-      <td class="num-cell" style="font-weight:600">${p.sPoints}</td>
-      <td class="num-cell">${p.sFieldGoalsAttempted+p.sFreeThrowsAttempted?f1(ts):'—'}</td>
-      <td class="num-cell">${p.sFieldGoalsAttempted?f1(efg):'—'}</td>
-      <td class="num-cell">${p.sReboundsTotal}<span class="sh">${p.sReboundsOffensive}o</span></td>
-      <td class="num-cell">${p.sAssists}</td>
-      <td class="num-cell">${p.sTurnovers}</td>
-      <td class="num-cell">${p.sFoulsOn}</td>
-      <td class="num-cell">${p.sPointsInThePaint}</td>
-      <td class="num-cell ${p.sPlusMinusPoints>0?'pos':p.sPlusMinusPoints<0?'neg':''}">${signed(p.sPlusMinusPoints)}</td>
+      <td class="num-cell" style="font-weight:600">${p.pts}</td>
+      <td class="num-cell">${(p.fga+p.fta)?f1(ts):'—'}</td>
+      <td class="num-cell">${p.fga?f1(efg):'—'}</td>
+      <td class="num-cell">${p.reb}<span class="sh">${p.oreb}o</span></td>
+      <td class="num-cell">${p.ast}</td>
+      <td class="num-cell">${p.to}</td>
+      <td class="num-cell">${p.foulon}</td>
+      <td class="num-cell">${p.paint}</td>
+      <td class="num-cell ${p.pm>0?'pos':p.pm<0?'neg':''}">${signed(p.pm)}</td>
       <td class="num-cell ${per40>0?'pos':per40<0?'neg':''}">${signed(Math.round(per40))}</td>
     </tr>`;
   }).join('');
-  $('plTable').innerHTML=`<thead><tr>${th.map((x,i)=>`<th${i===0?' style="text-align:left"':''}>${x}</th>`).join('')}</tr></thead><tbody>${rows}</tbody>`;
+  $('plTable').innerHTML=`<thead><tr>${th.map((x,i)=>`<th${i===0?' style="text-align:left"':''}>${x}</th>`).join('')}</tr></thead><tbody>${body}</tbody>`;
 }
 
-/* ---------------- timeline / scrub ---------------- */
-let TL=null;
-function renderTimeline(d,h,a){
-  const built=(LU&&LU.timeline)?LU:buildLineups(d);
-  TL={tl:built.timeline, total:built.total, pl:built.pl,
-      nm1:nameMap(h), nm2:nameMap(a), hName:h.shortName, aName:a.shortName};
-  const sc=$('scrub');
-  sc.max=Math.floor(TL.total); sc.value=TL.total;
-  sc.oninput=()=>{ drawLead(+sc.value); scrubReadout(+sc.value); };
-  drawLead(TL.total); scrubReadout(TL.total);
-}
-function stateAt(t){
-  // poslední snapshot s el <= t
-  let s=TL.tl[0];
-  for(const x of TL.tl){ if(x.el<=t) s=x; else break; }
-  return s;
-}
-function fmtClock(st){
-  const p=st.period, gt=st.gt;
-  return (p<=4?('Q'+p):('P'+p))+' '+gt;
-}
-function drawLead(t){
-  const cv=$('leadCanvas'), ctx=cv.getContext('2d'), W=cv.width, H=cv.height;
-  ctx.clearRect(0,0,W,H);
-  const tl=TL.tl, total=TL.total, pl=TL.pl;
-  const padL=34,padR=10,padT=12,padB=18;
-  const plotW=W-padL-padR, plotH=H-padT-padB;
-  let maxAbs=6;
-  tl.forEach(x=>maxAbs=Math.max(maxAbs,Math.abs(x.s1-x.s2)));
-  const X=el=>padL+plotW*el/total;
-  const Y=m=>padT+plotH*(0.5 - 0.5*m/maxAbs);
-  // čtvrtiny
-  ctx.strokeStyle='#2c3644';ctx.lineWidth=1;ctx.fillStyle='#6c7a89';ctx.font="11px Oswald";
-  const nQ=Math.ceil(total/(pl*60));
-  for(let i=0;i<=nQ;i++){const el=Math.min(i*pl*60,total);const x=X(el);
-    ctx.beginPath();ctx.moveTo(x,padT);ctx.lineTo(x,padT+plotH);ctx.stroke();
-    if(i<nQ)ctx.fillText((i+1<=4?'Q'+(i+1):'OT'),x+4,padT+11);}
-  // nula
-  ctx.strokeStyle='#3a4756';ctx.beginPath();ctx.moveTo(padL,Y(0));ctx.lineTo(W-padR,Y(0));ctx.stroke();
-  ctx.fillText('+'+maxAbs,4,Y(maxAbs)+4);ctx.fillText('−'+maxAbs,4,Y(-maxAbs)+4);
-  // plocha vedení (step)
-  const pts=[[0,0],...tl.map(x=>[x.el,x.s1-x.s2])];
-  function area(sign){
-    ctx.beginPath();ctx.moveTo(X(0),Y(0));
-    let px=X(0),py=Y(0);
-    for(const [el,m] of pts){const x=X(el);const mm=sign>0?Math.max(0,m):Math.min(0,m);
-      ctx.lineTo(x,py);ctx.lineTo(x,Y(mm));py=Y(mm);}
-    ctx.lineTo(X(total),Y(0));ctx.closePath();
-    ctx.fillStyle=sign>0?'rgba(242,183,5,.28)':'rgba(78,161,211,.28)';ctx.fill();
-  }
-  area(1);area(-1);
-  // linka vedení
-  ctx.strokeStyle='#cbd5e0';ctx.lineWidth=1.5;ctx.beginPath();
-  let first=true,py=Y(0);
-  for(const [el,m] of pts){const x=X(el);if(first){ctx.moveTo(x,Y(0));first=false;}ctx.lineTo(x,py);ctx.lineTo(x,Y(m));py=Y(m);}
-  ctx.stroke();
-  // marker
-  const mx=X(Math.min(t,total));
-  ctx.strokeStyle='#f2b705';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(mx,padT);ctx.lineTo(mx,padT+plotH);ctx.stroke();
-}
-function scrubReadout(t){
-  const st=stateAt(t);
-  const luLine=(arr,nm,cls)=>`<div class="sc-lu ${cls}"><b>na hřišti:</b> ${arr.map(p=>nm[p]||('#'+p)).join(', ')||'—'}</div>`;
-  $('scrubOut').innerHTML=`
-    <div class="sc-time">${fmtClock(st)}</div>
-    <div class="sc-score"><span class="h">${st.s1}</span><span class="s"> : </span><span class="a">${st.s2}</span>
-      <span class="s"> (${st.s1-st.s2>0?'+':''}${st.s1-st.s2})</span></div>
-    <div>
-      ${luLine(st.on1,TL.nm1,'h')}
-      ${luLine(st.on2,TL.nm2,'a')}
-    </div>`;
-}
-
-/* auto-load pokus */
-loadById('2705709');
+/* auto-load */
+loadById('2705709',true);
 </script>
 </body>
 </html>
