@@ -206,22 +206,19 @@ function mojiScore(s){return (s.match(/Ã.|Å.|Â.|â€|Ä.|Ð/g)||[]).length;}
 function fixText(s){const b=mojiScore(s);if(!b)return s;let f;try{f=new TextDecoder('utf-8').decode(Uint8Array.from([...s].map(c=>c.charCodeAt(0)&0xff)));}catch(e){return s;}return (mojiScore(f)<b&&!(f.includes('\uFFFD')&&!s.includes('\uFFFD')))?f:s;}
 function decodeParse(input){let t=typeof input==='string'?input:new TextDecoder('utf-8').decode(input);return JSON.parse(fixText(t));}
 
+const GH='https://raw.githubusercontent.com/sturcjan-rgb/srsni-data/main/data/data.json';
 async function loadById(id,quiet){
-  if(!/^\d+$/.test(id)){showErr('ID musí být číslo.');return;}
   showErr('');$('hint').textContent='Načítám…';
-  const url=`https://fibalivestats.dcd.shared.geniussports.com/data/${id}/data.json`;
-  const tries=[
-    'https://api.codetabs.com/v1/proxy/?quest='+url,
-    url,
-    'https://corsproxy.io/?url='+encodeURIComponent(url),
-    'https://api.allorigins.win/raw?url='+encodeURIComponent(url),
-  ];
+  // Primární zdroj: GitHub raw (správný charset + CORS). Fallback: live endpoint přes proxy.
+  const live=/^\d+$/.test(id)?`https://fibalivestats.dcd.shared.geniussports.com/data/${id}/data.json`:null;
+  const tries=[GH+'?t='+Date.now()];
+  if(live){tries.push('https://api.codetabs.com/v1/proxy/?quest='+live, live, 'https://corsproxy.io/?url='+encodeURIComponent(live));}
   for(const u of tries){
-    try{const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw 0;const j=decodeParse(await r.arrayBuffer());if(!j.tm)throw 0;render(j);$('hint').textContent='Data načtena online.';showErr('');return;}catch(e){}
+    try{const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw 0;const j=decodeParse(await r.arrayBuffer());if(!j.tm)throw 0;render(j);$('hint').textContent='Data načtena ('+(u.indexOf('githubusercontent')>-1?'GitHub':'live')+').';showErr('');return;}catch(e){}
   }
   $('hint').textContent='';
   if(!quiet){const p=$('paste'),b=$('parsePaste');p.style.display='block';b.classList.remove('hidden');}
-  showErr('Online načtení neprošlo (CORS). Otevři odkaz, ulož a nahraj přes „Nahrát data.json": '+url);
+  showErr('Online načtení neprošlo. Otevři odkaz, ulož a nahraj přes „Nahrát data.json": '+GH);
 }
 
 const gtSec=s=>{const[m,x]=s.split(':').map(Number);return m*60+x;};
