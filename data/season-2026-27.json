@@ -1,0 +1,49 @@
+{
+  "season": "2026/27",
+  "team": {
+    "name": "Sršni Photomate Písek",
+    "nblId": 10110,
+    "nblSlug": "srsni-photomate-pisek"
+  },
+  "generatedAt": "2026-08-31T05:16:00.625571+02:00",
+  "source": "https://nbl.basketball/tym/srsni-photomate-pisek",
+  "counts": {
+    "total": 1,
+    "home": 0,
+    "away": 1,
+    "final": 0,
+    "scheduled": 1
+  },
+  "fixtures": [
+    {
+      "nblMatchId": 544546,
+      "fibaMatchId": null,
+      "round": null,
+      "roundNum": null,
+      "phase": "Základní část",
+      "date": "2026-09-20",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-09-20T18:00:00+02:00",
+      "home": "SLUNETA Ústí nad Labem",
+      "away": "Sršni Photomate Písek",
+      "opponent": "SLUNETA Ústí nad Labem",
+      "venue": "away",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544546",
+        "livestats": null,
+        "fibaData": null
+      }
+    }
+  ]
+}

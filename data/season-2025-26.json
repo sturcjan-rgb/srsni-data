@@ -1,0 +1,3686 @@
+{
+  "season": "2025/26",
+  "team": {
+    "name": "Sršni Photomate Písek",
+    "nblId": 10110,
+    "nblSlug": "srsni-photomate-pisek"
+  },
+  "generatedAt": "2026-08-31T05:15:04.724083+02:00",
+  "source": "https://nbl.basketball/tym/srsni-photomate-pisek",
+  "counts": {
+    "total": 42,
+    "home": 21,
+    "away": 21,
+    "final": 42,
+    "scheduled": 0
+  },
+  "fixtures": [
+    {
+      "nblMatchId": 512540,
+      "fibaMatchId": 2705709,
+      "round": "1. kolo",
+      "roundNum": 1,
+      "phase": "Základní část",
+      "date": "2025-09-28",
+      "time": "17:00",
+      "tz": "Europe/Prague",
+      "datetime": "2025-09-28T17:00:00+02:00",
+      "home": "Sršni Photomate Písek",
+      "away": "NH Ostrava",
+      "opponent": "NH Ostrava",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 84,
+        "away": 77,
+        "us": 84,
+        "them": 77,
+        "result": "W",
+        "margin": 7
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 22,
+            "away": 9
+          },
+          {
+            "home": 26,
+            "away": 21
+          },
+          {
+            "home": 19,
+            "away": 20
+          },
+          {
+            "home": 17,
+            "away": 27
+          }
+        ],
+        "regulation": [
+          {
+            "home": 22,
+            "away": 9
+          },
+          {
+            "home": 26,
+            "away": 21
+          },
+          {
+            "home": 19,
+            "away": 20
+          },
+          {
+            "home": 17,
+            "away": 27
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 22,
+            "away": 9
+          },
+          {
+            "home": 48,
+            "away": 30
+          },
+          {
+            "home": 67,
+            "away": 50
+          },
+          {
+            "home": 84,
+            "away": 77
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512540",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2705709/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2705709/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512551,
+      "fibaMatchId": 2708058,
+      "round": "2. kolo",
+      "roundNum": 2,
+      "phase": "Základní část",
+      "date": "2025-10-01",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2025-10-01T18:00:00+02:00",
+      "home": "Sršni Photomate Písek",
+      "away": "BK Olomoucko",
+      "opponent": "BK Olomoucko",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 70,
+        "away": 60,
+        "us": 70,
+        "them": 60,
+        "result": "W",
+        "margin": 10
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 17,
+            "away": 20
+          },
+          {
+            "home": 14,
+            "away": 17
+          },
+          {
+            "home": 26,
+            "away": 13
+          },
+          {
+            "home": 13,
+            "away": 10
+          }
+        ],
+        "regulation": [
+          {
+            "home": 17,
+            "away": 20
+          },
+          {
+            "home": 14,
+            "away": 17
+          },
+          {
+            "home": 26,
+            "away": 13
+          },
+          {
+            "home": 13,
+            "away": 10
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 17,
+            "away": 20
+          },
+          {
+            "home": 31,
+            "away": 37
+          },
+          {
+            "home": 57,
+            "away": 50
+          },
+          {
+            "home": 70,
+            "away": 60
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512551",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2708058/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2708058/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512553,
+      "fibaMatchId": 2711134,
+      "round": "3. kolo",
+      "roundNum": 3,
+      "phase": "Základní část",
+      "date": "2025-10-04",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2025-10-04T18:00:00+02:00",
+      "home": "BK Opava",
+      "away": "Sršni Photomate Písek",
+      "opponent": "BK Opava",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 120,
+        "away": 93,
+        "us": 93,
+        "them": 120,
+        "result": "L",
+        "margin": -27
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 23,
+            "away": 21
+          },
+          {
+            "home": 34,
+            "away": 29
+          },
+          {
+            "home": 29,
+            "away": 22
+          },
+          {
+            "home": 34,
+            "away": 21
+          }
+        ],
+        "regulation": [
+          {
+            "home": 23,
+            "away": 21
+          },
+          {
+            "home": 34,
+            "away": 29
+          },
+          {
+            "home": 29,
+            "away": 22
+          },
+          {
+            "home": 34,
+            "away": 21
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 23,
+            "away": 21
+          },
+          {
+            "home": 57,
+            "away": 50
+          },
+          {
+            "home": 86,
+            "away": 72
+          },
+          {
+            "home": 120,
+            "away": 93
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512553",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2711134/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2711134/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512562,
+      "fibaMatchId": 2713587,
+      "round": "4. kolo",
+      "roundNum": 4,
+      "phase": "Základní část",
+      "date": "2025-10-08",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2025-10-08T18:00:00+02:00",
+      "home": "SLUNETA Ústí nad Labem",
+      "away": "Sršni Photomate Písek",
+      "opponent": "SLUNETA Ústí nad Labem",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 91,
+        "away": 73,
+        "us": 73,
+        "them": 91,
+        "result": "L",
+        "margin": -18
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 26,
+            "away": 16
+          },
+          {
+            "home": 23,
+            "away": 21
+          },
+          {
+            "home": 24,
+            "away": 15
+          },
+          {
+            "home": 18,
+            "away": 21
+          }
+        ],
+        "regulation": [
+          {
+            "home": 26,
+            "away": 16
+          },
+          {
+            "home": 23,
+            "away": 21
+          },
+          {
+            "home": 24,
+            "away": 15
+          },
+          {
+            "home": 18,
+            "away": 21
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 26,
+            "away": 16
+          },
+          {
+            "home": 49,
+            "away": 37
+          },
+          {
+            "home": 73,
+            "away": 52
+          },
+          {
+            "home": 91,
+            "away": 73
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512562",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2713587/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2713587/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512566,
+      "fibaMatchId": 2716310,
+      "round": "5. kolo",
+      "roundNum": 5,
+      "phase": "Základní část",
+      "date": "2025-10-11",
+      "time": "17:30",
+      "tz": "Europe/Prague",
+      "datetime": "2025-10-11T17:30:00+02:00",
+      "home": "USK Praha",
+      "away": "Sršni Photomate Písek",
+      "opponent": "USK Praha",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 92,
+        "away": 103,
+        "us": 103,
+        "them": 92,
+        "result": "W",
+        "margin": 11
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 22,
+            "away": 31
+          },
+          {
+            "home": 23,
+            "away": 23
+          },
+          {
+            "home": 21,
+            "away": 25
+          },
+          {
+            "home": 26,
+            "away": 24
+          }
+        ],
+        "regulation": [
+          {
+            "home": 22,
+            "away": 31
+          },
+          {
+            "home": 23,
+            "away": 23
+          },
+          {
+            "home": 21,
+            "away": 25
+          },
+          {
+            "home": 26,
+            "away": 24
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 22,
+            "away": 31
+          },
+          {
+            "home": 45,
+            "away": 54
+          },
+          {
+            "home": 66,
+            "away": 79
+          },
+          {
+            "home": 92,
+            "away": 103
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512566",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2716310/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2716310/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512573,
+      "fibaMatchId": 2735086,
+      "round": "6. kolo",
+      "roundNum": 6,
+      "phase": "Základní část",
+      "date": "2025-10-19",
+      "time": "17:00",
+      "tz": "Europe/Prague",
+      "datetime": "2025-10-19T17:00:00+02:00",
+      "home": "Sršni Photomate Písek",
+      "away": "SK Slavia Praha ERA NBK",
+      "opponent": "SK Slavia Praha ERA NBK",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 103,
+        "away": 72,
+        "us": 103,
+        "them": 72,
+        "result": "W",
+        "margin": 31
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 23,
+            "away": 20
+          },
+          {
+            "home": 30,
+            "away": 19
+          },
+          {
+            "home": 22,
+            "away": 17
+          },
+          {
+            "home": 28,
+            "away": 16
+          }
+        ],
+        "regulation": [
+          {
+            "home": 23,
+            "away": 20
+          },
+          {
+            "home": 30,
+            "away": 19
+          },
+          {
+            "home": 22,
+            "away": 17
+          },
+          {
+            "home": 28,
+            "away": 16
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 23,
+            "away": 20
+          },
+          {
+            "home": 53,
+            "away": 39
+          },
+          {
+            "home": 75,
+            "away": 56
+          },
+          {
+            "home": 103,
+            "away": 72
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512573",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2735086/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2735086/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512579,
+      "fibaMatchId": 2743123,
+      "round": "7. kolo",
+      "roundNum": 7,
+      "phase": "Základní část",
+      "date": "2025-10-24",
+      "time": "10:00",
+      "tz": "Europe/Prague",
+      "datetime": "2025-10-24T10:00:00+02:00",
+      "home": "ERA Basketball Nymburk",
+      "away": "Sršni Photomate Písek",
+      "opponent": "ERA Basketball Nymburk",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 105,
+        "away": 75,
+        "us": 75,
+        "them": 105,
+        "result": "L",
+        "margin": -30
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 22,
+            "away": 14
+          },
+          {
+            "home": 31,
+            "away": 19
+          },
+          {
+            "home": 30,
+            "away": 29
+          },
+          {
+            "home": 22,
+            "away": 13
+          }
+        ],
+        "regulation": [
+          {
+            "home": 22,
+            "away": 14
+          },
+          {
+            "home": 31,
+            "away": 19
+          },
+          {
+            "home": 30,
+            "away": 29
+          },
+          {
+            "home": 22,
+            "away": 13
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 22,
+            "away": 14
+          },
+          {
+            "home": 53,
+            "away": 33
+          },
+          {
+            "home": 83,
+            "away": 62
+          },
+          {
+            "home": 105,
+            "away": 75
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512579",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2743123/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2743123/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512584,
+      "fibaMatchId": 2755309,
+      "round": "8. kolo",
+      "roundNum": 8,
+      "phase": "Základní část",
+      "date": "2025-10-29",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2025-10-29T18:00:00+01:00",
+      "home": "Sršni Photomate Písek",
+      "away": "BK ARMEX ENERGY Děčín",
+      "opponent": "BK ARMEX ENERGY Děčín",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 88,
+        "away": 75,
+        "us": 88,
+        "them": 75,
+        "result": "W",
+        "margin": 13
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 23,
+            "away": 28
+          },
+          {
+            "home": 18,
+            "away": 20
+          },
+          {
+            "home": 23,
+            "away": 8
+          },
+          {
+            "home": 24,
+            "away": 19
+          }
+        ],
+        "regulation": [
+          {
+            "home": 23,
+            "away": 28
+          },
+          {
+            "home": 18,
+            "away": 20
+          },
+          {
+            "home": 23,
+            "away": 8
+          },
+          {
+            "home": 24,
+            "away": 19
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 23,
+            "away": 28
+          },
+          {
+            "home": 41,
+            "away": 48
+          },
+          {
+            "home": 64,
+            "away": 56
+          },
+          {
+            "home": 88,
+            "away": 75
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512584",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2755309/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2755309/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512592,
+      "fibaMatchId": 2757870,
+      "round": "9. kolo",
+      "roundNum": 9,
+      "phase": "Základní část",
+      "date": "2025-11-01",
+      "time": "19:00",
+      "tz": "Europe/Prague",
+      "datetime": "2025-11-01T19:00:00+01:00",
+      "home": "PUMPA Basket Brno",
+      "away": "Sršni Photomate Písek",
+      "opponent": "PUMPA Basket Brno",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 110,
+        "away": 100,
+        "us": 100,
+        "them": 110,
+        "result": "L",
+        "margin": -10
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 26,
+            "away": 28
+          },
+          {
+            "home": 32,
+            "away": 33
+          },
+          {
+            "home": 29,
+            "away": 18
+          },
+          {
+            "home": 23,
+            "away": 21
+          }
+        ],
+        "regulation": [
+          {
+            "home": 26,
+            "away": 28
+          },
+          {
+            "home": 32,
+            "away": 33
+          },
+          {
+            "home": 29,
+            "away": 18
+          },
+          {
+            "home": 23,
+            "away": 21
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 26,
+            "away": 28
+          },
+          {
+            "home": 58,
+            "away": 61
+          },
+          {
+            "home": 87,
+            "away": 79
+          },
+          {
+            "home": 110,
+            "away": 100
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512592",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2757870/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2757870/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512595,
+      "fibaMatchId": 2763799,
+      "round": "10. kolo",
+      "roundNum": 10,
+      "phase": "Základní část",
+      "date": "2025-11-09",
+      "time": "17:00",
+      "tz": "Europe/Prague",
+      "datetime": "2025-11-09T17:00:00+01:00",
+      "home": "Sršni Photomate Písek",
+      "away": "BK KVIS Pardubice",
+      "opponent": "BK KVIS Pardubice",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 87,
+        "away": 78,
+        "us": 87,
+        "them": 78,
+        "result": "W",
+        "margin": 9
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 24,
+            "away": 23
+          },
+          {
+            "home": 22,
+            "away": 19
+          },
+          {
+            "home": 20,
+            "away": 19
+          },
+          {
+            "home": 21,
+            "away": 17
+          }
+        ],
+        "regulation": [
+          {
+            "home": 24,
+            "away": 23
+          },
+          {
+            "home": 22,
+            "away": 19
+          },
+          {
+            "home": 20,
+            "away": 19
+          },
+          {
+            "home": 21,
+            "away": 17
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 24,
+            "away": 23
+          },
+          {
+            "home": 46,
+            "away": 42
+          },
+          {
+            "home": 66,
+            "away": 61
+          },
+          {
+            "home": 87,
+            "away": 78
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512595",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2763799/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2763799/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512605,
+      "fibaMatchId": 2765927,
+      "round": "11. kolo",
+      "roundNum": 11,
+      "phase": "Základní část",
+      "date": "2025-11-12",
+      "time": "19:00",
+      "tz": "Europe/Prague",
+      "datetime": "2025-11-12T19:00:00+01:00",
+      "home": "BK GAPA Hradec Králové",
+      "away": "Sršni Photomate Písek",
+      "opponent": "BK GAPA Hradec Králové",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 67,
+        "away": 89,
+        "us": 89,
+        "them": 67,
+        "result": "W",
+        "margin": 22
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 17,
+            "away": 19
+          },
+          {
+            "home": 25,
+            "away": 23
+          },
+          {
+            "home": 14,
+            "away": 25
+          },
+          {
+            "home": 11,
+            "away": 22
+          }
+        ],
+        "regulation": [
+          {
+            "home": 17,
+            "away": 19
+          },
+          {
+            "home": 25,
+            "away": 23
+          },
+          {
+            "home": 14,
+            "away": 25
+          },
+          {
+            "home": 11,
+            "away": 22
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 17,
+            "away": 19
+          },
+          {
+            "home": 42,
+            "away": 42
+          },
+          {
+            "home": 56,
+            "away": 67
+          },
+          {
+            "home": 67,
+            "away": 89
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512605",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2765927/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2765927/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512606,
+      "fibaMatchId": 2767343,
+      "round": "12. kolo",
+      "roundNum": 12,
+      "phase": "Základní část",
+      "date": "2025-11-15",
+      "time": "17:30",
+      "tz": "Europe/Prague",
+      "datetime": "2025-11-15T17:30:00+01:00",
+      "home": "NH Ostrava",
+      "away": "Sršni Photomate Písek",
+      "opponent": "NH Ostrava",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 101,
+        "away": 105,
+        "us": 105,
+        "them": 101,
+        "result": "W",
+        "margin": 4
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 31,
+            "away": 26
+          },
+          {
+            "home": 13,
+            "away": 28
+          },
+          {
+            "home": 23,
+            "away": 22
+          },
+          {
+            "home": 34,
+            "away": 29
+          }
+        ],
+        "regulation": [
+          {
+            "home": 31,
+            "away": 26
+          },
+          {
+            "home": 13,
+            "away": 28
+          },
+          {
+            "home": 23,
+            "away": 22
+          },
+          {
+            "home": 34,
+            "away": 29
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 31,
+            "away": 26
+          },
+          {
+            "home": 44,
+            "away": 54
+          },
+          {
+            "home": 67,
+            "away": 76
+          },
+          {
+            "home": 101,
+            "away": 105
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512606",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2767343/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2767343/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512617,
+      "fibaMatchId": 2769234,
+      "round": "13. kolo",
+      "roundNum": 13,
+      "phase": "Základní část",
+      "date": "2025-11-19",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2025-11-19T18:00:00+01:00",
+      "home": "BK Olomoucko",
+      "away": "Sršni Photomate Písek",
+      "opponent": "BK Olomoucko",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 100,
+        "away": 103,
+        "us": 103,
+        "them": 100,
+        "result": "W",
+        "margin": 3
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 18,
+            "away": 15
+          },
+          {
+            "home": 26,
+            "away": 24
+          },
+          {
+            "home": 20,
+            "away": 33
+          },
+          {
+            "home": 30,
+            "away": 22
+          },
+          {
+            "home": 6,
+            "away": 9
+          }
+        ],
+        "regulation": [
+          {
+            "home": 18,
+            "away": 15
+          },
+          {
+            "home": 26,
+            "away": 24
+          },
+          {
+            "home": 20,
+            "away": 33
+          },
+          {
+            "home": 30,
+            "away": 22
+          }
+        ],
+        "overtimes": [
+          {
+            "home": 6,
+            "away": 9
+          }
+        ],
+        "otCount": 1,
+        "cumulative": [
+          {
+            "home": 18,
+            "away": 15
+          },
+          {
+            "home": 44,
+            "away": 39
+          },
+          {
+            "home": 64,
+            "away": 72
+          },
+          {
+            "home": 94,
+            "away": 94
+          },
+          {
+            "home": 100,
+            "away": 103
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512617",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2769234/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2769234/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512619,
+      "fibaMatchId": 2770937,
+      "round": "14. kolo",
+      "roundNum": 14,
+      "phase": "Základní část",
+      "date": "2025-11-23",
+      "time": "17:00",
+      "tz": "Europe/Prague",
+      "datetime": "2025-11-23T17:00:00+01:00",
+      "home": "Sršni Photomate Písek",
+      "away": "BK Opava",
+      "opponent": "BK Opava",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 84,
+        "away": 86,
+        "us": 84,
+        "them": 86,
+        "result": "L",
+        "margin": -2
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 15,
+            "away": 20
+          },
+          {
+            "home": 15,
+            "away": 24
+          },
+          {
+            "home": 26,
+            "away": 17
+          },
+          {
+            "home": 28,
+            "away": 25
+          }
+        ],
+        "regulation": [
+          {
+            "home": 15,
+            "away": 20
+          },
+          {
+            "home": 15,
+            "away": 24
+          },
+          {
+            "home": 26,
+            "away": 17
+          },
+          {
+            "home": 28,
+            "away": 25
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 15,
+            "away": 20
+          },
+          {
+            "home": 30,
+            "away": 44
+          },
+          {
+            "home": 56,
+            "away": 61
+          },
+          {
+            "home": 84,
+            "away": 86
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512619",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2770937/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2770937/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512628,
+      "fibaMatchId": 2777740,
+      "round": "15. kolo",
+      "roundNum": 15,
+      "phase": "Základní část",
+      "date": "2025-12-07",
+      "time": "17:00",
+      "tz": "Europe/Prague",
+      "datetime": "2025-12-07T17:00:00+01:00",
+      "home": "Sršni Photomate Písek",
+      "away": "SLUNETA Ústí nad Labem",
+      "opponent": "SLUNETA Ústí nad Labem",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 82,
+        "away": 94,
+        "us": 82,
+        "them": 94,
+        "result": "L",
+        "margin": -12
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 21,
+            "away": 20
+          },
+          {
+            "home": 19,
+            "away": 23
+          },
+          {
+            "home": 17,
+            "away": 28
+          },
+          {
+            "home": 25,
+            "away": 23
+          }
+        ],
+        "regulation": [
+          {
+            "home": 21,
+            "away": 20
+          },
+          {
+            "home": 19,
+            "away": 23
+          },
+          {
+            "home": 17,
+            "away": 28
+          },
+          {
+            "home": 25,
+            "away": 23
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 21,
+            "away": 20
+          },
+          {
+            "home": 40,
+            "away": 43
+          },
+          {
+            "home": 57,
+            "away": 71
+          },
+          {
+            "home": 82,
+            "away": 94
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512628",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2777740/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2777740/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512632,
+      "fibaMatchId": 2780677,
+      "round": "16. kolo",
+      "roundNum": 16,
+      "phase": "Základní část",
+      "date": "2025-12-14",
+      "time": "17:00",
+      "tz": "Europe/Prague",
+      "datetime": "2025-12-14T17:00:00+01:00",
+      "home": "Sršni Photomate Písek",
+      "away": "USK Praha",
+      "opponent": "USK Praha",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 95,
+        "away": 79,
+        "us": 95,
+        "them": 79,
+        "result": "W",
+        "margin": 16
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 20,
+            "away": 21
+          },
+          {
+            "home": 32,
+            "away": 21
+          },
+          {
+            "home": 26,
+            "away": 20
+          },
+          {
+            "home": 17,
+            "away": 17
+          }
+        ],
+        "regulation": [
+          {
+            "home": 20,
+            "away": 21
+          },
+          {
+            "home": 32,
+            "away": 21
+          },
+          {
+            "home": 26,
+            "away": 20
+          },
+          {
+            "home": 17,
+            "away": 17
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 20,
+            "away": 21
+          },
+          {
+            "home": 52,
+            "away": 42
+          },
+          {
+            "home": 78,
+            "away": 62
+          },
+          {
+            "home": 95,
+            "away": 79
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512632",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2780677/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2780677/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512639,
+      "fibaMatchId": 2782893,
+      "round": "17. kolo",
+      "roundNum": 17,
+      "phase": "Základní část",
+      "date": "2025-12-20",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2025-12-20T18:00:00+01:00",
+      "home": "SK Slavia Praha ERA NBK",
+      "away": "Sršni Photomate Písek",
+      "opponent": "SK Slavia Praha ERA NBK",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 73,
+        "away": 82,
+        "us": 82,
+        "them": 73,
+        "result": "W",
+        "margin": 9
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 24,
+            "away": 16
+          },
+          {
+            "home": 19,
+            "away": 20
+          },
+          {
+            "home": 13,
+            "away": 30
+          },
+          {
+            "home": 17,
+            "away": 16
+          }
+        ],
+        "regulation": [
+          {
+            "home": 24,
+            "away": 16
+          },
+          {
+            "home": 19,
+            "away": 20
+          },
+          {
+            "home": 13,
+            "away": 30
+          },
+          {
+            "home": 17,
+            "away": 16
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 24,
+            "away": 16
+          },
+          {
+            "home": 43,
+            "away": 36
+          },
+          {
+            "home": 56,
+            "away": 66
+          },
+          {
+            "home": 73,
+            "away": 82
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512639",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2782893/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2782893/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512645,
+      "fibaMatchId": 2787027,
+      "round": "18. kolo",
+      "roundNum": 18,
+      "phase": "Základní část",
+      "date": "2025-12-27",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2025-12-27T18:00:00+01:00",
+      "home": "Sršni Photomate Písek",
+      "away": "ERA Basketball Nymburk",
+      "opponent": "ERA Basketball Nymburk",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 92,
+        "away": 105,
+        "us": 92,
+        "them": 105,
+        "result": "L",
+        "margin": -13
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 20,
+            "away": 25
+          },
+          {
+            "home": 27,
+            "away": 27
+          },
+          {
+            "home": 26,
+            "away": 20
+          },
+          {
+            "home": 19,
+            "away": 33
+          }
+        ],
+        "regulation": [
+          {
+            "home": 20,
+            "away": 25
+          },
+          {
+            "home": 27,
+            "away": 27
+          },
+          {
+            "home": 26,
+            "away": 20
+          },
+          {
+            "home": 19,
+            "away": 33
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 20,
+            "away": 25
+          },
+          {
+            "home": 47,
+            "away": 52
+          },
+          {
+            "home": 73,
+            "away": 72
+          },
+          {
+            "home": 92,
+            "away": 105
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512645",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2787027/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2787027/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512650,
+      "fibaMatchId": 2787958,
+      "round": "19. kolo",
+      "roundNum": 19,
+      "phase": "Základní část",
+      "date": "2025-12-30",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2025-12-30T18:00:00+01:00",
+      "home": "BK ARMEX ENERGY Děčín",
+      "away": "Sršni Photomate Písek",
+      "opponent": "BK ARMEX ENERGY Děčín",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 90,
+        "away": 86,
+        "us": 86,
+        "them": 90,
+        "result": "L",
+        "margin": -4
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 25,
+            "away": 15
+          },
+          {
+            "home": 22,
+            "away": 30
+          },
+          {
+            "home": 23,
+            "away": 23
+          },
+          {
+            "home": 20,
+            "away": 18
+          }
+        ],
+        "regulation": [
+          {
+            "home": 25,
+            "away": 15
+          },
+          {
+            "home": 22,
+            "away": 30
+          },
+          {
+            "home": 23,
+            "away": 23
+          },
+          {
+            "home": 20,
+            "away": 18
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 25,
+            "away": 15
+          },
+          {
+            "home": 47,
+            "away": 45
+          },
+          {
+            "home": 70,
+            "away": 68
+          },
+          {
+            "home": 90,
+            "away": 86
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512650",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2787958/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2787958/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512658,
+      "fibaMatchId": 2789898,
+      "round": "20. kolo",
+      "roundNum": 20,
+      "phase": "Základní část",
+      "date": "2026-01-04",
+      "time": "17:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-01-04T17:00:00+01:00",
+      "home": "Sršni Photomate Písek",
+      "away": "PUMPA Basket Brno",
+      "opponent": "PUMPA Basket Brno",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 98,
+        "away": 105,
+        "us": 98,
+        "them": 105,
+        "result": "L",
+        "margin": -7
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 26,
+            "away": 29
+          },
+          {
+            "home": 14,
+            "away": 28
+          },
+          {
+            "home": 24,
+            "away": 20
+          },
+          {
+            "home": 34,
+            "away": 28
+          }
+        ],
+        "regulation": [
+          {
+            "home": 26,
+            "away": 29
+          },
+          {
+            "home": 14,
+            "away": 28
+          },
+          {
+            "home": 24,
+            "away": 20
+          },
+          {
+            "home": 34,
+            "away": 28
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 26,
+            "away": 29
+          },
+          {
+            "home": 40,
+            "away": 57
+          },
+          {
+            "home": 64,
+            "away": 77
+          },
+          {
+            "home": 98,
+            "away": 105
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512658",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2789898/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2789898/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512661,
+      "fibaMatchId": 2791866,
+      "round": "21. kolo",
+      "roundNum": 21,
+      "phase": "Základní část",
+      "date": "2026-01-10",
+      "time": "15:30",
+      "tz": "Europe/Prague",
+      "datetime": "2026-01-10T15:30:00+01:00",
+      "home": "BK KVIS Pardubice",
+      "away": "Sršni Photomate Písek",
+      "opponent": "BK KVIS Pardubice",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 118,
+        "away": 85,
+        "us": 85,
+        "them": 118,
+        "result": "L",
+        "margin": -33
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 26,
+            "away": 18
+          },
+          {
+            "home": 37,
+            "away": 21
+          },
+          {
+            "home": 26,
+            "away": 26
+          },
+          {
+            "home": 29,
+            "away": 20
+          }
+        ],
+        "regulation": [
+          {
+            "home": 26,
+            "away": 18
+          },
+          {
+            "home": 37,
+            "away": 21
+          },
+          {
+            "home": 26,
+            "away": 26
+          },
+          {
+            "home": 29,
+            "away": 20
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 26,
+            "away": 18
+          },
+          {
+            "home": 63,
+            "away": 39
+          },
+          {
+            "home": 89,
+            "away": 65
+          },
+          {
+            "home": 118,
+            "away": 85
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512661",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2791866/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2791866/data.json"
+      }
+    },
+    {
+      "nblMatchId": 512671,
+      "fibaMatchId": 2794576,
+      "round": "22. kolo",
+      "roundNum": 22,
+      "phase": "Základní část",
+      "date": "2026-01-17",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-01-17T18:00:00+01:00",
+      "home": "Sršni Photomate Písek",
+      "away": "BK GAPA Hradec Králové",
+      "opponent": "BK GAPA Hradec Králové",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 89,
+        "away": 74,
+        "us": 89,
+        "them": 74,
+        "result": "W",
+        "margin": 15
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 19,
+            "away": 10
+          },
+          {
+            "home": 19,
+            "away": 25
+          },
+          {
+            "home": 22,
+            "away": 29
+          },
+          {
+            "home": 29,
+            "away": 10
+          }
+        ],
+        "regulation": [
+          {
+            "home": 19,
+            "away": 10
+          },
+          {
+            "home": 19,
+            "away": 25
+          },
+          {
+            "home": 22,
+            "away": 29
+          },
+          {
+            "home": 29,
+            "away": 10
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 19,
+            "away": 10
+          },
+          {
+            "home": 38,
+            "away": 35
+          },
+          {
+            "home": 60,
+            "away": 64
+          },
+          {
+            "home": 89,
+            "away": 74
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/512671",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2794576/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2794576/data.json"
+      }
+    },
+    {
+      "nblMatchId": 526945,
+      "fibaMatchId": 2803556,
+      "round": "1. kolo",
+      "roundNum": 1,
+      "phase": "Nadstavbová část – skupina A1",
+      "date": "2026-01-25",
+      "time": "17:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-01-25T17:00:00+01:00",
+      "home": "Sršni Photomate Písek",
+      "away": "PUMPA Basket Brno",
+      "opponent": "PUMPA Basket Brno",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 101,
+        "away": 84,
+        "us": 101,
+        "them": 84,
+        "result": "W",
+        "margin": 17
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 24,
+            "away": 27
+          },
+          {
+            "home": 22,
+            "away": 21
+          },
+          {
+            "home": 24,
+            "away": 10
+          },
+          {
+            "home": 31,
+            "away": 26
+          }
+        ],
+        "regulation": [
+          {
+            "home": 24,
+            "away": 27
+          },
+          {
+            "home": 22,
+            "away": 21
+          },
+          {
+            "home": 24,
+            "away": 10
+          },
+          {
+            "home": 31,
+            "away": 26
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 24,
+            "away": 27
+          },
+          {
+            "home": 46,
+            "away": 48
+          },
+          {
+            "home": 70,
+            "away": 58
+          },
+          {
+            "home": 101,
+            "away": 84
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/526945",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2803556/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2803556/data.json"
+      }
+    },
+    {
+      "nblMatchId": 526950,
+      "fibaMatchId": 2803561,
+      "round": "2. kolo",
+      "roundNum": 2,
+      "phase": "Nadstavbová část – skupina A1",
+      "date": "2026-01-28",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-01-28T18:00:00+01:00",
+      "home": "Sršni Photomate Písek",
+      "away": "BK Opava",
+      "opponent": "BK Opava",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 87,
+        "away": 76,
+        "us": 87,
+        "them": 76,
+        "result": "W",
+        "margin": 11
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 31,
+            "away": 19
+          },
+          {
+            "home": 19,
+            "away": 9
+          },
+          {
+            "home": 11,
+            "away": 24
+          },
+          {
+            "home": 26,
+            "away": 24
+          }
+        ],
+        "regulation": [
+          {
+            "home": 31,
+            "away": 19
+          },
+          {
+            "home": 19,
+            "away": 9
+          },
+          {
+            "home": 11,
+            "away": 24
+          },
+          {
+            "home": 26,
+            "away": 24
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 31,
+            "away": 19
+          },
+          {
+            "home": 50,
+            "away": 28
+          },
+          {
+            "home": 61,
+            "away": 52
+          },
+          {
+            "home": 87,
+            "away": 76
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/526950",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2803561/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2803561/data.json"
+      }
+    },
+    {
+      "nblMatchId": 526954,
+      "fibaMatchId": 2803565,
+      "round": "3. kolo",
+      "roundNum": 3,
+      "phase": "Nadstavbová část – skupina A1",
+      "date": "2026-02-01",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-02-01T18:00:00+01:00",
+      "home": "SLUNETA Ústí nad Labem",
+      "away": "Sršni Photomate Písek",
+      "opponent": "SLUNETA Ústí nad Labem",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 88,
+        "away": 74,
+        "us": 74,
+        "them": 88,
+        "result": "L",
+        "margin": -14
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 25,
+            "away": 15
+          },
+          {
+            "home": 26,
+            "away": 20
+          },
+          {
+            "home": 20,
+            "away": 30
+          },
+          {
+            "home": 17,
+            "away": 9
+          }
+        ],
+        "regulation": [
+          {
+            "home": 25,
+            "away": 15
+          },
+          {
+            "home": 26,
+            "away": 20
+          },
+          {
+            "home": 20,
+            "away": 30
+          },
+          {
+            "home": 17,
+            "away": 9
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 25,
+            "away": 15
+          },
+          {
+            "home": 51,
+            "away": 35
+          },
+          {
+            "home": 71,
+            "away": 65
+          },
+          {
+            "home": 88,
+            "away": 74
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/526954",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2803565/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2803565/data.json"
+      }
+    },
+    {
+      "nblMatchId": 526957,
+      "fibaMatchId": 2803568,
+      "round": "4. kolo",
+      "roundNum": 4,
+      "phase": "Nadstavbová část – skupina A1",
+      "date": "2026-02-07",
+      "time": "17:30",
+      "tz": "Europe/Prague",
+      "datetime": "2026-02-07T17:30:00+01:00",
+      "home": "NH Ostrava",
+      "away": "Sršni Photomate Písek",
+      "opponent": "NH Ostrava",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 71,
+        "away": 99,
+        "us": 99,
+        "them": 71,
+        "result": "W",
+        "margin": 28
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 19,
+            "away": 35
+          },
+          {
+            "home": 16,
+            "away": 23
+          },
+          {
+            "home": 21,
+            "away": 24
+          },
+          {
+            "home": 15,
+            "away": 17
+          }
+        ],
+        "regulation": [
+          {
+            "home": 19,
+            "away": 35
+          },
+          {
+            "home": 16,
+            "away": 23
+          },
+          {
+            "home": 21,
+            "away": 24
+          },
+          {
+            "home": 15,
+            "away": 17
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 19,
+            "away": 35
+          },
+          {
+            "home": 35,
+            "away": 58
+          },
+          {
+            "home": 56,
+            "away": 82
+          },
+          {
+            "home": 71,
+            "away": 99
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/526957",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2803568/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2803568/data.json"
+      }
+    },
+    {
+      "nblMatchId": 526964,
+      "fibaMatchId": 2805260,
+      "round": "6. kolo",
+      "roundNum": 6,
+      "phase": "Nadstavbová část – skupina A1",
+      "date": "2026-02-18",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-02-18T18:00:00+01:00",
+      "home": "BK ARMEX ENERGY Děčín",
+      "away": "Sršni Photomate Písek",
+      "opponent": "BK ARMEX ENERGY Děčín",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 88,
+        "away": 84,
+        "us": 84,
+        "them": 88,
+        "result": "L",
+        "margin": -4
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 29,
+            "away": 27
+          },
+          {
+            "home": 26,
+            "away": 21
+          },
+          {
+            "home": 13,
+            "away": 18
+          },
+          {
+            "home": 20,
+            "away": 18
+          }
+        ],
+        "regulation": [
+          {
+            "home": 29,
+            "away": 27
+          },
+          {
+            "home": 26,
+            "away": 21
+          },
+          {
+            "home": 13,
+            "away": 18
+          },
+          {
+            "home": 20,
+            "away": 18
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 29,
+            "away": 27
+          },
+          {
+            "home": 55,
+            "away": 48
+          },
+          {
+            "home": 68,
+            "away": 66
+          },
+          {
+            "home": 88,
+            "away": 84
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/526964",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2805260/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2805260/data.json"
+      }
+    },
+    {
+      "nblMatchId": 526971,
+      "fibaMatchId": 2812474,
+      "round": "7. kolo",
+      "roundNum": 7,
+      "phase": "Nadstavbová část – skupina A1",
+      "date": "2026-03-06",
+      "time": "17:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-03-06T17:00:00+01:00",
+      "home": "Sršni Photomate Písek",
+      "away": "BK KVIS Pardubice",
+      "opponent": "BK KVIS Pardubice",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 84,
+        "away": 86,
+        "us": 84,
+        "them": 86,
+        "result": "L",
+        "margin": -2
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 21,
+            "away": 19
+          },
+          {
+            "home": 23,
+            "away": 22
+          },
+          {
+            "home": 17,
+            "away": 18
+          },
+          {
+            "home": 23,
+            "away": 27
+          }
+        ],
+        "regulation": [
+          {
+            "home": 21,
+            "away": 19
+          },
+          {
+            "home": 23,
+            "away": 22
+          },
+          {
+            "home": 17,
+            "away": 18
+          },
+          {
+            "home": 23,
+            "away": 27
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 21,
+            "away": 19
+          },
+          {
+            "home": 44,
+            "away": 41
+          },
+          {
+            "home": 61,
+            "away": 59
+          },
+          {
+            "home": 84,
+            "away": 86
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/526971",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2812474/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2812474/data.json"
+      }
+    },
+    {
+      "nblMatchId": 526973,
+      "fibaMatchId": 2815467,
+      "round": "8. kolo",
+      "roundNum": 8,
+      "phase": "Nadstavbová část – skupina A1",
+      "date": "2026-03-14",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-03-14T18:00:00+01:00",
+      "home": "PUMPA Basket Brno",
+      "away": "Sršni Photomate Písek",
+      "opponent": "PUMPA Basket Brno",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 90,
+        "away": 85,
+        "us": 85,
+        "them": 90,
+        "result": "L",
+        "margin": -5
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 27,
+            "away": 19
+          },
+          {
+            "home": 21,
+            "away": 21
+          },
+          {
+            "home": 19,
+            "away": 19
+          },
+          {
+            "home": 23,
+            "away": 26
+          }
+        ],
+        "regulation": [
+          {
+            "home": 27,
+            "away": 19
+          },
+          {
+            "home": 21,
+            "away": 21
+          },
+          {
+            "home": 19,
+            "away": 19
+          },
+          {
+            "home": 23,
+            "away": 26
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 27,
+            "away": 19
+          },
+          {
+            "home": 48,
+            "away": 40
+          },
+          {
+            "home": 67,
+            "away": 59
+          },
+          {
+            "home": 90,
+            "away": 85
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/526973",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2815467/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2815467/data.json"
+      }
+    },
+    {
+      "nblMatchId": 526963,
+      "fibaMatchId": 2803572,
+      "round": "5. kolo",
+      "roundNum": 5,
+      "phase": "Nadstavbová část – skupina A1",
+      "date": "2026-03-19",
+      "time": "17:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-03-19T17:00:00+01:00",
+      "home": "ERA Basketball Nymburk",
+      "away": "Sršni Photomate Písek",
+      "opponent": "ERA Basketball Nymburk",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 87,
+        "away": 95,
+        "us": 95,
+        "them": 87,
+        "result": "W",
+        "margin": 8
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 16,
+            "away": 22
+          },
+          {
+            "home": 19,
+            "away": 23
+          },
+          {
+            "home": 25,
+            "away": 24
+          },
+          {
+            "home": 27,
+            "away": 26
+          }
+        ],
+        "regulation": [
+          {
+            "home": 16,
+            "away": 22
+          },
+          {
+            "home": 19,
+            "away": 23
+          },
+          {
+            "home": 25,
+            "away": 24
+          },
+          {
+            "home": 27,
+            "away": 26
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 16,
+            "away": 22
+          },
+          {
+            "home": 35,
+            "away": 45
+          },
+          {
+            "home": 60,
+            "away": 69
+          },
+          {
+            "home": 87,
+            "away": 95
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/526963",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2803572/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2803572/data.json"
+      }
+    },
+    {
+      "nblMatchId": 526978,
+      "fibaMatchId": 2818759,
+      "round": "9. kolo",
+      "roundNum": 9,
+      "phase": "Nadstavbová část – skupina A1",
+      "date": "2026-03-21",
+      "time": "18:30",
+      "tz": "Europe/Prague",
+      "datetime": "2026-03-21T18:30:00+01:00",
+      "home": "BK Opava",
+      "away": "Sršni Photomate Písek",
+      "opponent": "BK Opava",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 86,
+        "away": 70,
+        "us": 70,
+        "them": 86,
+        "result": "L",
+        "margin": -16
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 22,
+            "away": 28
+          },
+          {
+            "home": 19,
+            "away": 20
+          },
+          {
+            "home": 24,
+            "away": 13
+          },
+          {
+            "home": 21,
+            "away": 9
+          }
+        ],
+        "regulation": [
+          {
+            "home": 22,
+            "away": 28
+          },
+          {
+            "home": 19,
+            "away": 20
+          },
+          {
+            "home": 24,
+            "away": 13
+          },
+          {
+            "home": 21,
+            "away": 9
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 22,
+            "away": 28
+          },
+          {
+            "home": 41,
+            "away": 48
+          },
+          {
+            "home": 65,
+            "away": 61
+          },
+          {
+            "home": 86,
+            "away": 70
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/526978",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2818759/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2818759/data.json"
+      }
+    },
+    {
+      "nblMatchId": 526982,
+      "fibaMatchId": 2820798,
+      "round": "10. kolo",
+      "roundNum": 10,
+      "phase": "Nadstavbová část – skupina A1",
+      "date": "2026-03-25",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-03-25T18:00:00+01:00",
+      "home": "Sršni Photomate Písek",
+      "away": "SLUNETA Ústí nad Labem",
+      "opponent": "SLUNETA Ústí nad Labem",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 84,
+        "away": 91,
+        "us": 84,
+        "them": 91,
+        "result": "L",
+        "margin": -7
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 22,
+            "away": 27
+          },
+          {
+            "home": 20,
+            "away": 19
+          },
+          {
+            "home": 18,
+            "away": 20
+          },
+          {
+            "home": 24,
+            "away": 25
+          }
+        ],
+        "regulation": [
+          {
+            "home": 22,
+            "away": 27
+          },
+          {
+            "home": 20,
+            "away": 19
+          },
+          {
+            "home": 18,
+            "away": 20
+          },
+          {
+            "home": 24,
+            "away": 25
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 22,
+            "away": 27
+          },
+          {
+            "home": 42,
+            "away": 46
+          },
+          {
+            "home": 60,
+            "away": 66
+          },
+          {
+            "home": 84,
+            "away": 91
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/526982",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2820798/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2820798/data.json"
+      }
+    },
+    {
+      "nblMatchId": 526985,
+      "fibaMatchId": 2823403,
+      "round": "11. kolo",
+      "roundNum": 11,
+      "phase": "Nadstavbová část – skupina A1",
+      "date": "2026-03-29",
+      "time": "17:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-03-29T17:00:00+02:00",
+      "home": "Sršni Photomate Písek",
+      "away": "NH Ostrava",
+      "opponent": "NH Ostrava",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 104,
+        "away": 81,
+        "us": 104,
+        "them": 81,
+        "result": "W",
+        "margin": 23
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 28,
+            "away": 28
+          },
+          {
+            "home": 36,
+            "away": 17
+          },
+          {
+            "home": 17,
+            "away": 21
+          },
+          {
+            "home": 23,
+            "away": 15
+          }
+        ],
+        "regulation": [
+          {
+            "home": 28,
+            "away": 28
+          },
+          {
+            "home": 36,
+            "away": 17
+          },
+          {
+            "home": 17,
+            "away": 21
+          },
+          {
+            "home": 23,
+            "away": 15
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 28,
+            "away": 28
+          },
+          {
+            "home": 64,
+            "away": 45
+          },
+          {
+            "home": 81,
+            "away": 66
+          },
+          {
+            "home": 104,
+            "away": 81
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/526985",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2823403/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2823403/data.json"
+      }
+    },
+    {
+      "nblMatchId": 526992,
+      "fibaMatchId": 2826620,
+      "round": "13. kolo",
+      "roundNum": 13,
+      "phase": "Nadstavbová část – skupina A1",
+      "date": "2026-04-05",
+      "time": "17:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-04-05T17:00:00+02:00",
+      "home": "Sršni Photomate Písek",
+      "away": "BK ARMEX ENERGY Děčín",
+      "opponent": "BK ARMEX ENERGY Děčín",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 91,
+        "away": 76,
+        "us": 91,
+        "them": 76,
+        "result": "W",
+        "margin": 15
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 20,
+            "away": 20
+          },
+          {
+            "home": 21,
+            "away": 14
+          },
+          {
+            "home": 30,
+            "away": 15
+          },
+          {
+            "home": 20,
+            "away": 27
+          }
+        ],
+        "regulation": [
+          {
+            "home": 20,
+            "away": 20
+          },
+          {
+            "home": 21,
+            "away": 14
+          },
+          {
+            "home": 30,
+            "away": 15
+          },
+          {
+            "home": 20,
+            "away": 27
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 20,
+            "away": 20
+          },
+          {
+            "home": 41,
+            "away": 34
+          },
+          {
+            "home": 71,
+            "away": 49
+          },
+          {
+            "home": 91,
+            "away": 76
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/526992",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2826620/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2826620/data.json"
+      }
+    },
+    {
+      "nblMatchId": 526991,
+      "fibaMatchId": 2825152,
+      "round": "12. kolo",
+      "roundNum": 12,
+      "phase": "Nadstavbová část – skupina A1",
+      "date": "2026-04-11",
+      "time": "17:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-04-11T17:00:00+02:00",
+      "home": "Sršni Photomate Písek",
+      "away": "ERA Basketball Nymburk",
+      "opponent": "ERA Basketball Nymburk",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 78,
+        "away": 106,
+        "us": 78,
+        "them": 106,
+        "result": "L",
+        "margin": -28
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 29,
+            "away": 31
+          },
+          {
+            "home": 19,
+            "away": 18
+          },
+          {
+            "home": 21,
+            "away": 29
+          },
+          {
+            "home": 9,
+            "away": 28
+          }
+        ],
+        "regulation": [
+          {
+            "home": 29,
+            "away": 31
+          },
+          {
+            "home": 19,
+            "away": 18
+          },
+          {
+            "home": 21,
+            "away": 29
+          },
+          {
+            "home": 9,
+            "away": 28
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 29,
+            "away": 31
+          },
+          {
+            "home": 48,
+            "away": 49
+          },
+          {
+            "home": 69,
+            "away": 78
+          },
+          {
+            "home": 78,
+            "away": 106
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/526991",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2825152/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2825152/data.json"
+      }
+    },
+    {
+      "nblMatchId": 526999,
+      "fibaMatchId": 2828944,
+      "round": "14. kolo",
+      "roundNum": 14,
+      "phase": "Nadstavbová část – skupina A1",
+      "date": "2026-04-18",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-04-18T18:00:00+02:00",
+      "home": "BK KVIS Pardubice",
+      "away": "Sršni Photomate Písek",
+      "opponent": "BK KVIS Pardubice",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 100,
+        "away": 95,
+        "us": 95,
+        "them": 100,
+        "result": "L",
+        "margin": -5
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 26,
+            "away": 27
+          },
+          {
+            "home": 24,
+            "away": 19
+          },
+          {
+            "home": 25,
+            "away": 19
+          },
+          {
+            "home": 25,
+            "away": 30
+          }
+        ],
+        "regulation": [
+          {
+            "home": 26,
+            "away": 27
+          },
+          {
+            "home": 24,
+            "away": 19
+          },
+          {
+            "home": 25,
+            "away": 19
+          },
+          {
+            "home": 25,
+            "away": 30
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 26,
+            "away": 27
+          },
+          {
+            "home": 50,
+            "away": 46
+          },
+          {
+            "home": 75,
+            "away": 65
+          },
+          {
+            "home": 100,
+            "away": 95
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/526999",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2828944/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2828944/data.json"
+      }
+    },
+    {
+      "nblMatchId": 529729,
+      "fibaMatchId": 2840884,
+      "round": "1. kolo",
+      "roundNum": 1,
+      "phase": "Předkolo play-off",
+      "date": "2026-04-21",
+      "time": "17:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-04-21T17:00:00+02:00",
+      "home": "Sršni Photomate Písek",
+      "away": "USK Praha",
+      "opponent": "USK Praha",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 78,
+        "away": 65,
+        "us": 78,
+        "them": 65,
+        "result": "W",
+        "margin": 13
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 26,
+            "away": 18
+          },
+          {
+            "home": 13,
+            "away": 22
+          },
+          {
+            "home": 21,
+            "away": 10
+          },
+          {
+            "home": 18,
+            "away": 15
+          }
+        ],
+        "regulation": [
+          {
+            "home": 26,
+            "away": 18
+          },
+          {
+            "home": 13,
+            "away": 22
+          },
+          {
+            "home": 21,
+            "away": 10
+          },
+          {
+            "home": 18,
+            "away": 15
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 26,
+            "away": 18
+          },
+          {
+            "home": 39,
+            "away": 40
+          },
+          {
+            "home": 60,
+            "away": 50
+          },
+          {
+            "home": 78,
+            "away": 65
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/529729",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2840884/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2840884/data.json"
+      }
+    },
+    {
+      "nblMatchId": 529731,
+      "fibaMatchId": 2840885,
+      "round": "2. kolo",
+      "roundNum": 2,
+      "phase": "Předkolo play-off",
+      "date": "2026-04-23",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-04-23T18:00:00+02:00",
+      "home": "USK Praha",
+      "away": "Sršni Photomate Písek",
+      "opponent": "USK Praha",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 92,
+        "away": 100,
+        "us": 100,
+        "them": 92,
+        "result": "W",
+        "margin": 8
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 29,
+            "away": 30
+          },
+          {
+            "home": 19,
+            "away": 25
+          },
+          {
+            "home": 23,
+            "away": 21
+          },
+          {
+            "home": 21,
+            "away": 24
+          }
+        ],
+        "regulation": [
+          {
+            "home": 29,
+            "away": 30
+          },
+          {
+            "home": 19,
+            "away": 25
+          },
+          {
+            "home": 23,
+            "away": 21
+          },
+          {
+            "home": 21,
+            "away": 24
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 29,
+            "away": 30
+          },
+          {
+            "home": 48,
+            "away": 55
+          },
+          {
+            "home": 71,
+            "away": 76
+          },
+          {
+            "home": 92,
+            "away": 100
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/529731",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2840885/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2840885/data.json"
+      }
+    },
+    {
+      "nblMatchId": 529740,
+      "fibaMatchId": 2842775,
+      "round": "čtvrtfinále",
+      "roundNum": null,
+      "phase": "Play-off",
+      "date": "2026-04-30",
+      "time": "17:30",
+      "tz": "Europe/Prague",
+      "datetime": "2026-04-30T17:30:00+02:00",
+      "home": "BK KVIS Pardubice",
+      "away": "Sršni Photomate Písek",
+      "opponent": "BK KVIS Pardubice",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 99,
+        "away": 81,
+        "us": 81,
+        "them": 99,
+        "result": "L",
+        "margin": -18
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 27,
+            "away": 20
+          },
+          {
+            "home": 22,
+            "away": 23
+          },
+          {
+            "home": 24,
+            "away": 20
+          },
+          {
+            "home": 26,
+            "away": 18
+          }
+        ],
+        "regulation": [
+          {
+            "home": 27,
+            "away": 20
+          },
+          {
+            "home": 22,
+            "away": 23
+          },
+          {
+            "home": 24,
+            "away": 20
+          },
+          {
+            "home": 26,
+            "away": 18
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 27,
+            "away": 20
+          },
+          {
+            "home": 49,
+            "away": 43
+          },
+          {
+            "home": 73,
+            "away": 63
+          },
+          {
+            "home": 99,
+            "away": 81
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/529740",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2842775/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2842775/data.json"
+      }
+    },
+    {
+      "nblMatchId": 529742,
+      "fibaMatchId": 2842776,
+      "round": "čtvrtfinále",
+      "roundNum": null,
+      "phase": "Play-off",
+      "date": "2026-05-01",
+      "time": "19:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-05-01T19:00:00+02:00",
+      "home": "BK KVIS Pardubice",
+      "away": "Sršni Photomate Písek",
+      "opponent": "BK KVIS Pardubice",
+      "venue": "away",
+      "status": "final",
+      "score": {
+        "home": 78,
+        "away": 74,
+        "us": 74,
+        "them": 78,
+        "result": "L",
+        "margin": -4
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 18,
+            "away": 21
+          },
+          {
+            "home": 16,
+            "away": 10
+          },
+          {
+            "home": 26,
+            "away": 21
+          },
+          {
+            "home": 18,
+            "away": 22
+          }
+        ],
+        "regulation": [
+          {
+            "home": 18,
+            "away": 21
+          },
+          {
+            "home": 16,
+            "away": 10
+          },
+          {
+            "home": 26,
+            "away": 21
+          },
+          {
+            "home": 18,
+            "away": 22
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 18,
+            "away": 21
+          },
+          {
+            "home": 34,
+            "away": 31
+          },
+          {
+            "home": 60,
+            "away": 52
+          },
+          {
+            "home": 78,
+            "away": 74
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/529742",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2842776/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2842776/data.json"
+      }
+    },
+    {
+      "nblMatchId": 529748,
+      "fibaMatchId": 2842777,
+      "round": "čtvrtfinále",
+      "roundNum": null,
+      "phase": "Play-off",
+      "date": "2026-05-04",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-05-04T18:00:00+02:00",
+      "home": "Sršni Photomate Písek",
+      "away": "BK KVIS Pardubice",
+      "opponent": "BK KVIS Pardubice",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 63,
+        "away": 78,
+        "us": 63,
+        "them": 78,
+        "result": "L",
+        "margin": -15
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 18,
+            "away": 22
+          },
+          {
+            "home": 11,
+            "away": 28
+          },
+          {
+            "home": 20,
+            "away": 19
+          },
+          {
+            "home": 14,
+            "away": 9
+          }
+        ],
+        "regulation": [
+          {
+            "home": 18,
+            "away": 22
+          },
+          {
+            "home": 11,
+            "away": 28
+          },
+          {
+            "home": 20,
+            "away": 19
+          },
+          {
+            "home": 14,
+            "away": 9
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 18,
+            "away": 22
+          },
+          {
+            "home": 29,
+            "away": 50
+          },
+          {
+            "home": 49,
+            "away": 69
+          },
+          {
+            "home": 63,
+            "away": 78
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/529748",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2842777/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2842777/data.json"
+      }
+    },
+    {
+      "nblMatchId": 529750,
+      "fibaMatchId": 2842778,
+      "round": "čtvrtfinále",
+      "roundNum": null,
+      "phase": "Play-off",
+      "date": "2026-05-05",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-05-05T18:00:00+02:00",
+      "home": "Sršni Photomate Písek",
+      "away": "BK KVIS Pardubice",
+      "opponent": "BK KVIS Pardubice",
+      "venue": "home",
+      "status": "final",
+      "score": {
+        "home": 71,
+        "away": 79,
+        "us": 71,
+        "them": 79,
+        "result": "L",
+        "margin": -8
+      },
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 22,
+            "away": 28
+          },
+          {
+            "home": 19,
+            "away": 29
+          },
+          {
+            "home": 21,
+            "away": 9
+          },
+          {
+            "home": 9,
+            "away": 13
+          }
+        ],
+        "regulation": [
+          {
+            "home": 22,
+            "away": 28
+          },
+          {
+            "home": 19,
+            "away": 29
+          },
+          {
+            "home": 21,
+            "away": 9
+          },
+          {
+            "home": 9,
+            "away": 13
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 22,
+            "away": 28
+          },
+          {
+            "home": 41,
+            "away": 57
+          },
+          {
+            "home": 62,
+            "away": 66
+          },
+          {
+            "home": 71,
+            "away": 79
+          }
+        ]
+      },
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/529750",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2842778/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2842778/data.json"
+      }
+    }
+  ]
+}
