@@ -1,0 +1,14 @@
+{
+  "name": "srsni-data",
+  "version": "1.0.0",
+  "description": "Season data backbone pro Sršni Photomate Písek — scraper NBL rozpisu do season-*.json",
+  "type": "module",
+  "main": "season-scraper.mjs",
+  "scripts": {
+    "scrape": "node season-scraper.mjs",
+    "scrape:debug": "node season-scraper.mjs --debug"
+  },
+  "dependencies": {
+    "cheerio": "^1.2.0"
+  }
+}
