@@ -5,7 +5,7 @@
     "nblId": 10110,
     "nblSlug": "srsni-photomate-pisek"
   },
-  "generatedAt": "2026-08-31T05:15:04.724083+02:00",
+  "generatedAt": "2026-08-31T03:50:09.832Z",
   "source": "https://nbl.basketball/tym/srsni-photomate-pisek",
   "counts": {
     "total": 42,
@@ -41,54 +41,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 22,
-            "away": 9
+            "home": 229,
+            "away": 4830
           },
           {
-            "home": 26,
-            "away": 21
-          },
-          {
-            "home": 19,
-            "away": 20
-          },
-          {
-            "home": 17,
-            "away": 27
+            "home": -145,
+            "away": -4753
           }
         ],
         "regulation": [
           {
-            "home": 22,
-            "away": 9
+            "home": 229,
+            "away": 4830
           },
           {
-            "home": 26,
-            "away": 21
-          },
-          {
-            "home": 19,
-            "away": 20
-          },
-          {
-            "home": 17,
-            "away": 27
+            "home": -145,
+            "away": -4753
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 22,
-            "away": 9
-          },
-          {
-            "home": 48,
-            "away": 30
-          },
-          {
-            "home": 67,
-            "away": 50
+            "home": 229,
+            "away": 4830
           },
           {
             "home": 84,
@@ -128,54 +104,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 17,
-            "away": 20
+            "home": 1720,
+            "away": 3137
           },
           {
-            "home": 14,
-            "away": 17
-          },
-          {
-            "home": 26,
-            "away": 13
-          },
-          {
-            "home": 13,
-            "away": 10
+            "home": -1650,
+            "away": -3077
           }
         ],
         "regulation": [
           {
-            "home": 17,
-            "away": 20
+            "home": 1720,
+            "away": 3137
           },
           {
-            "home": 14,
-            "away": 17
-          },
-          {
-            "home": 26,
-            "away": 13
-          },
-          {
-            "home": 13,
-            "away": 10
+            "home": -1650,
+            "away": -3077
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 17,
-            "away": 20
-          },
-          {
-            "home": 31,
-            "away": 37
-          },
-          {
-            "home": 57,
-            "away": 50
+            "home": 1720,
+            "away": 3137
           },
           {
             "home": 70,
@@ -215,54 +167,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 23,
-            "away": 21
+            "home": 2321,
+            "away": 5750
           },
           {
-            "home": 34,
-            "away": 29
-          },
-          {
-            "home": 29,
-            "away": 22
-          },
-          {
-            "home": 34,
-            "away": 21
+            "home": -2201,
+            "away": -5657
           }
         ],
         "regulation": [
           {
-            "home": 23,
-            "away": 21
+            "home": 2321,
+            "away": 5750
           },
           {
-            "home": 34,
-            "away": 29
-          },
-          {
-            "home": 29,
-            "away": 22
-          },
-          {
-            "home": 34,
-            "away": 21
+            "home": -2201,
+            "away": -5657
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 23,
-            "away": 21
-          },
-          {
-            "home": 57,
-            "away": 50
-          },
-          {
-            "home": 86,
-            "away": 72
+            "home": 2321,
+            "away": 5750
           },
           {
             "home": 120,
@@ -302,54 +230,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 26,
-            "away": 16
+            "home": 2616,
+            "away": 4937
           },
           {
-            "home": 23,
-            "away": 21
-          },
-          {
-            "home": 24,
-            "away": 15
-          },
-          {
-            "home": 18,
-            "away": 21
+            "home": -2525,
+            "away": -4864
           }
         ],
         "regulation": [
           {
-            "home": 26,
-            "away": 16
+            "home": 2616,
+            "away": 4937
           },
           {
-            "home": 23,
-            "away": 21
-          },
-          {
-            "home": 24,
-            "away": 15
-          },
-          {
-            "home": 18,
-            "away": 21
+            "home": -2525,
+            "away": -4864
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 26,
-            "away": 16
-          },
-          {
-            "home": 49,
-            "away": 37
-          },
-          {
-            "home": 73,
-            "away": 52
+            "home": 2616,
+            "away": 4937
           },
           {
             "home": 91,
@@ -389,54 +293,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 22,
-            "away": 31
+            "home": 2231,
+            "away": 4554
           },
           {
-            "home": 23,
-            "away": 23
-          },
-          {
-            "home": 21,
-            "away": 25
-          },
-          {
-            "home": 26,
-            "away": 24
+            "home": -2139,
+            "away": -4451
           }
         ],
         "regulation": [
           {
-            "home": 22,
-            "away": 31
+            "home": 2231,
+            "away": 4554
           },
           {
-            "home": 23,
-            "away": 23
-          },
-          {
-            "home": 21,
-            "away": 25
-          },
-          {
-            "home": 26,
-            "away": 24
+            "home": -2139,
+            "away": -4451
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 22,
-            "away": 31
-          },
-          {
-            "home": 45,
-            "away": 54
-          },
-          {
-            "home": 66,
-            "away": 79
+            "home": 2231,
+            "away": 4554
           },
           {
             "home": 92,
@@ -476,54 +356,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 23,
-            "away": 20
+            "home": 2320,
+            "away": 5339
           },
           {
-            "home": 30,
-            "away": 19
-          },
-          {
-            "home": 22,
-            "away": 17
-          },
-          {
-            "home": 28,
-            "away": 16
+            "home": -2217,
+            "away": -5267
           }
         ],
         "regulation": [
           {
-            "home": 23,
-            "away": 20
+            "home": 2320,
+            "away": 5339
           },
           {
-            "home": 30,
-            "away": 19
-          },
-          {
-            "home": 22,
-            "away": 17
-          },
-          {
-            "home": 28,
-            "away": 16
+            "home": -2217,
+            "away": -5267
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 23,
-            "away": 20
-          },
-          {
-            "home": 53,
-            "away": 39
-          },
-          {
-            "home": 75,
-            "away": 56
+            "home": 2320,
+            "away": 5339
           },
           {
             "home": 103,
@@ -563,54 +419,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 22,
-            "away": 14
+            "home": 2214,
+            "away": 5333
           },
           {
-            "home": 31,
-            "away": 19
-          },
-          {
-            "home": 30,
-            "away": 29
-          },
-          {
-            "home": 22,
-            "away": 13
+            "home": -2109,
+            "away": -5258
           }
         ],
         "regulation": [
           {
-            "home": 22,
-            "away": 14
+            "home": 2214,
+            "away": 5333
           },
           {
-            "home": 31,
-            "away": 19
-          },
-          {
-            "home": 30,
-            "away": 29
-          },
-          {
-            "home": 22,
-            "away": 13
+            "home": -2109,
+            "away": -5258
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 22,
-            "away": 14
-          },
-          {
-            "home": 53,
-            "away": 33
-          },
-          {
-            "home": 83,
-            "away": 62
+            "home": 2214,
+            "away": 5333
           },
           {
             "home": 105,
@@ -650,54 +482,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 23,
-            "away": 28
+            "home": 2328,
+            "away": 4148
           },
           {
-            "home": 18,
-            "away": 20
-          },
-          {
-            "home": 23,
-            "away": 8
-          },
-          {
-            "home": 24,
-            "away": 19
+            "home": -2240,
+            "away": -4073
           }
         ],
         "regulation": [
           {
-            "home": 23,
-            "away": 28
+            "home": 2328,
+            "away": 4148
           },
           {
-            "home": 18,
-            "away": 20
-          },
-          {
-            "home": 23,
-            "away": 8
-          },
-          {
-            "home": 24,
-            "away": 19
+            "home": -2240,
+            "away": -4073
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 23,
-            "away": 28
-          },
-          {
-            "home": 41,
-            "away": 48
-          },
-          {
-            "home": 64,
-            "away": 56
+            "home": 2328,
+            "away": 4148
           },
           {
             "home": 88,
@@ -737,54 +545,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 26,
-            "away": 28
+            "home": 2628,
+            "away": 5861
           },
           {
-            "home": 32,
-            "away": 33
-          },
-          {
-            "home": 29,
-            "away": 18
-          },
-          {
-            "home": 23,
-            "away": 21
+            "home": -2518,
+            "away": -5761
           }
         ],
         "regulation": [
           {
-            "home": 26,
-            "away": 28
+            "home": 2628,
+            "away": 5861
           },
           {
-            "home": 32,
-            "away": 33
-          },
-          {
-            "home": 29,
-            "away": 18
-          },
-          {
-            "home": 23,
-            "away": 21
+            "home": -2518,
+            "away": -5761
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 26,
-            "away": 28
-          },
-          {
-            "home": 58,
-            "away": 61
-          },
-          {
-            "home": 87,
-            "away": 79
+            "home": 2628,
+            "away": 5861
           },
           {
             "home": 110,
@@ -824,54 +608,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 24,
-            "away": 23
+            "home": 2423,
+            "away": 4642
           },
           {
-            "home": 22,
-            "away": 19
-          },
-          {
-            "home": 20,
-            "away": 19
-          },
-          {
-            "home": 21,
-            "away": 17
+            "home": -2336,
+            "away": -4564
           }
         ],
         "regulation": [
           {
-            "home": 24,
-            "away": 23
+            "home": 2423,
+            "away": 4642
           },
           {
-            "home": 22,
-            "away": 19
-          },
-          {
-            "home": 20,
-            "away": 19
-          },
-          {
-            "home": 21,
-            "away": 17
+            "home": -2336,
+            "away": -4564
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 24,
-            "away": 23
-          },
-          {
-            "home": 46,
-            "away": 42
-          },
-          {
-            "home": 66,
-            "away": 61
+            "home": 2423,
+            "away": 4642
           },
           {
             "home": 87,
@@ -911,54 +671,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 17,
-            "away": 19
+            "home": 1719,
+            "away": 4242
           },
           {
-            "home": 25,
-            "away": 23
-          },
-          {
-            "home": 14,
-            "away": 25
-          },
-          {
-            "home": 11,
-            "away": 22
+            "home": -1652,
+            "away": -4153
           }
         ],
         "regulation": [
           {
-            "home": 17,
-            "away": 19
+            "home": 1719,
+            "away": 4242
           },
           {
-            "home": 25,
-            "away": 23
-          },
-          {
-            "home": 14,
-            "away": 25
-          },
-          {
-            "home": 11,
-            "away": 22
+            "home": -1652,
+            "away": -4153
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 17,
-            "away": 19
-          },
-          {
-            "home": 42,
-            "away": 42
-          },
-          {
-            "home": 56,
-            "away": 67
+            "home": 1719,
+            "away": 4242
           },
           {
             "home": 67,
@@ -998,54 +734,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 31,
-            "away": 26
+            "home": 3126,
+            "away": 4454
           },
           {
-            "home": 13,
-            "away": 28
-          },
-          {
-            "home": 23,
-            "away": 22
-          },
-          {
-            "home": 34,
-            "away": 29
+            "home": -3025,
+            "away": -4349
           }
         ],
         "regulation": [
           {
-            "home": 31,
-            "away": 26
+            "home": 3126,
+            "away": 4454
           },
           {
-            "home": 13,
-            "away": 28
-          },
-          {
-            "home": 23,
-            "away": 22
-          },
-          {
-            "home": 34,
-            "away": 29
+            "home": -3025,
+            "away": -4349
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 31,
-            "away": 26
-          },
-          {
-            "home": 44,
-            "away": 54
-          },
-          {
-            "home": 67,
-            "away": 76
+            "home": 3126,
+            "away": 4454
           },
           {
             "home": 101,
@@ -1085,67 +797,42 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 18,
-            "away": 15
+            "home": 1815,
+            "away": 4439
           },
           {
-            "home": 26,
-            "away": 24
+            "home": 4657,
+            "away": 5055
           },
           {
-            "home": 20,
-            "away": 33
-          },
-          {
-            "home": 30,
-            "away": 22
-          },
-          {
-            "home": 6,
-            "away": 9
+            "home": -6372,
+            "away": -9391
           }
         ],
         "regulation": [
           {
-            "home": 18,
-            "away": 15
+            "home": 1815,
+            "away": 4439
           },
           {
-            "home": 26,
-            "away": 24
+            "home": 4657,
+            "away": 5055
           },
           {
-            "home": 20,
-            "away": 33
-          },
-          {
-            "home": 30,
-            "away": 22
+            "home": -6372,
+            "away": -9391
           }
         ],
-        "overtimes": [
-          {
-            "home": 6,
-            "away": 9
-          }
-        ],
-        "otCount": 1,
+        "overtimes": [],
+        "otCount": 0,
         "cumulative": [
           {
-            "home": 18,
-            "away": 15
+            "home": 1815,
+            "away": 4439
           },
           {
-            "home": 44,
-            "away": 39
-          },
-          {
-            "home": 64,
-            "away": 72
-          },
-          {
-            "home": 94,
-            "away": 94
+            "home": 6472,
+            "away": 9494
           },
           {
             "home": 100,
@@ -1185,54 +872,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 15,
-            "away": 20
+            "home": 1520,
+            "away": 3044
           },
           {
-            "home": 15,
-            "away": 24
-          },
-          {
-            "home": 26,
-            "away": 17
-          },
-          {
-            "home": 28,
-            "away": 25
+            "home": -1436,
+            "away": -2958
           }
         ],
         "regulation": [
           {
-            "home": 15,
-            "away": 20
+            "home": 1520,
+            "away": 3044
           },
           {
-            "home": 15,
-            "away": 24
-          },
-          {
-            "home": 26,
-            "away": 17
-          },
-          {
-            "home": 28,
-            "away": 25
+            "home": -1436,
+            "away": -2958
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 15,
-            "away": 20
-          },
-          {
-            "home": 30,
-            "away": 44
-          },
-          {
-            "home": 56,
-            "away": 61
+            "home": 1520,
+            "away": 3044
           },
           {
             "home": 84,
@@ -1272,54 +935,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 21,
-            "away": 20
+            "home": 2120,
+            "away": 4043
           },
           {
-            "home": 19,
-            "away": 23
-          },
-          {
-            "home": 17,
-            "away": 28
-          },
-          {
-            "home": 25,
-            "away": 23
+            "home": -2038,
+            "away": -3949
           }
         ],
         "regulation": [
           {
-            "home": 21,
-            "away": 20
+            "home": 2120,
+            "away": 4043
           },
           {
-            "home": 19,
-            "away": 23
-          },
-          {
-            "home": 17,
-            "away": 28
-          },
-          {
-            "home": 25,
-            "away": 23
+            "home": -2038,
+            "away": -3949
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 21,
-            "away": 20
-          },
-          {
-            "home": 40,
-            "away": 43
-          },
-          {
-            "home": 57,
-            "away": 71
+            "home": 2120,
+            "away": 4043
           },
           {
             "home": 82,
@@ -1359,54 +998,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 20,
-            "away": 21
+            "home": 2021,
+            "away": 5242
           },
           {
-            "home": 32,
-            "away": 21
-          },
-          {
-            "home": 26,
-            "away": 20
-          },
-          {
-            "home": 17,
-            "away": 17
+            "home": -1926,
+            "away": -5163
           }
         ],
         "regulation": [
           {
-            "home": 20,
-            "away": 21
+            "home": 2021,
+            "away": 5242
           },
           {
-            "home": 32,
-            "away": 21
-          },
-          {
-            "home": 26,
-            "away": 20
-          },
-          {
-            "home": 17,
-            "away": 17
+            "home": -1926,
+            "away": -5163
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 20,
-            "away": 21
-          },
-          {
-            "home": 52,
-            "away": 42
-          },
-          {
-            "home": 78,
-            "away": 62
+            "home": 2021,
+            "away": 5242
           },
           {
             "home": 95,
@@ -1446,54 +1061,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 24,
-            "away": 16
+            "home": 2416,
+            "away": 4336
           },
           {
-            "home": 19,
-            "away": 20
-          },
-          {
-            "home": 13,
-            "away": 30
-          },
-          {
-            "home": 17,
-            "away": 16
+            "home": -2343,
+            "away": -4254
           }
         ],
         "regulation": [
           {
-            "home": 24,
-            "away": 16
+            "home": 2416,
+            "away": 4336
           },
           {
-            "home": 19,
-            "away": 20
-          },
-          {
-            "home": 13,
-            "away": 30
-          },
-          {
-            "home": 17,
-            "away": 16
+            "home": -2343,
+            "away": -4254
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 24,
-            "away": 16
-          },
-          {
-            "home": 43,
-            "away": 36
-          },
-          {
-            "home": 56,
-            "away": 66
+            "home": 2416,
+            "away": 4336
           },
           {
             "home": 73,
@@ -1533,54 +1124,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 20,
-            "away": 25
+            "home": 2025,
+            "away": 4752
           },
           {
-            "home": 27,
-            "away": 27
-          },
-          {
-            "home": 26,
-            "away": 20
-          },
-          {
-            "home": 19,
-            "away": 33
+            "home": -1933,
+            "away": -4647
           }
         ],
         "regulation": [
           {
-            "home": 20,
-            "away": 25
+            "home": 2025,
+            "away": 4752
           },
           {
-            "home": 27,
-            "away": 27
-          },
-          {
-            "home": 26,
-            "away": 20
-          },
-          {
-            "home": 19,
-            "away": 33
+            "home": -1933,
+            "away": -4647
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 20,
-            "away": 25
-          },
-          {
-            "home": 47,
-            "away": 52
-          },
-          {
-            "home": 73,
-            "away": 72
+            "home": 2025,
+            "away": 4752
           },
           {
             "home": 92,
@@ -1620,54 +1187,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 25,
-            "away": 15
+            "home": 2515,
+            "away": 4745
           },
           {
-            "home": 22,
-            "away": 30
-          },
-          {
-            "home": 23,
-            "away": 23
-          },
-          {
-            "home": 20,
-            "away": 18
+            "home": -2425,
+            "away": -4659
           }
         ],
         "regulation": [
           {
-            "home": 25,
-            "away": 15
+            "home": 2515,
+            "away": 4745
           },
           {
-            "home": 22,
-            "away": 30
-          },
-          {
-            "home": 23,
-            "away": 23
-          },
-          {
-            "home": 20,
-            "away": 18
+            "home": -2425,
+            "away": -4659
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 25,
-            "away": 15
-          },
-          {
-            "home": 47,
-            "away": 45
-          },
-          {
-            "home": 70,
-            "away": 68
+            "home": 2515,
+            "away": 4745
           },
           {
             "home": 90,
@@ -1707,54 +1250,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 26,
-            "away": 29
+            "home": 2629,
+            "away": 4057
           },
           {
-            "home": 14,
-            "away": 28
-          },
-          {
-            "home": 24,
-            "away": 20
-          },
-          {
-            "home": 34,
-            "away": 28
+            "home": -2531,
+            "away": -3952
           }
         ],
         "regulation": [
           {
-            "home": 26,
-            "away": 29
+            "home": 2629,
+            "away": 4057
           },
           {
-            "home": 14,
-            "away": 28
-          },
-          {
-            "home": 24,
-            "away": 20
-          },
-          {
-            "home": 34,
-            "away": 28
+            "home": -2531,
+            "away": -3952
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 26,
-            "away": 29
-          },
-          {
-            "home": 40,
-            "away": 57
-          },
-          {
-            "home": 64,
-            "away": 77
+            "home": 2629,
+            "away": 4057
           },
           {
             "home": 98,
@@ -1794,54 +1313,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 26,
-            "away": 18
+            "home": 2618,
+            "away": 6339
           },
           {
-            "home": 37,
-            "away": 21
-          },
-          {
-            "home": 26,
-            "away": 26
-          },
-          {
-            "home": 29,
-            "away": 20
+            "home": -2500,
+            "away": -6254
           }
         ],
         "regulation": [
           {
-            "home": 26,
-            "away": 18
+            "home": 2618,
+            "away": 6339
           },
           {
-            "home": 37,
-            "away": 21
-          },
-          {
-            "home": 26,
-            "away": 26
-          },
-          {
-            "home": 29,
-            "away": 20
+            "home": -2500,
+            "away": -6254
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 26,
-            "away": 18
-          },
-          {
-            "home": 63,
-            "away": 39
-          },
-          {
-            "home": 89,
-            "away": 65
+            "home": 2618,
+            "away": 6339
           },
           {
             "home": 118,
@@ -1881,54 +1376,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 19,
-            "away": 10
+            "home": 1910,
+            "away": 3835
           },
           {
-            "home": 19,
-            "away": 25
-          },
-          {
-            "home": 22,
-            "away": 29
-          },
-          {
-            "home": 29,
-            "away": 10
+            "home": -1821,
+            "away": -3761
           }
         ],
         "regulation": [
           {
-            "home": 19,
-            "away": 10
+            "home": 1910,
+            "away": 3835
           },
           {
-            "home": 19,
-            "away": 25
-          },
-          {
-            "home": 22,
-            "away": 29
-          },
-          {
-            "home": 29,
-            "away": 10
+            "home": -1821,
+            "away": -3761
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 19,
-            "away": 10
-          },
-          {
-            "home": 38,
-            "away": 35
-          },
-          {
-            "home": 60,
-            "away": 64
+            "home": 1910,
+            "away": 3835
           },
           {
             "home": 89,
@@ -1968,54 +1439,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 24,
-            "away": 27
+            "home": 2427,
+            "away": 4648
           },
           {
-            "home": 22,
-            "away": 21
-          },
-          {
-            "home": 24,
-            "away": 10
-          },
-          {
-            "home": 31,
-            "away": 26
+            "home": -2326,
+            "away": -4564
           }
         ],
         "regulation": [
           {
-            "home": 24,
-            "away": 27
+            "home": 2427,
+            "away": 4648
           },
           {
-            "home": 22,
-            "away": 21
-          },
-          {
-            "home": 24,
-            "away": 10
-          },
-          {
-            "home": 31,
-            "away": 26
+            "home": -2326,
+            "away": -4564
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 24,
-            "away": 27
-          },
-          {
-            "home": 46,
-            "away": 48
-          },
-          {
-            "home": 70,
-            "away": 58
+            "home": 2427,
+            "away": 4648
           },
           {
             "home": 101,
@@ -2055,54 +1502,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 31,
-            "away": 19
+            "home": 3119,
+            "away": 5028
           },
           {
-            "home": 19,
-            "away": 9
-          },
-          {
-            "home": 11,
-            "away": 24
-          },
-          {
-            "home": 26,
-            "away": 24
+            "home": -3032,
+            "away": -4952
           }
         ],
         "regulation": [
           {
-            "home": 31,
-            "away": 19
+            "home": 3119,
+            "away": 5028
           },
           {
-            "home": 19,
-            "away": 9
-          },
-          {
-            "home": 11,
-            "away": 24
-          },
-          {
-            "home": 26,
-            "away": 24
+            "home": -3032,
+            "away": -4952
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 31,
-            "away": 19
-          },
-          {
-            "home": 50,
-            "away": 28
-          },
-          {
-            "home": 61,
-            "away": 52
+            "home": 3119,
+            "away": 5028
           },
           {
             "home": 87,
@@ -2142,54 +1565,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 25,
-            "away": 15
+            "home": 2515,
+            "away": 5135
           },
           {
-            "home": 26,
-            "away": 20
-          },
-          {
-            "home": 20,
-            "away": 30
-          },
-          {
-            "home": 17,
-            "away": 9
+            "home": -2427,
+            "away": -5061
           }
         ],
         "regulation": [
           {
-            "home": 25,
-            "away": 15
+            "home": 2515,
+            "away": 5135
           },
           {
-            "home": 26,
-            "away": 20
-          },
-          {
-            "home": 20,
-            "away": 30
-          },
-          {
-            "home": 17,
-            "away": 9
+            "home": -2427,
+            "away": -5061
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 25,
-            "away": 15
-          },
-          {
-            "home": 51,
-            "away": 35
-          },
-          {
-            "home": 71,
-            "away": 65
+            "home": 2515,
+            "away": 5135
           },
           {
             "home": 88,
@@ -2229,54 +1628,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 19,
-            "away": 35
+            "home": 1935,
+            "away": 3558
           },
           {
-            "home": 16,
-            "away": 23
-          },
-          {
-            "home": 21,
-            "away": 24
-          },
-          {
-            "home": 15,
-            "away": 17
+            "home": -1864,
+            "away": -3459
           }
         ],
         "regulation": [
           {
-            "home": 19,
-            "away": 35
+            "home": 1935,
+            "away": 3558
           },
           {
-            "home": 16,
-            "away": 23
-          },
-          {
-            "home": 21,
-            "away": 24
-          },
-          {
-            "home": 15,
-            "away": 17
+            "home": -1864,
+            "away": -3459
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 19,
-            "away": 35
-          },
-          {
-            "home": 35,
-            "away": 58
-          },
-          {
-            "home": 56,
-            "away": 82
+            "home": 1935,
+            "away": 3558
           },
           {
             "home": 71,
@@ -2316,54 +1691,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 29,
-            "away": 27
+            "home": 2927,
+            "away": 5548
           },
           {
-            "home": 26,
-            "away": 21
-          },
-          {
-            "home": 13,
-            "away": 18
-          },
-          {
-            "home": 20,
-            "away": 18
+            "home": -2839,
+            "away": -5464
           }
         ],
         "regulation": [
           {
-            "home": 29,
-            "away": 27
+            "home": 2927,
+            "away": 5548
           },
           {
-            "home": 26,
-            "away": 21
-          },
-          {
-            "home": 13,
-            "away": 18
-          },
-          {
-            "home": 20,
-            "away": 18
+            "home": -2839,
+            "away": -5464
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 29,
-            "away": 27
-          },
-          {
-            "home": 55,
-            "away": 48
-          },
-          {
-            "home": 68,
-            "away": 66
+            "home": 2927,
+            "away": 5548
           },
           {
             "home": 88,
@@ -2403,54 +1754,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 21,
-            "away": 19
+            "home": 2119,
+            "away": 4441
           },
           {
-            "home": 23,
-            "away": 22
-          },
-          {
-            "home": 17,
-            "away": 18
-          },
-          {
-            "home": 23,
-            "away": 27
+            "home": -2035,
+            "away": -4355
           }
         ],
         "regulation": [
           {
-            "home": 21,
-            "away": 19
+            "home": 2119,
+            "away": 4441
           },
           {
-            "home": 23,
-            "away": 22
-          },
-          {
-            "home": 17,
-            "away": 18
-          },
-          {
-            "home": 23,
-            "away": 27
+            "home": -2035,
+            "away": -4355
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 21,
-            "away": 19
-          },
-          {
-            "home": 44,
-            "away": 41
-          },
-          {
-            "home": 61,
-            "away": 59
+            "home": 2119,
+            "away": 4441
           },
           {
             "home": 84,
@@ -2490,54 +1817,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 27,
-            "away": 19
+            "home": 2719,
+            "away": 4840
           },
           {
-            "home": 21,
-            "away": 21
-          },
-          {
-            "home": 19,
-            "away": 19
-          },
-          {
-            "home": 23,
-            "away": 26
+            "home": -2629,
+            "away": -4755
           }
         ],
         "regulation": [
           {
-            "home": 27,
-            "away": 19
+            "home": 2719,
+            "away": 4840
           },
           {
-            "home": 21,
-            "away": 21
-          },
-          {
-            "home": 19,
-            "away": 19
-          },
-          {
-            "home": 23,
-            "away": 26
+            "home": -2629,
+            "away": -4755
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 27,
-            "away": 19
-          },
-          {
-            "home": 48,
-            "away": 40
-          },
-          {
-            "home": 67,
-            "away": 59
+            "home": 2719,
+            "away": 4840
           },
           {
             "home": 90,
@@ -2577,54 +1880,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 16,
-            "away": 22
+            "home": 1622,
+            "away": 3545
           },
           {
-            "home": 19,
-            "away": 23
-          },
-          {
-            "home": 25,
-            "away": 24
-          },
-          {
-            "home": 27,
-            "away": 26
+            "home": -1535,
+            "away": -3450
           }
         ],
         "regulation": [
           {
-            "home": 16,
-            "away": 22
+            "home": 1622,
+            "away": 3545
           },
           {
-            "home": 19,
-            "away": 23
-          },
-          {
-            "home": 25,
-            "away": 24
-          },
-          {
-            "home": 27,
-            "away": 26
+            "home": -1535,
+            "away": -3450
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 16,
-            "away": 22
-          },
-          {
-            "home": 35,
-            "away": 45
-          },
-          {
-            "home": 60,
-            "away": 69
+            "home": 1622,
+            "away": 3545
           },
           {
             "home": 87,
@@ -2664,54 +1943,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 22,
-            "away": 28
+            "home": 2228,
+            "away": 4148
           },
           {
-            "home": 19,
-            "away": 20
-          },
-          {
-            "home": 24,
-            "away": 13
-          },
-          {
-            "home": 21,
-            "away": 9
+            "home": -2142,
+            "away": -4078
           }
         ],
         "regulation": [
           {
-            "home": 22,
-            "away": 28
+            "home": 2228,
+            "away": 4148
           },
           {
-            "home": 19,
-            "away": 20
-          },
-          {
-            "home": 24,
-            "away": 13
-          },
-          {
-            "home": 21,
-            "away": 9
+            "home": -2142,
+            "away": -4078
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 22,
-            "away": 28
-          },
-          {
-            "home": 41,
-            "away": 48
-          },
-          {
-            "home": 65,
-            "away": 61
+            "home": 2228,
+            "away": 4148
           },
           {
             "home": 86,
@@ -2751,54 +2006,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 22,
-            "away": 27
+            "home": 2227,
+            "away": 4246
           },
           {
-            "home": 20,
-            "away": 19
-          },
-          {
-            "home": 18,
-            "away": 20
-          },
-          {
-            "home": 24,
-            "away": 25
+            "home": -2143,
+            "away": -4155
           }
         ],
         "regulation": [
           {
-            "home": 22,
-            "away": 27
+            "home": 2227,
+            "away": 4246
           },
           {
-            "home": 20,
-            "away": 19
-          },
-          {
-            "home": 18,
-            "away": 20
-          },
-          {
-            "home": 24,
-            "away": 25
+            "home": -2143,
+            "away": -4155
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 22,
-            "away": 27
-          },
-          {
-            "home": 42,
-            "away": 46
-          },
-          {
-            "home": 60,
-            "away": 66
+            "home": 2227,
+            "away": 4246
           },
           {
             "home": 84,
@@ -2838,54 +2069,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 28,
-            "away": 28
+            "home": 2828,
+            "away": 6445
           },
           {
-            "home": 36,
-            "away": 17
-          },
-          {
-            "home": 17,
-            "away": 21
-          },
-          {
-            "home": 23,
-            "away": 15
+            "home": -2724,
+            "away": -6364
           }
         ],
         "regulation": [
           {
-            "home": 28,
-            "away": 28
+            "home": 2828,
+            "away": 6445
           },
           {
-            "home": 36,
-            "away": 17
-          },
-          {
-            "home": 17,
-            "away": 21
-          },
-          {
-            "home": 23,
-            "away": 15
+            "home": -2724,
+            "away": -6364
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 28,
-            "away": 28
-          },
-          {
-            "home": 64,
-            "away": 45
-          },
-          {
-            "home": 81,
-            "away": 66
+            "home": 2828,
+            "away": 6445
           },
           {
             "home": 104,
@@ -2925,54 +2132,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 20,
-            "away": 20
+            "home": 2020,
+            "away": 4134
           },
           {
-            "home": 21,
-            "away": 14
-          },
-          {
-            "home": 30,
-            "away": 15
-          },
-          {
-            "home": 20,
-            "away": 27
+            "home": -1929,
+            "away": -4058
           }
         ],
         "regulation": [
           {
-            "home": 20,
-            "away": 20
+            "home": 2020,
+            "away": 4134
           },
           {
-            "home": 21,
-            "away": 14
-          },
-          {
-            "home": 30,
-            "away": 15
-          },
-          {
-            "home": 20,
-            "away": 27
+            "home": -1929,
+            "away": -4058
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 20,
-            "away": 20
-          },
-          {
-            "home": 41,
-            "away": 34
-          },
-          {
-            "home": 71,
-            "away": 49
+            "home": 2020,
+            "away": 4134
           },
           {
             "home": 91,
@@ -3012,54 +2195,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 29,
-            "away": 31
+            "home": 2931,
+            "away": 4849
           },
           {
-            "home": 19,
-            "away": 18
-          },
-          {
-            "home": 21,
-            "away": 29
-          },
-          {
-            "home": 9,
-            "away": 28
+            "home": -2853,
+            "away": -4743
           }
         ],
         "regulation": [
           {
-            "home": 29,
-            "away": 31
+            "home": 2931,
+            "away": 4849
           },
           {
-            "home": 19,
-            "away": 18
-          },
-          {
-            "home": 21,
-            "away": 29
-          },
-          {
-            "home": 9,
-            "away": 28
+            "home": -2853,
+            "away": -4743
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 29,
-            "away": 31
-          },
-          {
-            "home": 48,
-            "away": 49
-          },
-          {
-            "home": 69,
-            "away": 78
+            "home": 2931,
+            "away": 4849
           },
           {
             "home": 78,
@@ -3099,54 +2258,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 26,
-            "away": 27
+            "home": 2627,
+            "away": 5046
           },
           {
-            "home": 24,
-            "away": 19
-          },
-          {
-            "home": 25,
-            "away": 19
-          },
-          {
-            "home": 25,
-            "away": 30
+            "home": -2527,
+            "away": -4951
           }
         ],
         "regulation": [
           {
-            "home": 26,
-            "away": 27
+            "home": 2627,
+            "away": 5046
           },
           {
-            "home": 24,
-            "away": 19
-          },
-          {
-            "home": 25,
-            "away": 19
-          },
-          {
-            "home": 25,
-            "away": 30
+            "home": -2527,
+            "away": -4951
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 26,
-            "away": 27
-          },
-          {
-            "home": 50,
-            "away": 46
-          },
-          {
-            "home": 75,
-            "away": 65
+            "home": 2627,
+            "away": 5046
           },
           {
             "home": 100,
@@ -3186,54 +2321,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 26,
-            "away": 18
+            "home": 2618,
+            "away": 3940
           },
           {
-            "home": 13,
-            "away": 22
-          },
-          {
-            "home": 21,
-            "away": 10
-          },
-          {
-            "home": 18,
-            "away": 15
+            "home": -2540,
+            "away": -3875
           }
         ],
         "regulation": [
           {
-            "home": 26,
-            "away": 18
+            "home": 2618,
+            "away": 3940
           },
           {
-            "home": 13,
-            "away": 22
-          },
-          {
-            "home": 21,
-            "away": 10
-          },
-          {
-            "home": 18,
-            "away": 15
+            "home": -2540,
+            "away": -3875
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 26,
-            "away": 18
-          },
-          {
-            "home": 39,
-            "away": 40
-          },
-          {
-            "home": 60,
-            "away": 50
+            "home": 2618,
+            "away": 3940
           },
           {
             "home": 78,
@@ -3273,54 +2384,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 29,
-            "away": 30
+            "home": 2930,
+            "away": 4855
           },
           {
-            "home": 19,
-            "away": 25
-          },
-          {
-            "home": 23,
-            "away": 21
-          },
-          {
-            "home": 21,
-            "away": 24
+            "home": -2838,
+            "away": -4755
           }
         ],
         "regulation": [
           {
-            "home": 29,
-            "away": 30
+            "home": 2930,
+            "away": 4855
           },
           {
-            "home": 19,
-            "away": 25
-          },
-          {
-            "home": 23,
-            "away": 21
-          },
-          {
-            "home": 21,
-            "away": 24
+            "home": -2838,
+            "away": -4755
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 29,
-            "away": 30
-          },
-          {
-            "home": 48,
-            "away": 55
-          },
-          {
-            "home": 71,
-            "away": 76
+            "home": 2930,
+            "away": 4855
           },
           {
             "home": 92,
@@ -3360,54 +2447,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 27,
-            "away": 20
+            "home": 2720,
+            "away": 4943
           },
           {
-            "home": 22,
-            "away": 23
-          },
-          {
-            "home": 24,
-            "away": 20
-          },
-          {
-            "home": 26,
-            "away": 18
+            "home": -2621,
+            "away": -4862
           }
         ],
         "regulation": [
           {
-            "home": 27,
-            "away": 20
+            "home": 2720,
+            "away": 4943
           },
           {
-            "home": 22,
-            "away": 23
-          },
-          {
-            "home": 24,
-            "away": 20
-          },
-          {
-            "home": 26,
-            "away": 18
+            "home": -2621,
+            "away": -4862
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 27,
-            "away": 20
-          },
-          {
-            "home": 49,
-            "away": 43
-          },
-          {
-            "home": 73,
-            "away": 63
+            "home": 2720,
+            "away": 4943
           },
           {
             "home": 99,
@@ -3447,54 +2510,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 18,
-            "away": 21
+            "home": 1821,
+            "away": 3431
           },
           {
-            "home": 16,
-            "away": 10
-          },
-          {
-            "home": 26,
-            "away": 21
-          },
-          {
-            "home": 18,
-            "away": 22
+            "home": -1743,
+            "away": -3357
           }
         ],
         "regulation": [
           {
-            "home": 18,
-            "away": 21
+            "home": 1821,
+            "away": 3431
           },
           {
-            "home": 16,
-            "away": 10
-          },
-          {
-            "home": 26,
-            "away": 21
-          },
-          {
-            "home": 18,
-            "away": 22
+            "home": -1743,
+            "away": -3357
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 18,
-            "away": 21
-          },
-          {
-            "home": 34,
-            "away": 31
-          },
-          {
-            "home": 60,
-            "away": 52
+            "home": 1821,
+            "away": 3431
           },
           {
             "home": 78,
@@ -3534,54 +2573,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 18,
-            "away": 22
+            "home": 1822,
+            "away": 2950
           },
           {
-            "home": 11,
-            "away": 28
-          },
-          {
-            "home": 20,
-            "away": 19
-          },
-          {
-            "home": 14,
-            "away": 9
+            "home": -1759,
+            "away": -2872
           }
         ],
         "regulation": [
           {
-            "home": 18,
-            "away": 22
+            "home": 1822,
+            "away": 2950
           },
           {
-            "home": 11,
-            "away": 28
-          },
-          {
-            "home": 20,
-            "away": 19
-          },
-          {
-            "home": 14,
-            "away": 9
+            "home": -1759,
+            "away": -2872
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 18,
-            "away": 22
-          },
-          {
-            "home": 29,
-            "away": 50
-          },
-          {
-            "home": 49,
-            "away": 69
+            "home": 1822,
+            "away": 2950
           },
           {
             "home": 63,
@@ -3621,54 +2636,30 @@
       "quarters": {
         "byPeriod": [
           {
-            "home": 22,
-            "away": 28
+            "home": 2228,
+            "away": 4157
           },
           {
-            "home": 19,
-            "away": 29
-          },
-          {
-            "home": 21,
-            "away": 9
-          },
-          {
-            "home": 9,
-            "away": 13
+            "home": -2157,
+            "away": -4078
           }
         ],
         "regulation": [
           {
-            "home": 22,
-            "away": 28
+            "home": 2228,
+            "away": 4157
           },
           {
-            "home": 19,
-            "away": 29
-          },
-          {
-            "home": 21,
-            "away": 9
-          },
-          {
-            "home": 9,
-            "away": 13
+            "home": -2157,
+            "away": -4078
           }
         ],
         "overtimes": [],
         "otCount": 0,
         "cumulative": [
           {
-            "home": 22,
-            "away": 28
-          },
-          {
-            "home": 41,
-            "away": 57
-          },
-          {
-            "home": 62,
-            "away": 66
+            "home": 2228,
+            "away": 4157
           },
           {
             "home": 71,
