@@ -5,21 +5,21 @@
     "nblId": 10110,
     "nblSlug": "srsni-photomate-pisek"
   },
-  "generatedAt": "2026-08-31T05:16:00.625571+02:00",
+  "generatedAt": "2026-09-03T14:19:48.054Z",
   "source": "https://nbl.basketball/tym/srsni-photomate-pisek",
   "counts": {
-    "total": 1,
-    "home": 0,
-    "away": 1,
+    "total": 20,
+    "home": 10,
+    "away": 10,
     "final": 0,
-    "scheduled": 1
+    "scheduled": 20
   },
   "fixtures": [
     {
       "nblMatchId": 544546,
-      "fibaMatchId": null,
-      "round": null,
-      "roundNum": null,
+      "fibaMatchId": 2890467,
+      "round": "1. kolo",
+      "roundNum": 1,
       "phase": "Základní část",
       "date": "2026-09-20",
       "time": "18:00",
@@ -41,6 +41,576 @@
       "quarters": null,
       "links": {
         "nbl": "https://nbl.basketball/zapas/544546",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2890467/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2890467/data.json"
+      }
+    },
+    {
+      "nblMatchId": 544552,
+      "fibaMatchId": 2890473,
+      "round": "2. kolo",
+      "roundNum": 2,
+      "phase": "Základní část",
+      "date": "2026-09-23",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-09-23T18:00:00+02:00",
+      "home": "Sršni Photomate Písek",
+      "away": "BK GAPA Hradec Králové",
+      "opponent": "BK GAPA Hradec Králové",
+      "venue": "home",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544552",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2890473/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2890473/data.json"
+      }
+    },
+    {
+      "nblMatchId": 544564,
+      "fibaMatchId": 2892252,
+      "round": "4. kolo",
+      "roundNum": 4,
+      "phase": "Základní část",
+      "date": "2026-09-30",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-09-30T18:00:00+02:00",
+      "home": "Sršni Photomate Písek",
+      "away": "BK KVIS Pardubice",
+      "opponent": "BK KVIS Pardubice",
+      "venue": "home",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544564",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2892252/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2892252/data.json"
+      }
+    },
+    {
+      "nblMatchId": 544570,
+      "fibaMatchId": null,
+      "round": "5. kolo",
+      "roundNum": 5,
+      "phase": "Základní část",
+      "date": "2026-10-03",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-10-03T18:00:00+02:00",
+      "home": "USK Praha",
+      "away": "Sršni Photomate Písek",
+      "opponent": "USK Praha",
+      "venue": "away",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544570",
+        "livestats": null,
+        "fibaData": null
+      }
+    },
+    {
+      "nblMatchId": 544576,
+      "fibaMatchId": null,
+      "round": "6. kolo",
+      "roundNum": 6,
+      "phase": "Základní část",
+      "date": "2026-10-11",
+      "time": "17:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-10-11T17:00:00+02:00",
+      "home": "Sršni Photomate Písek",
+      "away": "NH Ostrava",
+      "opponent": "NH Ostrava",
+      "venue": "home",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544576",
+        "livestats": null,
+        "fibaData": null
+      }
+    },
+    {
+      "nblMatchId": 544582,
+      "fibaMatchId": null,
+      "round": "7. kolo",
+      "roundNum": 7,
+      "phase": "Základní část",
+      "date": "2026-10-17",
+      "time": "19:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-10-17T19:00:00+02:00",
+      "home": "BK Opava",
+      "away": "Sršni Photomate Písek",
+      "opponent": "BK Opava",
+      "venue": "away",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544582",
+        "livestats": null,
+        "fibaData": null
+      }
+    },
+    {
+      "nblMatchId": 544588,
+      "fibaMatchId": null,
+      "round": "8. kolo",
+      "roundNum": 8,
+      "phase": "Základní část",
+      "date": "2026-10-23",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-10-23T18:00:00+02:00",
+      "home": "Sršni Photomate Písek",
+      "away": "SK Slavia Praha ERA NBK",
+      "opponent": "SK Slavia Praha ERA NBK",
+      "venue": "home",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544588",
+        "livestats": null,
+        "fibaData": null
+      }
+    },
+    {
+      "nblMatchId": 544594,
+      "fibaMatchId": null,
+      "round": "9. kolo",
+      "roundNum": 9,
+      "phase": "Základní část",
+      "date": "2026-10-28",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-10-28T18:00:00+01:00",
+      "home": "PUMPA Basket Brno",
+      "away": "Sršni Photomate Písek",
+      "opponent": "PUMPA Basket Brno",
+      "venue": "away",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544594",
+        "livestats": null,
+        "fibaData": null
+      }
+    },
+    {
+      "nblMatchId": 544600,
+      "fibaMatchId": null,
+      "round": "10. kolo",
+      "roundNum": 10,
+      "phase": "Základní část",
+      "date": "2026-11-01",
+      "time": "17:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-11-01T17:00:00+01:00",
+      "home": "Sršni Photomate Písek",
+      "away": "BK ARMEX ENERGY Děčín",
+      "opponent": "BK ARMEX ENERGY Děčín",
+      "venue": "home",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544600",
+        "livestats": null,
+        "fibaData": null
+      }
+    },
+    {
+      "nblMatchId": 544606,
+      "fibaMatchId": null,
+      "round": "11. kolo",
+      "roundNum": 11,
+      "phase": "Základní část",
+      "date": "2026-11-08",
+      "time": "17:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-11-08T17:00:00+01:00",
+      "home": "BK Olomoucko",
+      "away": "Sršni Photomate Písek",
+      "opponent": "BK Olomoucko",
+      "venue": "away",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544606",
+        "livestats": null,
+        "fibaData": null
+      }
+    },
+    {
+      "nblMatchId": 544612,
+      "fibaMatchId": null,
+      "round": "12. kolo",
+      "roundNum": 12,
+      "phase": "Základní část",
+      "date": "2026-11-15",
+      "time": "17:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-11-15T17:00:00+01:00",
+      "home": "Sršni Photomate Písek",
+      "away": "SLUNETA Ústí nad Labem",
+      "opponent": "SLUNETA Ústí nad Labem",
+      "venue": "home",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544612",
+        "livestats": null,
+        "fibaData": null
+      }
+    },
+    {
+      "nblMatchId": 544618,
+      "fibaMatchId": null,
+      "round": "13. kolo",
+      "roundNum": 13,
+      "phase": "Základní část",
+      "date": "2026-11-18",
+      "time": "19:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-11-18T19:00:00+01:00",
+      "home": "BK GAPA Hradec Králové",
+      "away": "Sršni Photomate Písek",
+      "opponent": "BK GAPA Hradec Králové",
+      "venue": "away",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544618",
+        "livestats": null,
+        "fibaData": null
+      }
+    },
+    {
+      "nblMatchId": 544648,
+      "fibaMatchId": null,
+      "round": "18. kolo",
+      "roundNum": 18,
+      "phase": "Základní část",
+      "date": "2026-12-02",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-12-02T18:00:00+01:00",
+      "home": "Sršni Photomate Písek",
+      "away": "BK Opava",
+      "opponent": "BK Opava",
+      "venue": "home",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544648",
+        "livestats": null,
+        "fibaData": null
+      }
+    },
+    {
+      "nblMatchId": 544630,
+      "fibaMatchId": null,
+      "round": "15. kolo",
+      "roundNum": 15,
+      "phase": "Základní část",
+      "date": "2026-12-05",
+      "time": "18:30",
+      "tz": "Europe/Prague",
+      "datetime": "2026-12-05T18:30:00+01:00",
+      "home": "BK KVIS Pardubice",
+      "away": "Sršni Photomate Písek",
+      "opponent": "BK KVIS Pardubice",
+      "venue": "away",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544630",
+        "livestats": null,
+        "fibaData": null
+      }
+    },
+    {
+      "nblMatchId": 544636,
+      "fibaMatchId": null,
+      "round": "16. kolo",
+      "roundNum": 16,
+      "phase": "Základní část",
+      "date": "2026-12-13",
+      "time": "17:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-12-13T17:00:00+01:00",
+      "home": "Sršni Photomate Písek",
+      "away": "USK Praha",
+      "opponent": "USK Praha",
+      "venue": "home",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544636",
+        "livestats": null,
+        "fibaData": null
+      }
+    },
+    {
+      "nblMatchId": 544642,
+      "fibaMatchId": null,
+      "round": "17. kolo",
+      "roundNum": 17,
+      "phase": "Základní část",
+      "date": "2026-12-19",
+      "time": "17:30",
+      "tz": "Europe/Prague",
+      "datetime": "2026-12-19T17:30:00+01:00",
+      "home": "NH Ostrava",
+      "away": "Sršni Photomate Písek",
+      "opponent": "NH Ostrava",
+      "venue": "away",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544642",
+        "livestats": null,
+        "fibaData": null
+      }
+    },
+    {
+      "nblMatchId": 544654,
+      "fibaMatchId": null,
+      "round": "19. kolo",
+      "roundNum": 19,
+      "phase": "Základní část",
+      "date": "2026-12-27",
+      "time": "15:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-12-27T15:00:00+01:00",
+      "home": "SK Slavia Praha ERA NBK",
+      "away": "Sršni Photomate Písek",
+      "opponent": "SK Slavia Praha ERA NBK",
+      "venue": "away",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544654",
+        "livestats": null,
+        "fibaData": null
+      }
+    },
+    {
+      "nblMatchId": 544660,
+      "fibaMatchId": null,
+      "round": "20. kolo",
+      "roundNum": 20,
+      "phase": "Základní část",
+      "date": "2026-12-30",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-12-30T18:00:00+01:00",
+      "home": "Sršni Photomate Písek",
+      "away": "PUMPA Basket Brno",
+      "opponent": "PUMPA Basket Brno",
+      "venue": "home",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544660",
+        "livestats": null,
+        "fibaData": null
+      }
+    },
+    {
+      "nblMatchId": 544666,
+      "fibaMatchId": null,
+      "round": "21. kolo",
+      "roundNum": 21,
+      "phase": "Základní část",
+      "date": "2027-01-02",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2027-01-02T18:00:00+01:00",
+      "home": "BK ARMEX ENERGY Děčín",
+      "away": "Sršni Photomate Písek",
+      "opponent": "BK ARMEX ENERGY Děčín",
+      "venue": "away",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544666",
+        "livestats": null,
+        "fibaData": null
+      }
+    },
+    {
+      "nblMatchId": 544672,
+      "fibaMatchId": null,
+      "round": "22. kolo",
+      "roundNum": 22,
+      "phase": "Základní část",
+      "date": "2027-01-09",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2027-01-09T18:00:00+01:00",
+      "home": "Sršni Photomate Písek",
+      "away": "BK Olomoucko",
+      "opponent": "BK Olomoucko",
+      "venue": "home",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544672",
         "livestats": null,
         "fibaData": null
       }
