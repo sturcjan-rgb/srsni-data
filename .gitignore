@@ -1,0 +1,8 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# lokální databáze srsni-data (generuje se přes sync.py, necommitovat)
+srsni.db
+srsni.db-journal

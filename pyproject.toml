@@ -1,0 +1,10 @@
+[project]
+name = "srsni-data"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.10"
+dependencies = [
+    "beautifulsoup4>=4.15.0",
+    "mcp[cli]<2",
+    "requests>=2.34.2",
+]
