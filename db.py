@@ -59,8 +59,12 @@ def now_iso() -> str:
 
 
 @contextmanager
-def connect(db_path: Path = DB_PATH) -> Iterator[sqlite3.Connection]:
+def connect(db_path: Path | None = None) -> Iterator[sqlite3.Connection]:
     """Otevře spojení na DB, zajistí schéma a při odchodu commitne/zavře."""
+    if db_path is None:
+        # Vyhodnoceno až tady (ne jako výchozí hodnota parametru), aby šlo
+        # DB_PATH přepsat i po importu modulu (např. v testech).
+        db_path = DB_PATH
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
