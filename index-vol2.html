@@ -23,9 +23,11 @@
   .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:22px}
   .bar label.lb{color:var(--muted);font-size:13px}
   .bar input#gid{background:var(--bg);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:9px 11px;font-size:14px;font-family:'Oswald';width:120px}
+  .bar select#matchPicker{background:var(--bg);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:9px 11px;font-size:14px;font-family:'Oswald';max-width:420px}
   .bar button{background:var(--home);color:#221a00;border:0;border-radius:8px;padding:10px 16px;font-family:'Oswald';font-size:15px;font-weight:600;cursor:pointer;letter-spacing:.02em}
   .bar button:hover{filter:brightness(1.07)}
   .bar button.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+  .bar button:disabled{opacity:.4;cursor:not-allowed;filter:none}
   .hint{color:var(--muted);font-size:13px;flex-basis:100%}
   #paste{display:none;width:100%;min-height:120px;margin-top:10px;background:var(--bg);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:10px;font-family:ui-monospace,monospace;font-size:12px}
   .err{color:var(--bad);font-size:13px;flex-basis:100%}
@@ -131,15 +133,20 @@
 <div class="wrap">
 
   <div class="bar">
-    <label class="lb" for="gid">ID zápasu</label>
-    <input id="gid" value="2705709" inputmode="numeric">
-    <button id="load">Načíst online</button>
-    <button id="liveToggle">🔴 Sledovat naživo</button>
-    <label style="border:1px solid var(--line);border-radius:8px;padding:9px 14px;cursor:pointer;color:var(--home);font-family:'Oswald'">
-      Nahrát data.json<input id="file" type="file" accept=".json,application/json" style="display:none">
-    </label>
+    <label class="lb" for="matchPicker">Zápas</label>
+    <select id="matchPicker"><option>Načítám seznam zápasů ze scraperu…</option></select>
+    <button id="liveToggle" disabled>🔴 Sledovat naživo</button>
+    <button id="toggleManual" class="ghost">…zadat ID ručně</button>
     <button id="togglePaste" class="ghost">…nebo vložit ručně</button>
-    <span class="hint" id="hint">„Sledovat naživo" = zadej ID zápasu z FIBA LiveStats a stránka si sama tahá čerstvá play-by-play data. Upload/vložení JSONu je jen záložní cesta, když selže síť.</span>
+    <div class="hint" id="manualRow" style="display:none;flex-basis:100%;margin-top:8px">
+      <label class="lb" for="gid">ID zápasu (FIBA LiveStats)</label>
+      <input id="gid" inputmode="numeric" placeholder="např. 2842778">
+      <button id="load">Načíst online</button>
+      <label style="border:1px solid var(--line);border-radius:8px;padding:9px 14px;cursor:pointer;color:var(--home);font-family:'Oswald'">
+        Nahrát data.json<input id="file" type="file" accept=".json,application/json" style="display:none">
+      </label>
+    </div>
+    <span class="hint" id="hint">Seznam zápasů se tahá ze `season-*.json`, co scrapujeme na GitHub. Probíhající zápas se najde a spustí automaticky.</span>
     <div class="err hidden" id="err"></div>
     <textarea id="paste" placeholder="Sem vlož celý obsah data.json…"></textarea>
     <button id="parsePaste" class="ghost hidden" style="margin-top:8px">Zpracovat vložený JSON</button>
@@ -236,12 +243,11 @@ $('load').onclick=()=>{stopLive();loadById($('gid').value.trim(),false);};
 $('liveToggle').onclick=()=>{
   if(liveTimer){stopLive();return;}
   const id=$('gid').value.trim();
-  if(!/^\d+$/.test(id)){showErr('Pro živé sledování zadej číselné ID zápasu z FIBA LiveStats (jen čísla).');return;}
-  $('liveToggle').textContent='⏸ Zastavit sledování';
-  $('liveToggle').classList.add('on');
-  loadById(id,true,{preferLive:true});
-  liveTimer=setInterval(()=>loadById(id,true,{preferLive:true,silent:true}),8000);
+  if(!/^\d+$/.test(id)){showErr('Vyber zápas v seznamu nebo zadej číselné ID ručně.');return;}
+  startLive(id);
 };
+$('gid').oninput=()=>{$('liveToggle').disabled=!/^\d+$/.test($('gid').value.trim());};
+$('toggleManual').onclick=()=>{const r=$('manualRow');r.style.display=r.style.display==='none'?'flex':'none';};
 $('togglePaste').onclick=()=>{stopLive();const p=$('paste'),b=$('parsePaste');const s=p.style.display!=='block';p.style.display=s?'block':'none';b.classList.toggle('hidden',!s);};
 $('parsePaste').onclick=()=>{stopLive();try{render(decodeParse($('paste').value));showErr('');}catch(e){showErr('JSON se nepodařilo přečíst: '+e.message);}};
 $('file').onchange=e=>{
@@ -258,6 +264,85 @@ function decodeParse(input){let t=typeof input==='string'?input:new TextDecoder(
 
 let liveTimer=null;
 function stopLive(){if(liveTimer){clearInterval(liveTimer);liveTimer=null;}$('liveToggle').textContent='🔴 Sledovat naživo';$('liveToggle').classList.remove('on');}
+function startLive(id){
+  stopLive();
+  $('gid').value=id;
+  $('liveToggle').disabled=false;
+  $('liveToggle').textContent='⏸ Zastavit sledování';
+  $('liveToggle').classList.add('on');
+  loadById(id,true,{preferLive:true});
+  liveTimer=setInterval(()=>loadById(id,true,{preferLive:true,silent:true}),8000);
+}
+
+/* ---------- výběr zápasu ze season-*.json (žádné ruční ID) ---------- */
+const SEASON_BASE='https://raw.githubusercontent.com/sturcjan-rgb/srsni-data/main/data/';
+function seasonKeysToTry(){
+  const now=new Date();
+  const startY=(now.getMonth()+1>=7)?now.getFullYear():now.getFullYear()-1; // sezóna cca září–červen
+  const key=a=>`${a}-${String(a+1).slice(-2)}`;
+  return [key(startY-1),key(startY)]; // předchozí + aktuální, pokryje přelom sezóny
+}
+async function fetchSeasonFixtures(){
+  const out=[];
+  for(const k of seasonKeysToTry()){
+    try{
+      const r=await fetch(SEASON_BASE+'season-'+k+'.json?t='+Date.now(),{cache:'no-store'});
+      if(!r.ok)continue;
+      const j=decodeParse(await r.arrayBuffer());
+      if(Array.isArray(j.fixtures))out.push(...j.fixtures);
+    }catch(e){}
+  }
+  return out.filter(f=>f.fibaMatchId).sort((a,b)=>a.datetime.localeCompare(b.datetime));
+}
+function classifyMatches(fixtures){
+  const now=Date.now();
+  let live=null,lastFinal=null;
+  for(const f of fixtures){
+    const start=new Date(f.datetime).getTime();
+    if(now>=start-10*60000 && now<=start+150*60000)live=f;
+    if(f.status==='final' && start<=now && (!lastFinal||start>new Date(lastFinal.datetime).getTime()))lastFinal=f;
+  }
+  return {live,lastFinal};
+}
+function matchLabel(f){
+  const ds=new Date(f.datetime).toLocaleDateString('cs-CZ',{day:'2-digit',month:'2-digit',year:'numeric'});
+  const score=(f.status==='final'&&f.score)?` (${f.score.home}:${f.score.away})`:'';
+  return `${ds} ${f.time} — ${f.home} vs ${f.away}${score}`;
+}
+let FIXTURES=[];
+function populatePicker(cls){
+  const sel=$('matchPicker'); sel.innerHTML='';
+  const seen=new Set();
+  const addOpt=(f,status,prefix)=>{
+    if(seen.has(f.fibaMatchId))return; seen.add(f.fibaMatchId);
+    const o=document.createElement('option');
+    o.value=f.fibaMatchId; o.dataset.status=status;
+    o.textContent=(prefix||'')+matchLabel(f);
+    sel.appendChild(o);
+  };
+  if(cls.live)addOpt(cls.live,'live','🔴 NAŽIVO — ');
+  FIXTURES.filter(f=>f.status==='final').slice(-10).reverse().forEach(f=>addOpt(f,'final'));
+  FIXTURES.filter(f=>f.status!=='final').slice(0,6).forEach(f=>addOpt(f,'upcoming','⏳ '));
+  if(!sel.children.length){const o=document.createElement('option');o.textContent='Žádný zápas nenalezen — zadej ID ručně';sel.appendChild(o);}
+}
+$('matchPicker').onchange=()=>{
+  stopLive();
+  const opt=$('matchPicker').selectedOptions[0];
+  if(!opt||!opt.value)return;
+  const id=opt.value;
+  $('gid').value=id; $('liveToggle').disabled=false;
+  if(opt.dataset.status==='live')startLive(id);
+  else if(opt.dataset.status==='final')loadById(id,false);
+  else showErr('Tenhle zápas ještě nezačal — data budou k dispozici až se rozehraje.');
+};
+async function initPicker(){
+  FIXTURES=await fetchSeasonFixtures();
+  const cls=classifyMatches(FIXTURES);
+  populatePicker(cls);
+  if(cls.live){$('matchPicker').value=cls.live.fibaMatchId;startLive(cls.live.fibaMatchId);}
+  else if(cls.lastFinal){$('matchPicker').value=cls.lastFinal.fibaMatchId;$('gid').value=cls.lastFinal.fibaMatchId;$('liveToggle').disabled=false;loadById(cls.lastFinal.fibaMatchId,true);}
+  else $('hint').textContent='Nenašel jsem žádný odehraný ani probíhající zápas v season-*.json. Zadej ID ručně.';
+}
 
 const GH='https://raw.githubusercontent.com/sturcjan-rgb/srsni-data/main/data/data.json';
 async function loadById(id,quiet,opts){
@@ -690,8 +775,8 @@ function drawPlayers(){
   $('plTable').innerHTML=`<thead><tr>${th.map((x,i)=>`<th${i===0?' style="text-align:left"':''}>${x}</th>`).join('')}</tr></thead><tbody>${body}</tbody>`;
 }
 
-/* auto-load */
-loadById('2705709',true);
+/* auto-load: najde probíhající/poslední zápas ze season-*.json, žádné ruční ID */
+initPicker();
 </script>
 </body>
 </html>
