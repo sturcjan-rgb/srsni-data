@@ -1,1 +1,335 @@
-PLACEHOLDER
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<title>Sršni Photomate Písek — dashboard</title>
+<style>
+  :root{ color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px; background: #f7f7f5; color: #161616;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; }
+  header { display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:8px; margin-bottom:20px; border-bottom: 3px solid #161616; padding-bottom:14px; }
+  header h1 { margin:0; font-size: 26px; letter-spacing:0.01em; }
+  header .meta { font-size:12px; color:#6b6b6b; }
+  .badge { display:inline-block; background:#FBC400; color:#161616; font-weight:700; font-size:11px; padding:3px 8px; border-radius:20px; letter-spacing:0.04em; text-transform:uppercase; }
+  .badge.stale { background:#eee; color:#888; }
+
+  .hero {
+    background:#161616; color:#fff; border-radius:14px; padding:22px 24px; margin-bottom:22px;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:18px;
+  }
+  .hero .label { font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:#FBC400; font-weight:700; margin-bottom:6px; }
+  .hero .teams { font-size:20px; font-weight:700; }
+  .hero .sub { font-size:13px; color:#c9c9c9; margin-top:4px; }
+  .hero .countdown { font-size:28px; font-weight:800; color:#FBC400; font-variant-numeric: tabular-nums; }
+  .hero .links a { color:#fff; text-decoration:none; font-size:12px; border:1px solid #444; padding:6px 10px; border-radius:8px; margin-left:6px; display:inline-block; margin-top:8px; }
+  .hero .links a:hover { border-color:#FBC400; }
+
+  section { margin-bottom: 28px; }
+  h2 { font-size:14px; text-transform:uppercase; letter-spacing:0.06em; color:#6b6b6b; margin: 0 0 10px; }
+
+  table { width:100%; border-collapse: collapse; font-size:13px; background:#fff; border-radius:10px; overflow:hidden; box-shadow: 0 0 0 1px #e5e5e0; }
+  th, td { text-align:left; padding:9px 10px; border-bottom:1px solid #eee; }
+  th { background:#161616; color:#fff; font-size:11px; text-transform:uppercase; letter-spacing:0.04em; }
+  tr.today { background:#FFF6D6; font-weight:700; }
+  tr.next-home { background:#FFFBEA; }
+  td.links a { margin-right:8px; font-size:12px; color:#161616; text-decoration:none; border-bottom:1px dotted #999; }
+  .tag-home { color:#0a7d3a; font-weight:700; font-size:11px; }
+  .tag-away { color:#a05a00; font-weight:700; font-size:11px; }
+  .dim { color:#999; }
+
+  .checklist { background:#fff; border-radius:10px; box-shadow: 0 0 0 1px #e5e5e0; padding:14px 16px; }
+  .checklist h3 { font-size:13px; margin:0 0 8px; }
+  .checklist .sub { font-size:12px; color:#777; margin-bottom:10px; }
+  .checklist ul { list-style:none; margin:0; padding:0; }
+  .checklist li { display:flex; align-items:center; gap:8px; padding:6px 0; border-bottom:1px solid #f2f2f2; font-size:13px; }
+  .checklist li:last-child { border-bottom:none; }
+  .checklist input { width:16px; height:16px; accent-color:#FBC400; }
+  .checklist li span.done { text-decoration: line-through; color:#999; }
+  .plans { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  @media (max-width:720px){ .plans{ grid-template-columns: 1fr; } }
+
+  .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap:12px; }
+  .card { background:#fff; border-radius:10px; box-shadow:0 0 0 1px #e5e5e0; padding:14px; text-decoration:none; color:#161616; display:block; }
+  .card:hover { box-shadow:0 0 0 1.5px #FBC400; }
+  .card .name { font-weight:700; font-size:14px; margin-bottom:3px; }
+  .card .desc { font-size:12px; color:#777; }
+  .card .pending { display:inline-block; margin-top:6px; font-size:10px; background:#eee; color:#777; padding:2px 6px; border-radius:6px; }
+
+  .note { background:#fff; border-left:4px solid #FBC400; border-radius:8px; padding:12px 14px; font-size:13px; color:#333; margin-bottom:10px; }
+  .note b { color:#161616; }
+  footer { text-align:center; font-size:11px; color:#999; margin-top:30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <h1>🐝 Sršni Photomate Písek — velitelský dashboard</h1>
+      <div class="meta"><span id="season-label">Sezóna</span> · Maxa NBL · <span class="badge" id="freshness-badge">načítám data…</span></div>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div>
+      <div class="label">Nejbližší zápas</div>
+      <div class="teams" id="hero-teams">—</div>
+      <div class="sub" id="hero-sub">—</div>
+      <div class="links" id="hero-links"></div>
+    </div>
+    <div class="countdown" id="hero-countdown">—</div>
+  </div>
+
+  <section>
+    <h2>Kalendář sezóny (zdroj: season-2026-27.json, živě)</h2>
+    <table>
+      <thead>
+        <tr><th>Kolo</th><th>Datum</th><th>Čas</th><th>Domácí</th><th>Hosté</th><th>Odkazy</th></tr>
+      </thead>
+      <tbody id="fixtures-body"><tr><td colspan="6" class="dim">Načítám…</td></tr></tbody>
+    </table>
+  </section>
+
+  <section class="plans" id="plans-section">
+    <div class="checklist" id="plan-a" style="display:none">
+      <h3 id="plan-a-title">—</h3>
+      <div class="sub" id="plan-a-sub"></div>
+      <ul id="plan-a-list"></ul>
+    </div>
+    <div class="checklist" id="plan-b" style="display:none">
+      <h3 id="plan-b-title">—</h3>
+      <div class="sub" id="plan-b-sub"></div>
+      <ul id="plan-b-list"></ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Nástroje a odkazy</h2>
+    <div class="grid">
+      <a class="card" href="https://srsni.com" target="_blank">
+        <div class="name">srsni.com</div>
+        <div class="desc">Klubový web (eSports.cz CMS)</div>
+      </a>
+      <a class="card" href="https://tv.srsni.com" target="_blank">
+        <div class="name">Sršni TV</div>
+        <div class="desc">Video platforma, re-embed z tvcom.cz</div>
+      </a>
+      <a class="card" href="https://sturcjan-rgb.github.io/srsni-data/" target="_blank">
+        <div class="name">Live analytics app</div>
+        <div class="desc">Rozbor zápasu nad FIBA LiveStats JSON</div>
+      </a>
+      <a class="card" href="https://github.com/sturcjan-rgb/srsni-truth" target="_blank">
+        <div class="name">srsni-truth</div>
+        <div class="desc">Python + SQLite + MCP server pro Claude Code</div>
+        <span class="pending">portál čeká na aktivaci GitHub Pages</span>
+      </a>
+      <a class="card" href="https://github.com/sturcjan-rgb/srsni-data" target="_blank">
+        <div class="name">srsni-data (repo)</div>
+        <div class="desc">season-scraper.mjs, build_season.py, JSON</div>
+      </a>
+      <a class="card" href="https://raw.githubusercontent.com/sturcjan-rgb/srsni-data/main/data/season-2026-27.json" target="_blank">
+        <div class="name">season-2026-27.json</div>
+        <div class="desc">Zdroj dat pro tento dashboard</div>
+      </a>
+      <a class="card" href="https://github.com/sturcjan-rgb/srstv2" target="_blank">
+        <div class="name">srstv2 (repo)</div>
+        <div class="desc">Zdroj Sršni TV</div>
+      </a>
+      <a class="card" href="https://github.com/sturcjan-rgb/beksatv" target="_blank">
+        <div class="name">beksatv (repo)</div>
+        <div class="desc">Druhý klub na Sršni TV stacku</div>
+      </a>
+      <a class="card" href="https://www.figma.com/file/CfxFyNqMMncVYX1zCr7B9L" target="_blank">
+        <div class="name">Figma — Sršni</div>
+        <div class="desc">Grafické šablony</div>
+      </a>
+      <a class="card" href="https://nbl.basketball/tym/srsni-photomate-pisek" target="_blank">
+        <div class="name">NBL — týmová stránka</div>
+        <div class="desc">Soupiska, tabulka, rozpis</div>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Poznámky</h2>
+    <div class="note"><b>Automatické obnovování</b> — data zápasů stahuje GitHub Action <code>season-scraper</code> v repu <code>srsni-data</code> každé 2 hodiny a commitne je do <code>season-2026-27.json</code>. Tenhle dashboard si ten soubor tahá živě při každém otevření, takže žádnou ruční aktualizaci nepotřebuje.</div>
+    <div class="note"><b>srsni-truth</b> — v repu je hotový Python systém (SQLite + MCP server pro Claude Code se 4 nástroji). Web portál (<code>build_site.py</code>) zatím čeká na jednorázové ruční zapnutí GitHub Pages v nastavení repa (Settings → Pages → Source → GitHub Actions).</div>
+    <div class="note">Přímé otevření FIBA endpointu v prohlížeči vrací <b>403</b> — očekávané chování (dokumentovaný CORS/access quirk), live analytics app to řeší proxy fallback řetězcem.</div>
+  </section>
+
+  <footer>Tento dashboard si data tahá živě ze season-2026-27.json při každém načtení · Refresh = obnov stránku</footer>
+</div>
+
+<script>
+(function(){
+  var DATA_URL = 'https://raw.githubusercontent.com/sturcjan-rgb/srsni-data/main/data/season-2026-27.json';
+
+  // fallback snapshot z 20. 9. 2026, pro případ že fetch selže (offline náhled apod.)
+  var FALLBACK = {
+    season: "2026/27",
+    generatedAt: "2026-09-20T04:43:49.073Z",
+    fixtures: [
+      {round:"1. kolo", date:"2026-09-20", time:"18:00", datetime:"2026-09-20T18:00:00+02:00", home:"SLUNETA Ústí nad Labem", away:"Sršni Photomate Písek", venue:"away", links:{nbl:"https://nbl.basketball/zapas/544546", livestats:"https://www.fibalivestats.com/webcast/CBFFE/2890467/", fibaData:"https://fibalivestats.dcd.shared.geniussports.com/data/2890467/data.json"}},
+      {round:"2. kolo", date:"2026-09-23", time:"18:00", datetime:"2026-09-23T18:00:00+02:00", home:"Sršni Photomate Písek", away:"BK GAPA Hradec Králové", venue:"home", links:{nbl:"https://nbl.basketball/zapas/544552", livestats:"https://www.fibalivestats.com/webcast/CBFFE/2890473/", fibaData:"https://fibalivestats.dcd.shared.geniussports.com/data/2890473/data.json"}},
+      {round:"4. kolo", date:"2026-09-30", time:"18:00", datetime:"2026-09-30T18:00:00+02:00", home:"Sršni Photomate Písek", away:"BK KVIS Pardubice", venue:"home", links:{nbl:"https://nbl.basketball/zapas/544564", livestats:"https://www.fibalivestats.com/webcast/CBFFE/2892252/", fibaData:"https://fibalivestats.dcd.shared.geniussports.com/data/2892252/data.json"}},
+      {round:"5. kolo", date:"2026-10-03", time:"17:30", datetime:"2026-10-03T17:30:00+02:00", home:"USK Praha", away:"Sršni Photomate Písek", venue:"away", links:{nbl:"https://nbl.basketball/zapas/544570", livestats:"https://www.fibalivestats.com/webcast/CBFFE/2893123/", fibaData:"https://fibalivestats.dcd.shared.geniussports.com/data/2893123/data.json"}},
+      {round:"6. kolo", date:"2026-10-11", time:"17:00", datetime:"2026-10-11T17:00:00+02:00", home:"Sršni Photomate Písek", away:"NH Ostrava", venue:"home", links:{nbl:"https://nbl.basketball/zapas/544576", livestats:"https://www.fibalivestats.com/webcast/CBFFE/2900134/", fibaData:"https://fibalivestats.dcd.shared.geniussports.com/data/2900134/data.json"}},
+      {round:"7. kolo", date:"2026-10-17", time:"19:00", datetime:"2026-10-17T19:00:00+02:00", home:"BK Opava", away:"Sršni Photomate Písek", venue:"away", links:{nbl:"https://nbl.basketball/zapas/544582", livestats:"https://www.fibalivestats.com/webcast/CBFFE/2910248/", fibaData:"https://fibalivestats.dcd.shared.geniussports.com/data/2910248/data.json"}},
+      {round:"8. kolo", date:"2026-10-23", time:"18:00", datetime:"2026-10-23T18:00:00+02:00", home:"Sršni Photomate Písek", away:"SK Slavia Praha ERA NBK", venue:"home", links:{nbl:"https://nbl.basketball/zapas/544588", livestats:null, fibaData:null}},
+      {round:"9. kolo", date:"2026-10-28", time:"18:00", datetime:"2026-10-28T18:00:00+01:00", home:"PUMPA Basket Brno", away:"Sršni Photomate Písek", venue:"away", links:{nbl:"https://nbl.basketball/zapas/544594", livestats:null, fibaData:null}},
+      {round:"10. kolo", date:"2026-11-01", time:"17:00", datetime:"2026-11-01T17:00:00+01:00", home:"Sršni Photomate Písek", away:"BK ARMEX ENERGY Děčín", venue:"home", links:{nbl:"https://nbl.basketball/zapas/544600", livestats:null, fibaData:null}},
+      {round:"11. kolo", date:"2026-11-08", time:"17:00", datetime:"2026-11-08T17:00:00+01:00", home:"BK Olomoucko", away:"Sršni Photomate Písek", venue:"away", links:{nbl:"https://nbl.basketball/zapas/544606", livestats:null, fibaData:null}},
+      {round:"12. kolo", date:"2026-11-15", time:"17:00", datetime:"2026-11-15T17:00:00+01:00", home:"Sršni Photomate Písek", away:"SLUNETA Ústí nad Labem", venue:"home", links:{nbl:"https://nbl.basketball/zapas/544612", livestats:null, fibaData:null}},
+      {round:"13. kolo", date:"2026-11-18", time:"19:00", datetime:"2026-11-18T19:00:00+01:00", home:"BK GAPA Hradec Králové", away:"Sršni Photomate Písek", venue:"away", links:{nbl:"https://nbl.basketball/zapas/544618", livestats:null, fibaData:null}},
+      {round:"15. kolo", date:"2026-12-05", time:"18:30", datetime:"2026-12-05T18:30:00+01:00", home:"BK KVIS Pardubice", away:"Sršni Photomate Písek", venue:"away", links:{nbl:"https://nbl.basketball/zapas/544630", livestats:null, fibaData:null}},
+      {round:"16. kolo", date:"2026-12-13", time:"17:00", datetime:"2026-12-13T17:00:00+01:00", home:"Sršni Photomate Písek", away:"USK Praha", venue:"home", links:{nbl:"https://nbl.basketball/zapas/544636", livestats:null, fibaData:null}},
+      {round:"17. kolo", date:"2026-12-19", time:"17:30", datetime:"2026-12-19T17:30:00+01:00", home:"NH Ostrava", away:"Sršni Photomate Písek", venue:"away", links:{nbl:"https://nbl.basketball/zapas/544642", livestats:null, fibaData:null}},
+      {round:"18. kolo", date:"2026-12-02", time:"18:00", datetime:"2026-12-02T18:00:00+01:00", home:"Sršni Photomate Písek", away:"BK Opava", venue:"home", links:{nbl:"https://nbl.basketball/zapas/544648", livestats:null, fibaData:null}},
+      {round:"19. kolo", date:"2026-12-27", time:"15:00", datetime:"2026-12-27T15:00:00+01:00", home:"SK Slavia Praha ERA NBK", away:"Sršni Photomate Písek", venue:"away", links:{nbl:"https://nbl.basketball/zapas/544654", livestats:null, fibaData:null}},
+      {round:"20. kolo", date:"2026-12-30", time:"18:00", datetime:"2026-12-30T18:00:00+01:00", home:"Sršni Photomate Písek", away:"PUMPA Basket Brno", venue:"home", links:{nbl:"https://nbl.basketball/zapas/544660", livestats:null, fibaData:null}},
+      {round:"21. kolo", date:"2027-01-02", time:"18:00", datetime:"2027-01-02T18:00:00+01:00", home:"BK ARMEX ENERGY Děčín", away:"Sršni Photomate Písek", venue:"away", links:{nbl:"https://nbl.basketball/zapas/544666", livestats:null, fibaData:null}},
+      {round:"22. kolo", date:"2027-01-09", time:"18:00", datetime:"2027-01-09T18:00:00+01:00", home:"Sršni Photomate Písek", away:"BK Olomoucko", venue:"home", links:{nbl:"https://nbl.basketball/zapas/544672", livestats:null, fibaData:null}}
+    ]
+  };
+
+  var HOME_ITEMS = [
+    ['w1','Pozvánka'],
+    ['w2','Výzva k odhlášení permic'],
+    ['w3','HTML bulletin'],
+    ['w4','Poločasový výsledek'],
+    ['w5','Konečný výsledek'],
+    ['w6','Reportáž']
+  ];
+  var AWAY_ITEMS = [
+    ['t1','Pozvánka / upoutávka na sítě'],
+    ['t2','Live sledování (analytics app)'],
+    ['t3','Poločasový výsledek na sítě'],
+    ['t4','Konečný výsledek'],
+    ['t5','Reportáž (fact-sheet → text)']
+  ];
+
+  function fmtDate(dateStr){ return dateStr.split('-').reverse().join('. ') + '.'; }
+
+  function bindChecklistPersistence(ul){
+    var boxes = ul.querySelectorAll('input[type=checkbox]');
+    boxes.forEach(function(b){
+      var key = 'srsni-dash-' + b.dataset.key;
+      var saved = localStorage.getItem(key);
+      if (saved === '1') { b.checked = true; b.nextElementSibling.classList.add('done'); }
+      b.addEventListener('change', function(){
+        try { localStorage.setItem(key, b.checked ? '1' : '0'); } catch(e) {}
+        b.nextElementSibling.classList.toggle('done', b.checked);
+      });
+    });
+  }
+
+  function renderChecklist(boxId, match){
+    var box = document.getElementById(boxId);
+    if (!match) { box.style.display = 'none'; return; }
+    box.style.display = '';
+    var opponent = match.venue === 'home' ? match.away : match.home;
+    var venueLabel = match.venue === 'home' ? 'doma' : 'venku';
+    document.getElementById(boxId + '-title').textContent =
+      fmtDate(match.date) + ' — ' + opponent + ' (' + venueLabel + '), ' + match.time;
+    document.getElementById(boxId + '-sub').textContent =
+      match.venue === 'home' ? 'Domácí zápas → plný obsahový cyklus' : 'Zápas venku → stačí odlehčený cyklus';
+    var items = match.venue === 'home' ? HOME_ITEMS : AWAY_ITEMS;
+    var prefix = (match.nblMatchId || match.round || 'm') + '-';
+    var ul = document.getElementById(boxId + '-list');
+    ul.innerHTML = items.map(function(it){
+      return '<li><input type="checkbox" data-key="' + prefix + it[0] + '"><span>' + it[1] + '</span></li>';
+    }).join('');
+    bindChecklistPersistence(ul);
+  }
+
+  function render(data, isLive) {
+    var badge = document.getElementById('freshness-badge');
+    if (isLive) {
+      badge.textContent = 'živá data · ' + new Date(data.generatedAt).toLocaleString('cs-CZ');
+      badge.classList.remove('stale');
+    } else {
+      badge.textContent = 'nouzový snapshot (fetch selhal) · ' + new Date(data.generatedAt).toLocaleString('cs-CZ');
+      badge.classList.add('stale');
+    }
+    document.getElementById('season-label').textContent = 'Sezóna ' + (data.season || '');
+
+    var fixtures = data.fixtures.slice().sort(function(a,b){ return new Date(a.datetime) - new Date(b.datetime); });
+    var now = new Date();
+    var tbody = document.getElementById('fixtures-body');
+    tbody.innerHTML = '';
+    var nextHomeFound = false;
+
+    fixtures.forEach(function(f){
+      var tr = document.createElement('tr');
+      var d = new Date(f.datetime);
+      var isToday = d.toDateString() === now.toDateString();
+      var isFuture = d > now;
+      if (isToday) tr.className = 'today';
+      else if (isFuture && f.venue === 'home' && !nextHomeFound) { tr.className = 'next-home'; nextHomeFound = true; }
+
+      var L = f.links || {};
+      var links = '';
+      if (L.nbl) links += '<a href="'+L.nbl+'" target="_blank">NBL</a>';
+      if (L.livestats) links += '<a href="'+L.livestats+'" target="_blank">LiveStats</a>';
+      if (L.fibaData) links += '<a href="'+L.fibaData+'" target="_blank">JSON</a>';
+      if (!L.livestats) links += '<span class="dim">livestats zatím nepřiřazen</span>';
+
+      tr.innerHTML =
+        '<td>'+f.round+'</td>' +
+        '<td>'+fmtDate(f.date)+'</td>' +
+        '<td>'+f.time+'</td>' +
+        '<td>'+(f.venue==='home' ? '<span class="tag-home">'+f.home+'</span>' : f.home)+'</td>' +
+        '<td>'+(f.venue==='away' ? '<span class="tag-away">'+f.away+'</span>' : f.away)+'</td>' +
+        '<td class="links">'+links+'</td>';
+      tbody.appendChild(tr);
+    });
+
+    var upcoming = fixtures.filter(function(f){
+      var d = new Date(f.datetime);
+      return d.toDateString() === now.toDateString() || d > now;
+    });
+    var nextMatch = upcoming[0] || null;
+    var nextHomeMatch = upcoming.find(function(f){ return f.venue === 'home' && f !== nextMatch; }) || null;
+
+    renderChecklist('plan-a', nextMatch);
+    renderChecklist('plan-b', nextHomeMatch);
+
+    if (nextMatch) {
+      var L = nextMatch.links || {};
+      document.getElementById('hero-teams').textContent = nextMatch.home + ' — ' + nextMatch.away;
+      document.getElementById('hero-sub').textContent = nextMatch.round + ' · ' + fmtDate(nextMatch.date) + ' · ' + nextMatch.time + ' · ' + (nextMatch.venue==='home' ? 'doma' : 'venku');
+      var linksHtml = '';
+      if (L.nbl) linksHtml += '<a href="'+L.nbl+'" target="_blank">NBL detail</a>';
+      if (L.livestats) linksHtml += '<a href="'+L.livestats+'" target="_blank">LiveStats webcast</a>';
+      if (L.fibaData) linksHtml += '<a href="'+L.fibaData+'" target="_blank">FIBA JSON</a>';
+      linksHtml += '<a href="https://sturcjan-rgb.github.io/srsni-data/" target="_blank">Live analytics app</a>';
+      document.getElementById('hero-links').innerHTML = linksHtml;
+
+      var target = new Date(nextMatch.datetime);
+      function tick(){
+        var diff = target - new Date();
+        var el = document.getElementById('hero-countdown');
+        if (diff <= 0) { el.textContent = 'PROBÍHÁ / ODEHRÁNO'; return; }
+        var h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+        el.textContent = (h<10?'0':'')+h+':'+(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+      }
+      tick();
+      setInterval(tick, 1000);
+    } else {
+      document.getElementById('hero-teams').textContent = 'Sezóna dohraná';
+      document.getElementById('hero-countdown').textContent = '—';
+    }
+  }
+
+  fetch(DATA_URL, {cache:'no-store'})
+    .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(function(data){ render(data, true); })
+    .catch(function(err){ console.warn('live fetch failed, using fallback', err); render(FALLBACK, false); });
+})();
+</script>
+</body>
+</html>
