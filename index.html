@@ -6,108 +6,127 @@
 <title>Rozbor zápasu — FIBA LiveStats</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#12161c;--panel:#1a2029;--panel-2:#212a35;--line:#2c3644;
-    --ink:#eef2f6;--muted:#8896a5;
-    --home:#f2b705;--away:#4ea1d3;--good:#4ccf8f;--bad:#e2604a;--court:#141a12;
+    --bg:#333333;--panel:#5e5e5e;--panel-2:#828282;--line:rgba(255,211,27,0.16);
+    --ink:#f5f5f2;--muted:#c7c7c2;
+    --home:#ffd31a;--away:#9fb4c7;--good:#3ecf6e;--bad:#ef5757;--court:#292929;
   }
   *{box-sizing:border-box}
   html,body{margin:0}
-  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
   .wrap{max-width:1180px;margin:0 auto;padding:24px 20px 40px}
-  h1,h2,h3{font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.01em;margin:0}
-  .num{font-family:'Oswald',sans-serif;font-variant-numeric:tabular-nums}
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:.01em;margin:0}
+  .num{font-family:'Space Grotesk',sans-serif;font-variant-numeric:tabular-nums}
 
-  .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:22px}
-  .bar label.lb{color:var(--muted);font-size:13px}
-  .bar select#matchSelect{background:var(--bg);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:9px 11px;font-size:14px;font-family:'Oswald';min-width:300px;max-width:460px}
-  .bar input#gid{background:var(--bg);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:9px 11px;font-size:14px;font-family:'Oswald';width:120px}
-  .bar button{background:var(--home);color:#221a00;border:0;border-radius:8px;padding:10px 16px;font-family:'Oswald';font-size:15px;font-weight:600;cursor:pointer;letter-spacing:.02em}
+  header.site-header{background:var(--bg);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
+  header.site-header .topbar{display:flex;align-items:center;justify-content:space-between;height:64px;padding-top:0;padding-bottom:0}
+  .logo{font-weight:900;font-size:1.4rem;letter-spacing:.01em;color:var(--home);text-transform:uppercase}
+  .logo span{color:var(--ink)}
+  nav.main-nav{display:flex;gap:1.4rem;font-weight:700;text-transform:uppercase;font-size:.85rem;letter-spacing:.03em}
+  nav.main-nav a{color:var(--muted);text-decoration:none;transition:color .15s}
+  nav.main-nav a:hover,nav.main-nav a.active{color:var(--home)}
+
+  .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:var(--panel);border:1px solid var(--line);padding:14px 16px;margin-bottom:22px}
+  .bar label.lb{color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:.03em;font-weight:700}
+  .bar select#matchSelect{background:var(--bg);border:1px solid var(--line);color:var(--ink);padding:9px 11px;font-size:14px;font-family:'Space Grotesk';min-width:300px;max-width:460px}
+  .bar input#gid{background:var(--bg);border:1px solid var(--line);color:var(--ink);padding:9px 11px;font-size:14px;font-family:'Space Grotesk';width:120px}
+  .bar button{background:var(--home);color:#221a00;border:0;padding:10px 16px;font-family:'Space Grotesk';font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;cursor:pointer}
   .bar button:hover{filter:brightness(1.07)}
   .bar button.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
   .hint{color:var(--muted);font-size:13px;flex-basis:100%}
-  #paste{display:none;width:100%;min-height:120px;margin-top:10px;background:var(--bg);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:10px;font-family:ui-monospace,monospace;font-size:12px}
+  #paste{display:none;width:100%;min-height:120px;margin-top:10px;background:var(--bg);border:1px solid var(--line);color:var(--ink);padding:10px;font-family:ui-monospace,monospace;font-size:12px}
   .err{color:var(--bad);font-size:13px;flex-basis:100%}
   .err a{color:var(--home)}
 
-  .control{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,var(--bg) 72%,rgba(18,22,28,0));padding:10px 0 14px;margin-bottom:6px}
-  .control .inner{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+  .control{position:sticky;top:64px;z-index:20;background:linear-gradient(180deg,var(--bg) 72%,rgba(51,51,51,0));padding:10px 0 14px;margin-bottom:6px}
+  .control .inner{background:var(--panel);border:1px solid var(--line);padding:12px 16px}
   .control .toprow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-  .control .clock{font-family:'Oswald';font-weight:600;font-size:18px;color:var(--muted);white-space:nowrap}
+  .control .clock{font-weight:700;font-size:18px;color:var(--muted);white-space:nowrap}
   .control .clock b{color:var(--ink)}
-  .control .sc{font-family:'Oswald';font-weight:700;font-size:26px;white-space:nowrap}
+  .control .sc{font-weight:900;font-size:26px;white-space:nowrap}
   .control .sc .h{color:var(--home)} .control .sc .a{color:var(--away)} .control .sc .s{color:var(--muted);font-size:18px}
-  .control .lead{font-family:'Oswald';font-size:14px;color:var(--muted)}
+  .control .lead{font-size:14px;color:var(--muted)}
   .control .btns{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
-  .control .btns button{background:var(--bg);border:1px solid var(--line);color:var(--muted);border-radius:7px;padding:6px 10px;font-family:'Oswald';font-size:13px;cursor:pointer}
+  .control .btns button{background:var(--bg);border:1px solid var(--line);color:var(--muted);padding:6px 10px;font-family:'Space Grotesk';font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.02em;cursor:pointer}
   .control .btns button:hover{color:var(--ink)}
-  canvas#leadCanvas{width:100%;height:auto;display:block;margin-top:10px;border-radius:8px;background:var(--court)}
+  canvas#leadCanvas{width:100%;height:auto;display:block;margin-top:10px;background:var(--court)}
   input#scrub{width:100%;margin:10px 0 2px;accent-color:var(--home)}
-  .qmarks{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;font-family:'Oswald';padding:0 2px}
+  .qmarks{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;font-weight:700;padding:0 2px}
 
-  .dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px}
+  .dot{display:inline-block;width:9px;height:9px;margin-right:6px}
   .dot.h{background:var(--home)} .dot.a{background:var(--away)}
   section{margin-top:26px}
-  .sec-h{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;border-bottom:1px solid var(--line);padding-bottom:8px}
-  .sec-h h2{font-size:21px}
+  .sec-h{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;border-bottom:1px solid var(--home);padding-bottom:8px}
+  .sec-h h2{font-size:19px;text-transform:uppercase;color:var(--home)}
   .sec-h .sub{color:var(--muted);font-size:13px}
 
   .factors{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-  .ff{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-  .ff .lbl{color:var(--muted);font-size:12.5px;margin-bottom:10px}
+  .ff{background:var(--panel);border:1px solid var(--line);padding:14px 16px}
+  .ff .lbl{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.03em;font-weight:700;margin-bottom:10px}
   .ff .row{display:flex;justify-content:space-between;align-items:center;margin:6px 0}
   .ff .row .who{font-size:12px;color:var(--muted);width:44px}
-  .ff .v{font-family:'Oswald';font-size:20px;font-weight:600;width:64px;text-align:right}
-  .ff .track{flex:1;height:7px;background:var(--bg);border-radius:4px;margin:0 10px;overflow:hidden}
-  .ff .fill{height:100%;border-radius:4px}
+  .ff .v{font-size:20px;font-weight:700;width:64px;text-align:right}
+  .ff .track{flex:1;height:7px;background:var(--bg);margin:0 10px;overflow:hidden}
+  .ff .fill{height:100%}
   .ff .fill.h{background:var(--home)} .ff .fill.a{background:var(--away)}
 
   .ratings{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:12px}
-  .rc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;text-align:center}
-  .rc .big{font-family:'Oswald';font-size:32px;font-weight:700;line-height:1}
-  .rc .cap{color:var(--muted);font-size:12px;margin-top:6px}
+  .rc{background:var(--panel);border:1px solid var(--line);padding:14px 16px;text-align:center}
+  .rc .big{font-size:32px;font-weight:900;line-height:1}
+  .rc .cap{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.03em;font-weight:700;margin-top:6px}
 
   .charts{display:grid;grid-template-columns:1fr 1fr;gap:18px}
   @media(max-width:820px){.charts{grid-template-columns:1fr}.factors{grid-template-columns:1fr 1fr}}
-  .chartcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
-  .chartcard h3{font-size:16px;margin-bottom:4px}
+  .chartcard{background:var(--panel);border:1px solid var(--line);padding:16px}
+  .chartcard h3{font-size:16px;margin-bottom:4px;text-transform:uppercase}
   .chartcard .csub{color:var(--muted);font-size:12px;margin-bottom:10px}
-  canvas.shot{width:100%;height:auto;display:block;border-radius:8px;background:var(--court)}
+  canvas.shot{width:100%;height:auto;display:block;background:var(--court)}
   .zones{margin-top:12px;display:flex;flex-direction:column;gap:6px}
   .zrow{display:flex;align-items:center;gap:10px;font-size:13px}
   .zrow .zn{flex:1;color:var(--muted)}
-  .zrow .zv{font-family:'Oswald';font-size:14px}
-  .zrow .zbar{width:90px;height:6px;background:var(--bg);border-radius:3px;overflow:hidden}
+  .zrow .zv{font-size:14px;font-weight:700}
+  .zrow .zbar{width:90px;height:6px;background:var(--bg);overflow:hidden}
   .zrow .zbar i{display:block;height:100%}
   .leg{display:flex;gap:16px;margin-top:8px;font-size:12px;color:var(--muted)}
   .leg span{display:flex;align-items:center;gap:5px}
   .mk{width:10px;height:10px;border-radius:50%}
   .mk.made{background:var(--good)} .mk.miss{background:transparent;border:1.5px solid var(--bad)}
 
-  .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
-  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:640px}
-  th,td{padding:9px 11px;text-align:right;white-space:nowrap}
-  th{background:var(--panel-2);color:var(--muted);font-weight:500;font-size:12px}
+  .tblwrap{overflow-x:auto;border:1px solid var(--line)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:640px;font-variant-numeric:tabular-nums}
+  th,td{padding:9px 11px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+  th{background:var(--panel-2);color:var(--ink);font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:.03em}
   th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--panel)}
   th:first-child{background:var(--panel-2)}
   tr:nth-child(even) td{background:var(--panel-2)}
   tr:nth-child(even) td:first-child{background:var(--panel-2)}
-  td.name{font-weight:500}
-  td .sh{color:var(--muted);font-family:'Oswald';font-size:12px;margin-left:4px}
-  .num-cell{font-family:'Oswald';font-variant-numeric:tabular-nums}
+  td.name{font-weight:600}
+  td .sh{color:var(--muted);font-size:12px;margin-left:4px}
+  .num-cell{font-variant-numeric:tabular-nums}
   .pos{color:var(--good)} .neg{color:var(--bad)}
   .tabs{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
-  .tabs button{background:var(--panel);border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:7px 14px;font-family:'Oswald';cursor:pointer;font-size:14px}
+  .tabs button{background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:7px 14px;font-family:'Space Grotesk';cursor:pointer;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
   .tabs button.on{background:var(--home);color:#221a00;border-color:var(--home)}
-  .tabs button.on.away{background:var(--away);color:#0a1a22;border-color:var(--away)}
+  .tabs button.on.away{background:var(--away);color:#101418;border-color:var(--away)}
   .lu td.lu-players{text-align:left;white-space:normal;min-width:220px;font-size:12.5px}
   .caption{color:var(--muted);font-size:12.5px;margin-top:10px}
   .hidden{display:none}
 </style>
 </head>
 <body>
+<header class="site-header">
+  <div class="wrap topbar">
+    <a class="logo" href="index.html">🐝 SRŠNI <span>DATA</span></a>
+    <nav class="main-nav">
+      <a href="index.html" class="active">Live rozbor</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="https://sturcjan-rgb.github.io/srsni-truth/" target="_blank">Portál</a>
+      <a href="https://tv.srsni.com/" target="_blank">TV</a>
+    </nav>
+  </div>
+</header>
 <div class="wrap">
 
   <div class="bar">
@@ -119,7 +138,7 @@
     <label style="display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;cursor:pointer">
       <input type="checkbox" id="liveToggle" style="accent-color:var(--home)"> živě (3 s)
     </label>
-    <label style="border:1px solid var(--line);border-radius:8px;padding:9px 14px;cursor:pointer;color:var(--home);font-family:'Oswald'">
+    <label style="border:1px solid var(--line);padding:9px 14px;cursor:pointer;color:var(--home);font-family:'Space Grotesk';font-weight:700;text-transform:uppercase;font-size:14px;letter-spacing:.02em">
       Nahrát data.json<input id="file" type="file" accept=".json,application/json" style="display:none">
     </label>
     <button id="togglePaste" class="ghost">…nebo vložit ručně</button>
@@ -187,7 +206,7 @@
 </div>
 
 <script>
-const HOME='#f2b705', AWAY='#4ea1d3';
+const HOME='#ffd31a', AWAY='#9fb4c7';
 let DATA=null, ENGINE=null, STATE=null;
 
 const $=id=>document.getElementById(id);
@@ -245,13 +264,17 @@ async function loadMatchList(){
       catch(e){ return null; }
     }));
     let html='<option value="">— vyber zápas —</option>', any=false;
-    seasons.forEach(season=>{
+    let currentSeasonMatches=[];
+    seasons.forEach((season,i)=>{
       if(!season) return;
+      const isCurrent=i===0;
       const withStats=(season.fixtures||[]).filter(f=>f.fibaMatchId).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
       if(!withStats.length) return;
       any=true;
       withStats.forEach(f=>MATCHES[String(f.fibaMatchId)]=f);
-      html+='<optgroup label="Sezóna '+season.season+'">'+withStats.map(f=>{
+      if(isCurrent) currentSeasonMatches=withStats;
+      const label=isCurrent?'Sezóna '+season.season:'Sezóna '+season.season+' (archiv — livestats bývá nedostupný)';
+      html+='<optgroup label="'+label+'">'+withStats.map(f=>{
         const d=f.date.split('-').reverse().join('.')+'.';
         const played=f.status==='final'?' ✓':'';
         return `<option value="${f.fibaMatchId}">${f.round} · ${d} · ${f.home} – ${f.away}${played}</option>`;
@@ -259,10 +282,10 @@ async function loadMatchList(){
     });
     $('matchSelect').innerHTML=html;
     if(!any){$('hint').textContent='Žádný zápas zatím nemá přiřazené FIBA LiveStats ID.';return;}
+    if(!currentSeasonMatches.length){$('hint').textContent='Aktuální sezóna zatím nemá žádný zápas s FIBA LiveStats ID — vyber ze seznamu (archiv) nebo zadej ID ručně.';return;}
     const now=new Date();
-    const all=Object.values(MATCHES).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
-    const past=all.filter(f=>new Date(f.datetime)<=now);
-    const defaultMatch=past.length?past[past.length-1]:all[0];
+    const past=currentSeasonMatches.filter(f=>new Date(f.datetime)<=now);
+    const defaultMatch=past.length?past[past.length-1]:currentSeasonMatches[0];
     const id=String(defaultMatch.fibaMatchId);
     $('matchSelect').value=id; $('gid').value=id;
     loadById(id,true);
@@ -501,7 +524,7 @@ function drawCourt(cv,shots){
   const ctx=cv.getContext('2d'),W=cv.width,H=cv.height,L=28,Wd=15,drawLen=14,sx=W/drawLen,sy=H/Wd;
   const mx=x=>(x/100*L)*sx,my=y=>(y/100*Wd)*sy;
   ctx.clearRect(0,0,W,H);
-  ctx.strokeStyle='#3a4a34';ctx.lineWidth=2;ctx.strokeRect(1,1,W-2,H-2);
+  ctx.strokeStyle='#4a4a4a';ctx.lineWidth=2;ctx.strokeRect(1,1,W-2,H-2);
   const hoopX=mx(5.2),hoopY=my(50),r=6.75*sx;
   ctx.beginPath();ctx.arc(hoopX,hoopY,sx*0.22,0,7);ctx.stroke();
   const keyW=4.9*sy,keyLen=5.8*sx,keyTop=(H-keyW)/2;
@@ -511,7 +534,7 @@ function drawCourt(cv,shots){
   ctx.beginPath();ctx.moveTo(mx(0),hoopY-6.6*sy);ctx.lineTo(mx(4.5),hoopY-6.6*sy);ctx.stroke();
   ctx.beginPath();ctx.moveTo(mx(0),hoopY+6.6*sy);ctx.lineTo(mx(4.5),hoopY+6.6*sy);ctx.stroke();
   shots.forEach(s=>{const x=mx(s.x),y=my(s.y);ctx.beginPath();ctx.arc(x,y,4.5,0,7);
-    if(s.made){ctx.fillStyle='#4ccf8f';ctx.fill();}else{ctx.strokeStyle='#e2604a';ctx.lineWidth=1.6;ctx.stroke();}});
+    if(s.made){ctx.fillStyle='#3ecf6e';ctx.fill();}else{ctx.strokeStyle='#ef5757';ctx.lineWidth=1.6;ctx.stroke();}});
 }
 
 function drawLead(T){
@@ -521,19 +544,19 @@ function drawLead(T){
   const padL=30,padR=8,padT=8,padB=8,pw=W-padL-padR,ph=H-padT-padB;
   let mAbs=6;Ld.forEach(p=>mAbs=Math.max(mAbs,Math.abs(p.m)));
   const X=el=>padL+pw*el/total,Y=m=>padT+ph*(0.5-0.5*m/mAbs);
-  ctx.strokeStyle='#2c3644';ctx.lineWidth=1;ctx.fillStyle='#6c7a89';ctx.font='10px Oswald';
+  ctx.strokeStyle='#4a4a4a';ctx.lineWidth=1;ctx.fillStyle='#c7c7c2';ctx.font='10px "Space Grotesk"';
   const nQ=Math.round(total/(pl*60));
   for(let i=0;i<=nQ;i++){const x=X(Math.min(i*pl*60,total));ctx.beginPath();ctx.moveTo(x,padT);ctx.lineTo(x,padT+ph);ctx.stroke();}
-  ctx.strokeStyle='#3a4756';ctx.beginPath();ctx.moveTo(padL,Y(0));ctx.lineTo(W-padR,Y(0));ctx.stroke();
+  ctx.strokeStyle='#5e5e5e';ctx.beginPath();ctx.moveTo(padL,Y(0));ctx.lineTo(W-padR,Y(0));ctx.stroke();
   ctx.fillText('+'+mAbs,2,Y(mAbs)+8);ctx.fillText('-'+mAbs,2,Y(-mAbs));
   function area(sign,color){ctx.beginPath();ctx.moveTo(X(0),Y(0));let py=Y(0);
     for(const p of Ld){const x=X(p.el);const mm=sign>0?Math.max(0,p.m):Math.min(0,p.m);ctx.lineTo(x,py);ctx.lineTo(x,Y(mm));py=Y(mm);}
     ctx.lineTo(X(total),Y(0));ctx.closePath();ctx.fillStyle=color;ctx.fill();}
-  area(1,'rgba(242,183,5,.28)');area(-1,'rgba(78,161,211,.28)');
-  ctx.strokeStyle='#cbd5e0';ctx.lineWidth=1.4;ctx.beginPath();let py=Y(0),first=true;
+  area(1,'rgba(255,211,26,.28)');area(-1,'rgba(159,180,199,.28)');
+  ctx.strokeStyle='#f5f5f2';ctx.lineWidth=1.4;ctx.beginPath();let py=Y(0),first=true;
   for(const p of Ld){const x=X(p.el);if(first){ctx.moveTo(x,Y(0));first=false;}ctx.lineTo(x,py);ctx.lineTo(x,Y(p.m));py=Y(p.m);}
   ctx.stroke();
-  const mxp=X(Math.min(T,total));ctx.strokeStyle='#f2b705';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(mxp,padT);ctx.lineTo(mxp,padT+ph);ctx.stroke();
+  const mxp=X(Math.min(T,total));ctx.strokeStyle='#ffd31a';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(mxp,padT);ctx.lineTo(mxp,padT+ph);ctx.stroke();
 }
 
 /* ---------- lineups ---------- */
@@ -602,7 +625,7 @@ function drawPlayers(){
   $('plTable').innerHTML=`<thead><tr>${th.map((x,i)=>`<th${i===0?' style="text-align:left"':''}>${x}</th>`).join('')}</tr></thead><tbody>${body}</tbody>`;
 }
 
-/* auto-load: seznam zápasů ze season-2026-27.json (a historie z předchozích sezón), pak automaticky nejrelevantnější */
+/* auto-load: seznam zápasů ze season-2026-27.json, pak automaticky nejrelevantnější */
 loadMatchList();
 </script>
 </body>
