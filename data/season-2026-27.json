@@ -5,14 +5,14 @@
     "nblId": 10110,
     "nblSlug": "srsni-photomate-pisek"
   },
-  "generatedAt": "2026-09-20T15:53:33.634Z",
+  "generatedAt": "2026-09-20T18:38:58.776Z",
   "source": "https://nbl.basketball/tym/srsni-photomate-pisek",
   "counts": {
     "total": 20,
     "home": 10,
     "away": 10,
-    "final": 0,
-    "scheduled": 20
+    "final": 1,
+    "scheduled": 19
   },
   "fixtures": [
     {
@@ -29,16 +29,49 @@
       "away": "Sršni Photomate Písek",
       "opponent": "SLUNETA Ústí nad Labem",
       "venue": "away",
-      "status": "scheduled",
+      "status": "final",
       "score": {
-        "home": null,
-        "away": null,
-        "us": null,
-        "them": null,
-        "result": null,
-        "margin": null
+        "home": 78,
+        "away": 80,
+        "us": 80,
+        "them": 78,
+        "result": "W",
+        "margin": 2
       },
-      "quarters": null,
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 138,
+            "away": 3226
+          },
+          {
+            "home": -60,
+            "away": -3146
+          }
+        ],
+        "regulation": [
+          {
+            "home": 138,
+            "away": 3226
+          },
+          {
+            "home": -60,
+            "away": -3146
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 138,
+            "away": 3226
+          },
+          {
+            "home": 78,
+            "away": 80
+          }
+        ]
+      },
       "links": {
         "nbl": "https://nbl.basketball/zapas/544546",
         "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2890467/",
