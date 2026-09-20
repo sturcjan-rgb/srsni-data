@@ -142,7 +142,7 @@
       Nahrát data.json<input id="file" type="file" accept=".json,application/json" style="display:none">
     </label>
     <button id="togglePaste" class="ghost">…nebo vložit ručně</button>
-    <span class="hint" id="hint">Vyber zápas ze seznamu (historie všech sezón), nebo zadej ID ručně. „živě" = auto-refresh každé 3 s. Online načtení může blokovat CORS — pak odkaz ulož (Ctrl+S) a nahraj přes „Nahrát data.json".</span>
+    <span class="hint" id="hint">Vyber zápas ze seznamu (historie všech sezón, archivní zápasy se tahají z srsni-truth), nebo zadej ID ručně. „živě" = auto-refresh každé 3 s.</span>
     <div class="err hidden" id="err"></div>
     <textarea id="paste" placeholder="Sem vlož celý obsah data.json…"></textarea>
     <button id="parsePaste" class="ghost hidden" style="margin-top:8px">Zpracovat vložený JSON</button>
@@ -273,7 +273,7 @@ async function loadMatchList(){
       any=true;
       withStats.forEach(f=>MATCHES[String(f.fibaMatchId)]=f);
       if(isCurrent) currentSeasonMatches=withStats;
-      const label=isCurrent?'Sezóna '+season.season:'Sezóna '+season.season+' (archiv — livestats bývá nedostupný)';
+      const label=isCurrent?'Sezóna '+season.season:'Sezóna '+season.season+' (archiv)';
       html+='<optgroup label="'+label+'">'+withStats.map(f=>{
         const d=f.date.split('-').reverse().join('.')+'.';
         const played=f.status==='final'?' ✓':'';
@@ -301,18 +301,24 @@ async function loadById(id,quiet,silent){
   if(!/^\d+$/.test(id)){ if(!silent){$('hint').textContent='';showErr('Zadej platné ID zápasu (jen čísla).');} return; }
   currentId=id;
   if(!silent){ showErr(''); $('hint').textContent='Načítám…'; }
+  const archive=`https://sturcjan-rgb.github.io/srsni-truth/matches/${id}.json`;
   const live=`https://fibalivestats.dcd.shared.geniussports.com/data/${id}/data.json`;
-  const tries=['https://api.codetabs.com/v1/proxy/?quest='+live, live, 'https://corsproxy.io/?url='+encodeURIComponent(live)];
+  const liveTries=['https://api.codetabs.com/v1/proxy/?quest='+live, live, 'https://corsproxy.io/?url='+encodeURIComponent(live)];
+  // Při živém pollování zkoušej nejdřív přímo FIBA (nejčerstvější), archiv jen jako fallback.
+  // Jinak (ruční/výchozí načtení) nejdřív archiv (rychlý, spolehlivý, bez CORS proxy) -
+  // FIBA přestává starší zápasy servirovat, takže archiv je pro ně jediná trvalá cesta.
+  const tries=silent?[...liveTries,archive]:[archive,...liveTries];
   for(const u of tries){
     try{const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw 0;const j=decodeParse(await r.arrayBuffer());if(!j.tm)throw 0;render(j);
       const t=new Date().toLocaleTimeString('cs-CZ');
-      $('hint').textContent=(silent?'Živě aktualizováno':'Data načtena (živě)')+' · ID '+id+' · '+t;
+      const src=u===archive?'archiv srsni-truth':'živě';
+      $('hint').textContent=(silent?'Aktualizováno':'Data načtena')+' ('+src+') · ID '+id+' · '+t;
       showErr('');return;}catch(e){}
   }
   if(silent) return;
   $('hint').textContent='';
   if(!quiet){const p=$('paste'),b=$('parsePaste');p.style.display='block';b.classList.remove('hidden');}
-  showErr('Online načtení pro ID '+id+' neprošlo (CORS/expirace). Otevři odkaz, ulož a nahraj přes „Nahrát data.json": '+live);
+  showErr('Nepodařilo se načíst ID '+id+' ani z archivu, ani živě (CORS/expirace). Otevři odkaz, ulož a nahraj přes „Nahrát data.json": '+live);
 }
 
 const gtSec=s=>{const[m,x]=s.split(':').map(Number);return m*60+x;};
