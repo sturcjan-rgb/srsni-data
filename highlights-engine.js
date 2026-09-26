@@ -77,6 +77,7 @@ function analyze(d, opts) {
   for (const t of [1, 2]) {
     const tm = d.tm[String(t)];
     teams[t] = {name: tm.name || '', short: tm.shortName || tm.name || '', code: tm.code || ''};
+    teams[t].label = teamLabel(teams[t]);
   }
   const meta = {us, them, teams, home: teams[1], away: teams[2]};
 
@@ -224,6 +225,7 @@ function analyze(d, opts) {
     h.ours = h.team === us;
     h.caption = caption(h, meta);
     Object.assign(h, headline(h, meta));
+    h.card = card(h, meta);
   }
   meta.finished = finished;
   meta.now = now;
@@ -262,6 +264,44 @@ function resultLine(h, meta) {
   return '';
 }
 const TAGS = '#SršniPísek #Sršni #NBL #basketbal';
+
+/* Krátká jména týmů na kartu (jako v grafice: SRŠNI vs HRADEC). */
+const TEAM_LABELS = [
+  [/sr[sš]n|p[ií]sek/i, 'Sršni'], [/hradec/i, 'Hradec'], [/pardubic/i, 'Pardubice'], [/ostrav/i, 'Ostrava'],
+  [/opav/i, 'Opava'], [/olomou/i, 'Olomoucko'], [/plze/i, 'Plzeň'], [/brno/i, 'Brno'], [/d[eě][cč][ií]n/i, 'Děčín'],
+  [/slavia/i, 'Slavia'], [/usk/i, 'USK'], [/sluneta|[uú]st[ií]/i, 'Ústí'], [/nymburk/i, 'Nymburk']
+];
+function teamLabel(tm) {
+  const s = (tm.name || '') + ' ' + (tm.short || '');
+  const hit = TEAM_LABELS.find(([re]) => re.test(s));
+  return hit ? hit[1] : (tm.short || tm.name || '');
+}
+
+/* Texty pro grafiku: malý štítek nad číslem, velké číslo, řádek pod ním. */
+function card(h, meta) {
+  const tl = meta.teams[h.team].label;
+  const p = h.player;
+  const who = p ? p.name : '';
+  switch (h.type) {
+    case 'run': {
+      // série, která zároveň otočila skóre
+      const lead = (s1, s2) => h.team === 1 ? s1 - s2 : s2 - s1;
+      const flipped = lead(h.fromScore[0], h.fromScore[1]) < 0 && lead(h.s1, h.s2) > 0;
+      return {label: 'Série', big: h.pts + ':0',
+        line: flipped ? tl + ' otočili zápas' : (h.ongoing ? tl + ' jedou' : tl + ' zatáhli')};
+    }
+    case 'comeback': return {label: 'Obrat', big: '−' + h.deficit, line: tl + ' otočili zápas'};
+    case 'clutch': return {label: h.deficit ? 'Obrat v závěru' : 'Klíčový koš', big: p ? '#' + p.shirt : '+' + Math.abs(h.s1 - h.s2),
+      line: who || tl + ' jdou do vedení'};
+    case 'lead': return {label: 'Náskok', big: '+' + h.lead, line: tl + ' utíkají'};
+    case 'points': return {label: 'Body', big: String(h.line.pts), line: who};
+    case 'threes': return {label: 'Trojky', big: h.mark + '×', line: who};
+    case 'doubledouble': return {label: 'Double-double', big: h.cats.map(c => h.line[c]).join('/'), line: who};
+    case 'tripledouble': return {label: 'Triple-double', big: h.cats.map(c => h.line[c]).join('/'), line: who};
+    case 'mvp': return {label: h.final ? 'Hráč zápasu' : 'Zatím nejlepší', big: String(p.pts), line: who};
+  }
+  return {label: '', big: '', line: ''};
+}
 
 function headline(h, meta) {
   const tn = meta.teams[h.team].short;

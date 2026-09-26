@@ -6,8 +6,9 @@
 <title>Živé highlights — Sršni</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Barlow+Condensed:ital,wght@0,600;0,800;0,900;1,900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
 <style>
+  @font-face{font-family:"CoFo Peshka";src:url("assets/cofo-peshka-black.woff2") format("woff2");font-weight:400 900;font-display:block}
   :root{
     --bg:#333333;--panel:#5e5e5e;--line:rgba(255,211,27,0.16);
     --ink:#f5f5f2;--muted:#c7c7c2;
@@ -44,7 +45,7 @@
   .err a{color:var(--home)}
 
   .status{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:var(--court);border:1px solid var(--line);padding:12px 16px;margin-bottom:18px}
-  .status .sc{font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-weight:900;font-size:30px;line-height:1;white-space:nowrap}
+  .status .sc{font-family:'CoFo Peshka','Arial Black',sans-serif;font-weight:900;font-size:30px;line-height:1;white-space:nowrap}
   .status .sc .us{color:var(--home)}
   .status .clk{color:var(--muted);font-weight:700}
   .pill{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;border:1px solid var(--line);color:var(--muted)}
@@ -117,7 +118,6 @@
 <script src="highlights-engine.js"></script>
 <script>
 const $=id=>document.getElementById(id);
-const YEL='#ffd31a', STEEL='#9fb4c7', INK='#f5f5f2', MUTED='#b9b9b3';
 const FORMATS={post:{w:1080,h:1350},story:{w:1080,h:1920}};
 const POLL_MS=3000;
 
@@ -348,111 +348,79 @@ async function share(el,h){
   } else download(el,h);
 }
 
-/* ---------- grafika ---------- */
-const FONT='"Barlow Condensed", "Arial Narrow", sans-serif';
-function font(w,size,italic){ return (italic?'italic ':'')+w+' '+size+'px '+FONT; }
-function fit(ctx,text,maxW,size,w,italic,min){
-  let s=size; ctx.font=font(w,s,italic);
-  while(s>(min||20) && ctx.measureText(text).width>maxW){ s-=4; ctx.font=font(w,s,italic); }
+/* ---------- grafika (podle návrhu highlights.fig) ---------- */
+const C_YEL='#ffd11c', C_DARK='#434548', C_WHITE='#ffffff';
+const PESHKA='"CoFo Peshka", "Arial Black", sans-serif';
+const MONT='Montserrat, "Arial", sans-serif';
+// rozmístění v px; story = přesně podle Figmy (1080×1920), příspěvek 4:5 je stejné, jen stlačené
+const LAYOUT={
+  story:{logo:[405,104,270], clock:582, label:680, big:905, line:1133, lineH:100, box:1518},
+  post: {logo:[445,48,190],  clock:310, label:402, big:612, line:822,  lineH:96,  box:1052}
+};
+// Návrh je v CoFo Peshka Bold (550); v repu je Black, který je širší → velikosti ×0,84, aby šířky seděly s Figmou
+const PK=0.84;
+const LOGO=new Image(); LOGO.src='assets/srsni-logo.svg';
+
+function setFont(ctx,fam,size){ ctx.font=(fam===MONT?'700 ':'')+size+'px '+fam; }
+function fitSize(ctx,fam,text,maxW,size,min){
+  let s=size; setFont(ctx,fam,s);
+  while(s>min && ctx.measureText(text).width>maxW){ s-=2; setFont(ctx,fam,s); }
   return s;
 }
-function wrap(ctx,text,maxW){
+// vycentruje verzálky svisle na y (Figma centruje řádek, verzálky tak sedí na střed boxu)
+function centerText(ctx,text,x,y){
+  const capH=ctx.measureText('H').actualBoundingBoxAscent;
+  ctx.fillText(text,x,y+capH/2);
+}
+function wrapLines(ctx,text,maxW){
   const words=text.split(' '), lines=[]; let cur='';
   for(const w of words){ const t=cur?cur+' '+w:w; if(ctx.measureText(t).width>maxW&&cur){ lines.push(cur); cur=w; } else cur=t; }
   if(cur) lines.push(cur); return lines;
 }
-function hexPath(ctx,cx,cy,r){
-  ctx.beginPath();
-  for(let i=0;i<6;i++){ const a=Math.PI/3*i+Math.PI/6; const x=cx+r*Math.cos(a), y=cy+r*Math.sin(a); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
-  ctx.closePath();
-}
-function honeycomb(ctx,W,H,col){
-  const r=54, dx=Math.sqrt(3)*r, dy=1.5*r;
-  ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=3;
-  for(let row=0,y=0;y<H+r;row++,y+=dy){
-    for(let x=(row%2?dx/2:0);x<W+dx;x+=dx){
-      // fade: hustší vpravo nahoře
-      const a=Math.max(0,1-Math.hypot(W-x,y)/(W*1.05));
-      if(a<=0.02) continue;
-      ctx.globalAlpha=a*0.22; hexPath(ctx,x,y,r-4); ctx.stroke();
-    }
-  }
-  ctx.restore();
-}
 
 function drawCanvas(c,h){
-  const {w:W,h:H}=FORMATS[format];
+  const {w:W,h:H}=FORMATS[format], L=LAYOUT[format];
   c.width=W; c.height=H;
   const ctx=c.getContext('2d');
-  const m=RESULT.meta;
-  const acc=h.ours?YEL:STEEL;
-  const story=format==='story';
-  const P=72;
+  const m=RESULT.meta, cd=h.card, cx=W/2;
+  ctx.textAlign='center'; ctx.textBaseline='alphabetic';
 
-  // pozadí
-  const g=ctx.createLinearGradient(0,0,0,H);
-  g.addColorStop(0,'#2b2b2b'); g.addColorStop(1,'#141414');
-  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
-  honeycomb(ctx,W,H,acc);
-  // hlavička
-  const top=story?150:P;
-  ctx.textBaseline='alphabetic';
-  ctx.fillStyle=YEL; ctx.font=font(900,52); ctx.fillText('🐝 SRŠNI PÍSEK',P,top+44);
-  // štítek: LIVE jen u probíhajícího zápasu, jinak období momentu
-  const tag=h.type==='mvp'&&h.final?'KONEC':(m.finished?h.clock.split(' · ')[0]:'LIVE');
-  if(tag){
-    ctx.font=font(800,36);
-    const tw=ctx.measureText(tag).width+40;
-    ctx.fillStyle=tag==='LIVE'?'#e5484d':'#f5f5f2';
-    ctx.fillRect(W-P-tw,top,tw,56);
-    ctx.fillStyle=tag==='LIVE'?'#fff':'#141414'; ctx.fillText(tag,W-P-tw+20,top+43);
-  }
+  ctx.fillStyle=C_YEL; ctx.fillRect(0,0,W,H);
+  if(LOGO.complete&&LOGO.naturalWidth){ const [x,y,s]=L.logo; ctx.drawImage(LOGO,x,y,s,s); }
 
-  // obří číslo dresu v pozadí u hráčských karet
-  if(h.player && h.player.shirt){
-    ctx.save(); ctx.globalAlpha=.07; ctx.fillStyle=INK; ctx.font=font(900,story?900:760,true);
-    ctx.textAlign='right'; ctx.fillText(h.player.shirt,W+30,story?H*0.62:H*0.68); ctx.restore();
-  }
+  // čas momentu
+  ctx.fillStyle=C_DARK; setFont(ctx,MONT,30);
+  const when=h.type==='mvp'&&h.final?'KONEC ZÁPASU':h.clock.replace(' · ',' – ');
+  centerText(ctx,when.toUpperCase(),cx,L.clock);
 
-  // kicker
-  let y=story?H*0.25:H*0.2;
-  ctx.fillStyle=acc; fit(ctx,h.kicker.toUpperCase(),W-2*P,78,800); ctx.fillText(h.kicker.toUpperCase(),P,y);
-  // big
-  y+=story?380:330;
-  ctx.fillStyle=INK; const bs=fit(ctx,h.big,W-2*P,story?400:360,900,true,120);
-  ctx.fillText(h.big,P-8,y);
-  // title
-  y+=story?150:130;
-  ctx.fillStyle=INK; fit(ctx,h.title.toUpperCase(),W-2*P,110,800,false,48); ctx.fillText(h.title.toUpperCase(),P,y);
-  // sub
-  y+=story?80:70;
-  ctx.fillStyle=MUTED; ctx.font=font(600,44);
-  wrap(ctx,h.sub,W-2*P).slice(0,3).forEach((ln,i)=>ctx.fillText(ln,P,y+i*54));
+  // štítek
+  fitSize(ctx,PESHKA,cd.label.toUpperCase(),W-120,Math.round(136*PK),60);
+  centerText(ctx,cd.label.toUpperCase(),cx,L.label);
 
-  // skóre
-  const bh=210, by=story?H-bh-300:H-bh-P-20;
-  // šikmý pruh nad skóre
-  ctx.save(); ctx.globalAlpha=.9; ctx.fillStyle=acc;
-  ctx.beginPath(); ctx.moveTo(0,by-30); ctx.lineTo(W,by-150); ctx.lineTo(W,by-136); ctx.lineTo(0,by-16); ctx.fill(); ctx.restore();
-  ctx.fillStyle='#0b0b0b'; ctx.fillRect(P,by,W-2*P,bh);
-  ctx.fillStyle=acc; ctx.fillRect(P,by,10,bh);
-  const cx=W/2, sy=by+96;
-  ctx.textAlign='center';
-  ctx.font=font(900,104);
-  const sc=h.s1+' : '+h.s2;
-  ctx.fillStyle=INK; ctx.fillText(sc,cx,sy+24);
-  const half=ctx.measureText(sc).width/2+40;
-  const nm=(t)=>m.teams[t].short.toUpperCase();
-  const side=(W-2*P)/2-half-40;
-  ctx.textAlign='right'; ctx.fillStyle=m.us===1?YEL:INK; fit(ctx,nm(1),side,52,800,false,26); ctx.fillText(nm(1),cx-half,sy+12);
-  ctx.textAlign='left'; ctx.fillStyle=m.us===2?YEL:INK; fit(ctx,nm(2),side,52,800,false,26); ctx.fillText(nm(2),cx+half,sy+12);
-  ctx.textAlign='center'; ctx.fillStyle=MUTED; ctx.font=font(700,34);
-  ctx.fillText(h.type==='mvp'&&h.final?'KONEČNÝ STAV':h.clock.toUpperCase(),cx,by+bh-26);
-  ctx.textAlign='left';
+  // velké číslo
+  ctx.fillStyle=C_WHITE; fitSize(ctx,PESHKA,cd.big,W-120,Math.round(306*PK),120);
+  centerText(ctx,cd.big,cx,L.big);
 
-  // patička
-  ctx.fillStyle=MUTED; ctx.font=font(600,32);
-  ctx.fillText('#SršniPísek',P,by+bh+(story?70:56));
+  // řádek pod číslem — max 2 řádky v šířce 712 px, jinak se zmenší
+  ctx.fillStyle=C_DARK;
+  const line=(cd.line||'').toUpperCase();
+  let size=Math.round(86*PK), lines;
+  for(;;){ setFont(ctx,PESHKA,size); lines=wrapLines(ctx,line,712); if(lines.length<=2&&lines.every(l=>ctx.measureText(l).width<=W-120)||size<=44) break; size-=4; }
+  const lh=L.lineH*size/(86*PK);
+  lines.slice(0,2).forEach((ln,i)=>centerText(ctx,ln,cx,L.line+lh/2+i*lh));
+
+  // skóre: vlevo Sršni (žlutě), vpravo soupeř (bíle)
+  const us=m.us, them=m.them;
+  const sc={[us]:us===1?h.s1:h.s2,[them]:them===1?h.s1:h.s2};
+  const by=L.box, bs=191, bx1=338, bx2=551, my=by+bs/2;
+  ctx.fillStyle=C_DARK; ctx.fillRect(bx1,by,bs,bs); ctx.fillRect(bx2,by,bs,bs);
+  fitSize(ctx,PESHKA,String(Math.max(sc[us],sc[them])),bs-30,Math.round(96*PK),48);
+  ctx.fillStyle=C_YEL;   centerText(ctx,String(sc[us]),bx1+bs/2,my);
+  ctx.fillStyle=C_WHITE; centerText(ctx,String(sc[them]),bx2+bs/2,my);
+  ctx.fillStyle=C_DARK;
+  const lu=m.teams[us].label.toUpperCase(), lt=m.teams[them].label.toUpperCase();
+  fitSize(ctx,MONT,lu,bx1-40,30,18); centerText(ctx,lu,bx1/2+10,my-7);
+  fitSize(ctx,MONT,lt,W-bx2-bs-40,30,18); centerText(ctx,lt,(bx2+bs+W)/2-10,my-7);
 }
 
 /* ---------- ovládání ---------- */
@@ -482,7 +450,8 @@ $('notifyBtn').onclick=async()=>{
 };
 
 // grafika potřebuje načtený font, jinak se vykreslí náhradním písmem
-Promise.all([font(900,100,true),font(900,100),font(800,100),font(600,100),font(700,100)].map(f=>document.fonts.load(f).catch(()=>{})))
+Promise.all(['100px "CoFo Peshka"','700 30px Montserrat'].map(f=>document.fonts.load(f,'ŠČŘŽÝÁÍÉ0123456789').catch(()=>{}))
+  .concat(new Promise(r=>{ if(LOGO.complete) r(); else { LOGO.onload=LOGO.onerror=r; } })))
   .then(()=>{ if(RESULT) for(const r of rendered.values()) drawCanvas(r.el.querySelector('canvas'),r.el._h); });
 
 loadMatchList();
