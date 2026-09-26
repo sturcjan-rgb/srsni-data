@@ -92,7 +92,7 @@
     <select id="matchSelect"><option value="">Načítám seznam zápasů…</option></select>
     <input id="gid" type="text" inputmode="numeric" placeholder="nebo FIBA ID">
     <button class="btn" id="load">Načíst</button>
-    <label class="chk"><input type="checkbox" id="liveToggle"> živě (15 s)</label>
+    <label class="chk"><input type="checkbox" id="liveToggle"> živě (3 s)</label>
     <label class="chk"><input type="checkbox" id="showOpp"> i momenty soupeře</label>
     <label class="upload">Nahrát data.json<input id="file" type="file" accept=".json,application/json" hidden></label>
     <button class="btn ghost" id="notifyBtn">🔔 Upozornění</button>
@@ -119,7 +119,7 @@
 const $=id=>document.getElementById(id);
 const YEL='#ffd31a', STEEL='#9fb4c7', INK='#f5f5f2', MUTED='#b9b9b3';
 const FORMATS={post:{w:1080,h:1350},story:{w:1080,h:1920}};
-const POLL_MS=15000;
+const POLL_MS=3000;
 
 let DATA=null, RESULT=null, currentId=null, liveTimer=null, format='post';
 let firstLoad=true, unseen=0;
@@ -145,7 +145,11 @@ const SEASON_URLS=[
 const MATCHES={};
 
 function stopLive(){ if(liveTimer){clearInterval(liveTimer);liveTimer=null;} $('liveToggle').checked=false; }
-function startLive(){ if(liveTimer) return; $('liveToggle').checked=true; liveTimer=setInterval(()=>{ if(currentId) loadById(currentId,true); },POLL_MS); }
+let polling=false;   // pomalá proxy nesmí vrstvit souběžné dotazy
+function startLive(){ if(liveTimer) return; $('liveToggle').checked=true; liveTimer=setInterval(()=>{
+  if(!currentId || polling) return;
+  polling=true; loadById(currentId,true).finally(()=>{ polling=false; });
+},POLL_MS); }
 function maybeAutoLive(id){
   const f=MATCHES[id];
   if(!f){ stopLive(); return; }
