@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Živé highlights — Sršni</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Barlow+Condensed:ital,wght@0,600;0,800;0,900;1,900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#333333;--panel:#5e5e5e;--line:rgba(255,211,27,0.16);
+    --ink:#f5f5f2;--muted:#c7c7c2;
+    --home:#ffd31a;--away:#9fb4c7;--good:#3ecf6e;--bad:#ef5757;--court:#292929;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 16px 40px}
+  .hidden{display:none!important}
+
+  header.site-header{background:var(--bg);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
+  header.site-header .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;height:64px;padding-top:0;padding-bottom:0}
+  .logo{font-weight:900;font-size:1.4rem;letter-spacing:.01em;color:var(--home);text-transform:uppercase;text-decoration:none;white-space:nowrap}
+  .logo span{color:var(--ink)}
+  nav.main-nav{min-width:0;display:flex;gap:1.4rem;font-weight:700;text-transform:uppercase;font-size:.85rem;letter-spacing:.03em;overflow-x:auto}
+  nav.main-nav a{color:var(--muted);text-decoration:none;transition:color .15s;white-space:nowrap}
+  nav.main-nav a:hover,nav.main-nav a.active{color:var(--home)}
+
+  .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:var(--panel);border:1px solid var(--line);padding:14px 16px;margin-bottom:18px}
+  .bar label.lb{color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:.03em;font-weight:700}
+  .bar select,.bar input[type=text]{background:var(--bg);border:1px solid var(--line);color:var(--ink);padding:9px 11px;font-size:14px;font-family:'Space Grotesk'}
+  .bar select#matchSelect{min-width:0;flex:1 1 300px;max-width:460px}
+  .bar input#gid{width:120px}
+  .btn{background:var(--home);color:#221a00;border:0;padding:10px 16px;font-family:'Space Grotesk',system-ui,sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;cursor:pointer}
+  .btn:hover{filter:brightness(1.07)}
+  .btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+  .btn.ghost:hover{color:var(--ink)}
+  .chk{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;cursor:pointer}
+  .chk input{accent-color:var(--home)}
+  .upload{border:1px solid var(--line);padding:9px 14px;cursor:pointer;color:var(--home);font-weight:700;text-transform:uppercase;font-size:14px;letter-spacing:.02em}
+  .hint{color:var(--muted);font-size:13px;flex-basis:100%}
+  .err{color:var(--bad);font-size:13px;flex-basis:100%}
+  .err a{color:var(--home)}
+
+  .status{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:var(--court);border:1px solid var(--line);padding:12px 16px;margin-bottom:18px}
+  .status .sc{font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-weight:900;font-size:30px;line-height:1;white-space:nowrap}
+  .status .sc .us{color:var(--home)}
+  .status .clk{color:var(--muted);font-weight:700}
+  .pill{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;border:1px solid var(--line);color:var(--muted)}
+  .pill.live{background:var(--bad);border-color:var(--bad);color:#fff;animation:pulse 1.6s infinite}
+  @keyframes pulse{50%{opacity:.55}}
+  .status .fmt{margin-left:auto;display:flex;gap:6px}
+  .status .fmt button{background:var(--bg);border:1px solid var(--line);color:var(--muted);padding:6px 10px;font-family:'Space Grotesk',system-ui,sans-serif;font-size:13px;font-weight:700;cursor:pointer}
+  .status .fmt button.on{color:#221a00;background:var(--home);border-color:var(--home)}
+
+  .feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+  .card{background:var(--panel);border:1px solid var(--line);display:flex;flex-direction:column;position:relative}
+  .card.fresh{outline:2px solid var(--home);outline-offset:-2px}
+  .card .badge{position:absolute;top:10px;left:10px;background:var(--home);color:#221a00;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;z-index:2}
+  .card canvas{width:100%;height:auto;display:block;background:var(--court)}
+  .card .body{padding:12px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .card .meta{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.03em}
+  .card textarea{width:100%;min-height:118px;resize:vertical;background:var(--bg);border:1px solid var(--line);color:var(--ink);padding:8px 10px;font-family:'Space Grotesk',system-ui,sans-serif;font-size:13px;line-height:1.45}
+  .card .acts{display:flex;gap:6px;flex-wrap:wrap}
+  .card .acts .btn{padding:8px 12px;font-size:13px;flex:1}
+  .empty{color:var(--muted);text-align:center;padding:40px 16px;border:1px dashed var(--line)}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--home);color:#221a00;font-weight:700;padding:10px 18px;z-index:50;box-shadow:0 6px 24px rgba(0,0,0,.4);max-width:calc(100vw - 32px)}
+  @media (max-width:640px){
+    nav.main-nav{gap:.9rem;font-size:.75rem}
+    .status .sc{font-size:24px;white-space:normal}
+    .status .fmt{margin-left:0}
+  }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap topbar">
+    <a class="logo" href="index.html">🐝 SRŠNI <span>DATA</span></a>
+    <nav class="main-nav">
+      <a href="index.html">Live rozbor</a>
+      <a href="highlights.html" class="active">Highlights</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="https://sturcjan-rgb.github.io/srsni-truth/" target="_blank">Portál</a>
+    </nav>
+  </div>
+</header>
+<div class="wrap">
+
+  <div class="bar">
+    <label class="lb" for="matchSelect">Zápas</label>
+    <select id="matchSelect"><option value="">Načítám seznam zápasů…</option></select>
+    <input id="gid" type="text" inputmode="numeric" placeholder="nebo FIBA ID">
+    <button class="btn" id="load">Načíst</button>
+    <label class="chk"><input type="checkbox" id="liveToggle"> živě (15 s)</label>
+    <label class="chk"><input type="checkbox" id="showOpp"> i momenty soupeře</label>
+    <label class="upload">Nahrát data.json<input id="file" type="file" accept=".json,application/json" hidden></label>
+    <button class="btn ghost" id="notifyBtn">🔔 Upozornění</button>
+    <span class="hint" id="hint">Vyber zápas. Během zápasu se živé sledování zapne samo a nové momenty naskočí nahoru, hotové ke sdílení.</span>
+    <div class="err hidden" id="err"></div>
+  </div>
+
+  <div class="status hidden" id="status">
+    <span class="pill" id="stPill">—</span>
+    <span class="sc" id="stScore"></span>
+    <span class="clk" id="stClock"></span>
+    <span class="fmt" id="fmt">
+      <button data-f="post" class="on">Příspěvek 4:5</button>
+      <button data-f="story">Story 9:16</button>
+    </span>
+  </div>
+
+  <div class="feed" id="feed"></div>
+  <div class="empty hidden" id="empty">Zatím žádný moment. Série, obraty a milníky hráčů se tu objeví, jakmile nastanou.</div>
+</div>
+
+<script src="highlights-engine.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const YEL='#ffd31a', STEEL='#9fb4c7', INK='#f5f5f2', MUTED='#b9b9b3';
+const FORMATS={post:{w:1080,h:1350},story:{w:1080,h:1920}};
+const POLL_MS=15000;
+
+let DATA=null, RESULT=null, currentId=null, liveTimer=null, format='post';
+let firstLoad=true, unseen=0;
+const rendered=new Map();   // id -> {el, version}
+
+/* ---------- načítání (stejné zdroje jako Live rozbor) ---------- */
+function showErr(m){
+  const e=$('err');
+  if(!m){e.classList.add('hidden');e.textContent='';return;}
+  e.classList.remove('hidden');
+  const url=(m.match(/https?:\/\/\S+/)||[])[0];
+  e.textContent=url?m.replace(url,''):m;
+  if(url){const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';a.textContent='otevřít data.json ↗';e.appendChild(a);}
+}
+function mojiScore(s){return (s.match(/Ã.|Å.|Â.|â€|Ä.|Ð/g)||[]).length;}
+function fixText(s){const b=mojiScore(s);if(!b)return s;let f;try{f=new TextDecoder('utf-8').decode(Uint8Array.from([...s].map(c=>c.charCodeAt(0)&0xff)));}catch(e){return s;}return (mojiScore(f)<b&&!(f.includes('�')&&!s.includes('�')))?f:s;}
+function decodeParse(input){const t=typeof input==='string'?input:new TextDecoder('utf-8').decode(input);return JSON.parse(fixText(t));}
+
+const SEASON_URLS=[
+  'https://raw.githubusercontent.com/sturcjan-rgb/srsni-data/main/data/season-2026-27.json',
+  'https://raw.githubusercontent.com/sturcjan-rgb/srsni-data/main/data/season-2025-26.json'
+];
+const MATCHES={};
+
+function stopLive(){ if(liveTimer){clearInterval(liveTimer);liveTimer=null;} $('liveToggle').checked=false; }
+function startLive(){ if(liveTimer) return; $('liveToggle').checked=true; liveTimer=setInterval(()=>{ if(currentId) loadById(currentId,true); },POLL_MS); }
+function maybeAutoLive(id){
+  const f=MATCHES[id];
+  if(!f){ stopLive(); return; }
+  const start=new Date(f.datetime).getTime(), now=Date.now();
+  const inWindow=f.status!=='final' && now>=start-15*60000 && now<=start+3*3600000;
+  if(inWindow) startLive(); else stopLive();
+}
+
+async function loadMatchList(){
+  const seasons=await Promise.all(SEASON_URLS.map(async u=>{
+    try{ const r=await fetch(u+'?t='+Date.now(),{cache:'no-store'}); if(!r.ok) throw 0; return await r.json(); }
+    catch(e){ return null; }
+  }));
+  let html='<option value="">— vyber zápas —</option>', current=[];
+  seasons.forEach((season,i)=>{
+    if(!season) return;
+    const list=(season.fixtures||[]).filter(f=>f.fibaMatchId).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
+    if(!list.length) return;
+    list.forEach(f=>MATCHES[String(f.fibaMatchId)]=f);
+    if(i===0) current=list;
+    html+='<optgroup label="Sezóna '+season.season+(i?' (archiv)':'')+'">'+list.map(f=>{
+      const d=f.date.split('-').reverse().join('.')+'.';
+      return `<option value="${f.fibaMatchId}">${f.round} · ${d} · ${f.home} – ${f.away}${f.status==='final'?' ✓':''}</option>`;
+    }).join('')+'</optgroup>';
+  });
+  $('matchSelect').innerHTML=html;
+  if(!current.length){ $('hint').textContent='Seznam zápasů se nepodařilo načíst nebo nemá FIBA ID — zadej ID ručně.'; return; }
+  // výchozí: probíhající zápas, jinak poslední odehraný
+  const now=Date.now();
+  const live=current.find(f=>f.status!=='final' && now>=new Date(f.datetime).getTime()-15*60000 && now<=new Date(f.datetime).getTime()+3*3600000);
+  const past=current.filter(f=>new Date(f.datetime).getTime()<=now);
+  const pick=live||past[past.length-1]||current[0];
+  const id=String(pick.fibaMatchId);
+  $('matchSelect').value=id; $('gid').value=id;
+  selectMatch(id);
+}
+
+function selectMatch(id){
+  firstLoad=true; rendered.clear(); $('feed').innerHTML=''; unseen=0; updateTitle();
+  loadById(id,false); maybeAutoLive(id);
+}
+
+async function loadById(id,silent){
+  if(!/^\d+$/.test(id)){ showErr('Zadej platné ID zápasu (jen čísla).'); return; }
+  currentId=id;
+  if(!silent){ showErr(''); $('hint').textContent='Načítám…'; }
+  const archive=`https://sturcjan-rgb.github.io/srsni-truth/matches/${id}.json`;
+  const live=`https://fibalivestats.dcd.shared.geniussports.com/data/${id}/data.json`;
+  const liveTries=['https://api.codetabs.com/v1/proxy/?quest='+live, live, 'https://corsproxy.io/?url='+encodeURIComponent(live)];
+  const f=MATCHES[id];
+  // probíhající zápas: nejdřív FIBA (nejčerstvější), jinak nejdřív archiv
+  const preferLive=silent || (f && f.status!=='final');
+  const tries=preferLive?[...liveTries,archive]:[archive,...liveTries];
+  for(const u of tries){
+    try{
+      const r=await fetch(u,{cache:'no-store'}); if(!r.ok) throw 0;
+      const j=decodeParse(await r.arrayBuffer()); if(!j.tm||!j.pbp) throw 0;
+      if(id!==currentId) return;              // mezitím vybrán jiný zápas
+      ingest(j);
+      $('hint').textContent=(silent?'Aktualizováno':'Načteno')+' ('+(u===archive?'archiv srsni-truth':'živě')+') · ID '+id+' · '+new Date().toLocaleTimeString('cs-CZ');
+      showErr(''); return;
+    }catch(e){}
+  }
+  if(silent) return;
+  $('hint').textContent='';
+  showErr('Nepodařilo se načíst ID '+id+' ani z archivu, ani živě. Otevři odkaz, ulož ho a nahraj přes „Nahrát data.json": '+live);
+}
+
+/* ---------- zpracování ---------- */
+function ingest(d){
+  DATA=d;
+  RESULT=SrsniHighlights.analyze(d);
+  if(RESULT.meta.finished) stopLive();
+  drawStatus();
+  drawFeed();
+  firstLoad=false;
+}
+
+function drawStatus(){
+  const m=RESULT.meta, n=m.now;
+  $('status').classList.remove('hidden');
+  const pill=$('stPill');
+  const live=!m.finished && (n.el>0);
+  pill.textContent=m.finished?'Konec':(live?'Live':'Před zápasem');
+  pill.className='pill'+(live?' live':'');
+  const cls=t=>t===m.us?'us':'';
+  $('stScore').innerHTML=`<span class="${cls(1)}"></span> <span class="${cls(2)}"></span>`;
+  const sp=$('stScore').children;
+  sp[0].textContent=m.home.short+' '+m.score[1];
+  sp[1].textContent=': '+m.score[2]+' '+m.away.short;
+  sp[1].className=cls(2);
+  $('stClock').textContent=m.finished?'Konečný stav':n.clock;
+}
+
+function visible(){
+  const all=$('showOpp').checked;
+  return RESULT.highlights.filter(h=>all||h.ours||h.type==='mvp');
+}
+
+function drawFeed(){
+  const list=visible().slice().sort((a,b)=>(a.type==='mvp')-(b.type==='mvp')||b.action-a.action);
+  // mvp karta patří nahoru jen po konci zápasu
+  if(RESULT.meta.finished){ const i=list.findIndex(h=>h.type==='mvp'); if(i>0) list.unshift(list.splice(i,1)[0]); }
+  const feed=$('feed');
+  const keep=new Set(list.map(h=>h.id));
+  for(const [id,r] of rendered) if(!keep.has(id)){ r.el.remove(); rendered.delete(id); }
+  let fresh=0;
+  list.forEach((h,idx)=>{
+    let r=rendered.get(h.id);
+    if(!r){
+      r={el:makeCard(h),version:null};
+      rendered.set(h.id,r);
+      if(!firstLoad && h.type!=='mvp'){ r.el.classList.add('fresh'); r.el.querySelector('.badge').classList.remove('hidden'); fresh++; }
+    }
+    if(r.version!==h.version){
+      if(r.version && !firstLoad && h.type!=='mvp'){ r.el.classList.add('fresh'); const b=r.el.querySelector('.badge'); b.textContent='Aktualizováno'; b.classList.remove('hidden'); }
+      fillCard(r.el,h); r.version=h.version;
+    }
+    if(feed.children[idx]!==r.el) feed.insertBefore(r.el,feed.children[idx]||null);
+  });
+  $('empty').classList.toggle('hidden',list.length>0);
+  if(fresh) announce(fresh,list.find(h=>rendered.get(h.id).el.classList.contains('fresh')));
+}
+
+function announce(n,h){
+  unseen+=n; updateTitle();
+  toast(n===1?'Nový moment: '+h.kicker+' — '+h.title:n+' nové momenty');
+  if('Notification' in window && Notification.permission==='granted' && document.hidden){
+    try{ new Notification('🐝 '+h.kicker,{body:h.title+' · '+h.sub}); }catch(e){}
+  }
+}
+function updateTitle(){ document.title=(unseen?'('+unseen+') ':'')+'Živé highlights — Sršni'; }
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden){ unseen=0; updateTitle(); } });
+let toastT=null;
+function toast(msg){
+  let t=document.querySelector('.toast');
+  if(!t){ t=document.createElement('div'); t.className='toast'; document.body.appendChild(t); }
+  t.textContent=msg; clearTimeout(toastT); toastT=setTimeout(()=>t.remove(),4000);
+}
+
+/* ---------- karta v UI ---------- */
+function makeCard(h){
+  const el=document.createElement('div');
+  el.className='card';
+  el.innerHTML=`<span class="badge hidden">Nové</span>
+    <canvas></canvas>
+    <div class="body">
+      <div class="meta"><span class="k"></span><span class="c"></span></div>
+      <textarea spellcheck="false" aria-label="Text příspěvku"></textarea>
+      <div class="acts">
+        <button class="btn" data-a="share">Sdílet</button>
+        <button class="btn ghost" data-a="png">Stáhnout PNG</button>
+        <button class="btn ghost" data-a="copy">Kopírovat text</button>
+      </div>
+    </div>`;
+  el.querySelector('textarea').addEventListener('input',e=>{ e.target.dataset.edited='1'; });
+  el.addEventListener('click',e=>{
+    el.classList.remove('fresh'); el.querySelector('.badge').classList.add('hidden');
+    const a=e.target.dataset&&e.target.dataset.a; if(!a) return;
+    const h=el._h;
+    if(a==='copy') copyText(el.querySelector('textarea').value);
+    if(a==='png') download(el,h);
+    if(a==='share') share(el,h);
+  });
+  if(!(navigator.canShare)) el.querySelector('[data-a=share]').classList.add('hidden');
+  return el;
+}
+function fillCard(el,h){
+  el._h=h;
+  el.querySelector('.k').textContent=h.kicker;
+  el.querySelector('.c').textContent=h.type==='mvp'&&h.final?'Konec':h.clock;
+  const ta=el.querySelector('textarea');
+  if(!ta.dataset.edited) ta.value=h.caption;
+  drawCanvas(el.querySelector('canvas'),h);
+}
+
+async function copyText(t){
+  try{ await navigator.clipboard.writeText(t); toast('Text zkopírován'); }
+  catch(e){ toast('Kopírování se nepovedlo — označ text ručně'); }
+}
+function fileName(h){ return 'srsni-'+currentId+'-'+h.id+'-'+format+'.png'; }
+function toBlob(c){ return new Promise(r=>c.toBlob(r,'image/png')); }
+async function download(el,h){
+  const blob=await toBlob(el.querySelector('canvas'));
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=fileName(h);
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+async function share(el,h){
+  const text=el.querySelector('textarea').value;
+  // Instagram text ze sdílení zahazuje → dej ho rovnou do schránky
+  try{ await navigator.clipboard.writeText(text); }catch(e){}
+  const file=new File([await toBlob(el.querySelector('canvas'))],fileName(h),{type:'image/png'});
+  if(navigator.canShare && navigator.canShare({files:[file]})){
+    try{ await navigator.share({files:[file],text}); toast('Text je ve schránce — vlož ho k příspěvku'); }
+    catch(e){ if(e.name!=='AbortError') download(el,h); }
+  } else download(el,h);
+}
+
+/* ---------- grafika ---------- */
+const FONT='"Barlow Condensed", "Arial Narrow", sans-serif';
+function font(w,size,italic){ return (italic?'italic ':'')+w+' '+size+'px '+FONT; }
+function fit(ctx,text,maxW,size,w,italic,min){
+  let s=size; ctx.font=font(w,s,italic);
+  while(s>(min||20) && ctx.measureText(text).width>maxW){ s-=4; ctx.font=font(w,s,italic); }
+  return s;
+}
+function wrap(ctx,text,maxW){
+  const words=text.split(' '), lines=[]; let cur='';
+  for(const w of words){ const t=cur?cur+' '+w:w; if(ctx.measureText(t).width>maxW&&cur){ lines.push(cur); cur=w; } else cur=t; }
+  if(cur) lines.push(cur); return lines;
+}
+function hexPath(ctx,cx,cy,r){
+  ctx.beginPath();
+  for(let i=0;i<6;i++){ const a=Math.PI/3*i+Math.PI/6; const x=cx+r*Math.cos(a), y=cy+r*Math.sin(a); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+  ctx.closePath();
+}
+function honeycomb(ctx,W,H,col){
+  const r=54, dx=Math.sqrt(3)*r, dy=1.5*r;
+  ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=3;
+  for(let row=0,y=0;y<H+r;row++,y+=dy){
+    for(let x=(row%2?dx/2:0);x<W+dx;x+=dx){
+      // fade: hustší vpravo nahoře
+      const a=Math.max(0,1-Math.hypot(W-x,y)/(W*1.05));
+      if(a<=0.02) continue;
+      ctx.globalAlpha=a*0.22; hexPath(ctx,x,y,r-4); ctx.stroke();
+    }
+  }
+  ctx.restore();
+}
+
+function drawCanvas(c,h){
+  const {w:W,h:H}=FORMATS[format];
+  c.width=W; c.height=H;
+  const ctx=c.getContext('2d');
+  const m=RESULT.meta;
+  const acc=h.ours?YEL:STEEL;
+  const story=format==='story';
+  const P=72;
+
+  // pozadí
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#2b2b2b'); g.addColorStop(1,'#141414');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  honeycomb(ctx,W,H,acc);
+  // hlavička
+  const top=story?150:P;
+  ctx.textBaseline='alphabetic';
+  ctx.fillStyle=YEL; ctx.font=font(900,52); ctx.fillText('🐝 SRŠNI PÍSEK',P,top+44);
+  // štítek: LIVE jen u probíhajícího zápasu, jinak období momentu
+  const tag=h.type==='mvp'&&h.final?'KONEC':(m.finished?h.clock.split(' · ')[0]:'LIVE');
+  if(tag){
+    ctx.font=font(800,36);
+    const tw=ctx.measureText(tag).width+40;
+    ctx.fillStyle=tag==='LIVE'?'#e5484d':'#f5f5f2';
+    ctx.fillRect(W-P-tw,top,tw,56);
+    ctx.fillStyle=tag==='LIVE'?'#fff':'#141414'; ctx.fillText(tag,W-P-tw+20,top+43);
+  }
+
+  // obří číslo dresu v pozadí u hráčských karet
+  if(h.player && h.player.shirt){
+    ctx.save(); ctx.globalAlpha=.07; ctx.fillStyle=INK; ctx.font=font(900,story?900:760,true);
+    ctx.textAlign='right'; ctx.fillText(h.player.shirt,W+30,story?H*0.62:H*0.68); ctx.restore();
+  }
+
+  // kicker
+  let y=story?H*0.25:H*0.2;
+  ctx.fillStyle=acc; fit(ctx,h.kicker.toUpperCase(),W-2*P,78,800); ctx.fillText(h.kicker.toUpperCase(),P,y);
+  // big
+  y+=story?380:330;
+  ctx.fillStyle=INK; const bs=fit(ctx,h.big,W-2*P,story?400:360,900,true,120);
+  ctx.fillText(h.big,P-8,y);
+  // title
+  y+=story?150:130;
+  ctx.fillStyle=INK; fit(ctx,h.title.toUpperCase(),W-2*P,110,800,false,48); ctx.fillText(h.title.toUpperCase(),P,y);
+  // sub
+  y+=story?80:70;
+  ctx.fillStyle=MUTED; ctx.font=font(600,44);
+  wrap(ctx,h.sub,W-2*P).slice(0,3).forEach((ln,i)=>ctx.fillText(ln,P,y+i*54));
+
+  // skóre
+  const bh=210, by=story?H-bh-300:H-bh-P-20;
+  // šikmý pruh nad skóre
+  ctx.save(); ctx.globalAlpha=.9; ctx.fillStyle=acc;
+  ctx.beginPath(); ctx.moveTo(0,by-30); ctx.lineTo(W,by-150); ctx.lineTo(W,by-136); ctx.lineTo(0,by-16); ctx.fill(); ctx.restore();
+  ctx.fillStyle='#0b0b0b'; ctx.fillRect(P,by,W-2*P,bh);
+  ctx.fillStyle=acc; ctx.fillRect(P,by,10,bh);
+  const cx=W/2, sy=by+96;
+  ctx.textAlign='center';
+  ctx.font=font(900,104);
+  const sc=h.s1+' : '+h.s2;
+  ctx.fillStyle=INK; ctx.fillText(sc,cx,sy+24);
+  const half=ctx.measureText(sc).width/2+40;
+  const nm=(t)=>m.teams[t].short.toUpperCase();
+  const side=(W-2*P)/2-half-40;
+  ctx.textAlign='right'; ctx.fillStyle=m.us===1?YEL:INK; fit(ctx,nm(1),side,52,800,false,26); ctx.fillText(nm(1),cx-half,sy+12);
+  ctx.textAlign='left'; ctx.fillStyle=m.us===2?YEL:INK; fit(ctx,nm(2),side,52,800,false,26); ctx.fillText(nm(2),cx+half,sy+12);
+  ctx.textAlign='center'; ctx.fillStyle=MUTED; ctx.font=font(700,34);
+  ctx.fillText(h.type==='mvp'&&h.final?'KONEČNÝ STAV':h.clock.toUpperCase(),cx,by+bh-26);
+  ctx.textAlign='left';
+
+  // patička
+  ctx.fillStyle=MUTED; ctx.font=font(600,32);
+  ctx.fillText('#SršniPísek',P,by+bh+(story?70:56));
+}
+
+/* ---------- ovládání ---------- */
+$('matchSelect').onchange=e=>{ if(e.target.value){ $('gid').value=e.target.value; selectMatch(e.target.value); } };
+$('load').onclick=()=>{ const id=$('gid').value.trim(); selectMatch(id); };
+$('gid').addEventListener('keydown',e=>{ if(e.key==='Enter') $('load').click(); });
+$('liveToggle').onchange=()=>{ $('liveToggle').checked?startLive():stopLive(); };
+$('showOpp').onchange=()=>{ if(RESULT) drawFeed(); };
+$('fmt').addEventListener('click',e=>{
+  const f=e.target.dataset.f; if(!f) return;
+  format=f; $('fmt').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.f===f));
+  for(const r of rendered.values()) if(r.el._h) drawCanvas(r.el.querySelector('canvas'),r.el._h);
+});
+$('file').onchange=e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{ try{ const j=decodeParse(r.result); if(!j.tm||!j.pbp) throw new Error('nevypadá to jako FIBA data.json');
+      stopLive(); currentId='soubor'; firstLoad=true; rendered.clear(); $('feed').innerHTML=''; ingest(j);
+      $('hint').textContent='Načteno ze souboru '+f.name+'.'; showErr(''); }
+    catch(err){ showErr('Soubor se nepodařilo přečíst: '+err.message); } };
+  r.readAsArrayBuffer(f);
+};
+if(!('Notification' in window)) $('notifyBtn').classList.add('hidden');
+$('notifyBtn').onclick=async()=>{
+  const p=await Notification.requestPermission();
+  toast(p==='granted'?'Upozornění zapnutá — přijdou i na pozadí':'Upozornění nejsou povolená');
+};
+
+// grafika potřebuje načtený font, jinak se vykreslí náhradním písmem
+Promise.all([font(900,100,true),font(900,100),font(800,100),font(600,100),font(700,100)].map(f=>document.fonts.load(f).catch(()=>{})))
+  .then(()=>{ if(RESULT) for(const r of rendered.values()) drawCanvas(r.el.querySelector('canvas'),r.el._h); });
+
+loadMatchList();
+</script>
+</body>
+</html>
