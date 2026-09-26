@@ -22,7 +22,7 @@ const ALIASES = ["srsni", "sršni", "sokol", "pisek", "písek", "photomate"];
 const KNOWN_TEAMS = [
   "Sršni Photomate Písek", "USK Praha", "SLUNETA Ústí nad Labem",
   "SK Slavia Praha ERA NBK", "PUMPA Basket Brno", "NH Ostrava", "BK Opava",
-  "BK Olomoucko", "BK Lokomotiva Plzeň", "BK KVIS Pardubice",
+  "BK Olomoucko", "BK Loko BaliMania Plzeň", "BK Lokomotiva Plzeň", "BK KVIS Pardubice",
   "BK GAPA Hradec Králové", "BK ARMEX ENERGY Děčín", "ERA Basketball Nymburk",
 ];
 
@@ -64,7 +64,7 @@ function splitQuarters(nums, finalH, finalA) {
   };
 }
 
-function splitTeams(cellText) {
+export function splitTeams(cellText) {
   // Find known team names by their position in the cell; the two present are home/away in order.
   const found = [];
   for (const t of KNOWN_TEAMS) {
@@ -73,6 +73,14 @@ function splitTeams(cellText) {
   }
   found.sort((a, b) => a.idx - b.idx);
   if (found.length >= 2) return [found[0].t, found[1].t];
+  // Soupeř, kterého seznam nezná (nový tým, přejmenování sponzorem): zbytek buňky po odečtení nás.
+  const ours = found.find((f) => isUs(f.t));
+  if (ours) {
+    const before = cellText.slice(0, ours.idx).replace(/[\s–—:-]+$/, "").trim();
+    const after = cellText.slice(ours.idx + ours.t.length).replace(/^[\s–—:-]+/, "").trim();
+    if (after && !before) { console.warn(`WARN neznámý tým "${after}" — doplň do KNOWN_TEAMS`); return [ours.t, after]; }
+    if (before && !after) { console.warn(`WARN neznámý tým "${before}" — doplň do KNOWN_TEAMS`); return [before, ours.t]; }
+  }
   return [null, null];
 }
 
@@ -231,4 +239,4 @@ async function main() {
   console.log(counts);
 }
 
-main().catch((e) => { console.error(e); process.exit(1); });
+if (import.meta.url === `file://${process.argv[1]}`) main().catch((e) => { console.error(e); process.exit(1); });
