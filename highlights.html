@@ -106,8 +106,8 @@
     <span class="sc" id="stScore"></span>
     <span class="clk" id="stClock"></span>
     <span class="fmt" id="fmt">
-      <button data-f="post" class="on">Příspěvek 4:5</button>
-      <button data-f="story">Story 9:16</button>
+      <button data-f="story" class="on">1080×1920</button>
+      <button data-f="post">1080×1350</button>
     </span>
   </div>
 
@@ -121,7 +121,7 @@ const $=id=>document.getElementById(id);
 const FORMATS={post:{w:1080,h:1350},story:{w:1080,h:1920}};
 const POLL_MS=3000;
 
-let DATA=null, RESULT=null, currentId=null, liveTimer=null, format='post';
+let DATA=null, RESULT=null, currentId=null, liveTimer=null, format='story';
 let firstLoad=true, unseen=0;
 const rendered=new Map();   // id -> {el, version}
 
