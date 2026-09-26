@@ -6,7 +6,8 @@
   "main": "season-scraper.mjs",
   "scripts": {
     "scrape": "node season-scraper.mjs",
-    "scrape:debug": "node season-scraper.mjs --debug"
+    "scrape:debug": "node season-scraper.mjs --debug",
+    "test": "node --test highlights-engine.test.mjs"
   },
   "dependencies": {
     "cheerio": "^1.2.0"
