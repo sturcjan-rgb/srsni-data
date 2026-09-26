@@ -5,14 +5,14 @@
     "nblId": 10110,
     "nblSlug": "srsni-photomate-pisek"
   },
-  "generatedAt": "2026-09-26T11:12:10.843Z",
+  "generatedAt": "2026-09-26T16:01:45.295Z",
   "source": "https://nbl.basketball/tym/srsni-photomate-pisek",
   "counts": {
-    "total": 20,
-    "home": 10,
-    "away": 10,
+    "total": 22,
+    "home": 11,
+    "away": 11,
     "final": 2,
-    "scheduled": 18
+    "scheduled": 20
   },
   "fixtures": [
     {
@@ -139,6 +139,36 @@
         "nbl": "https://nbl.basketball/zapas/544552",
         "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2890473/",
         "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2890473/data.json"
+      }
+    },
+    {
+      "nblMatchId": 544558,
+      "fibaMatchId": 2890479,
+      "round": "3. kolo",
+      "roundNum": 3,
+      "phase": "Základní část",
+      "date": "2026-09-27",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-09-27T18:00:00+02:00",
+      "home": "BK Loko BaliMania Plzeň",
+      "away": "Sršni Photomate Písek",
+      "opponent": "BK Loko BaliMania Plzeň",
+      "venue": "away",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544558",
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2890479/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2890479/data.json"
       }
     },
     {
@@ -437,6 +467,36 @@
       "quarters": null,
       "links": {
         "nbl": "https://nbl.basketball/zapas/544618",
+        "livestats": null,
+        "fibaData": null
+      }
+    },
+    {
+      "nblMatchId": 544624,
+      "fibaMatchId": null,
+      "round": "14. kolo",
+      "roundNum": 14,
+      "phase": "Základní část",
+      "date": "2026-11-22",
+      "time": "18:00",
+      "tz": "Europe/Prague",
+      "datetime": "2026-11-22T18:00:00+01:00",
+      "home": "Sršni Photomate Písek",
+      "away": "BK Loko BaliMania Plzeň",
+      "opponent": "BK Loko BaliMania Plzeň",
+      "venue": "home",
+      "status": "scheduled",
+      "score": {
+        "home": null,
+        "away": null,
+        "us": null,
+        "them": null,
+        "result": null,
+        "margin": null
+      },
+      "quarters": null,
+      "links": {
+        "nbl": "https://nbl.basketball/zapas/544624",
         "livestats": null,
         "fibaData": null
       }
