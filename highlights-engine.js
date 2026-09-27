@@ -3,11 +3,11 @@
 (function(){
 'use strict';
 
-const RUN_MIN = 8;                        // série bez odpovědi od tolika bodů
+const RUN_MIN = 6;                        // série bez odpovědi od tolika bodů
 const COMEBACK_MIN = 6;                   // obrat: smazané manko aspoň tolik bodů
-const LEAD_MARKS = [10, 15, 20, 25, 30];  // náskok týmu dosáhl poprvé
-const PTS_MARKS = [15, 20, 25, 30, 35, 40];
-const THREES_MIN = 4;                     // trojky: 4, 5, 6, …
+const LEAD_MARKS = [5, 10, 15, 20, 25, 30]; // náskok týmu dosáhl poprvé
+const PTS_MARKS = [10, 15, 20, 25, 30, 35, 40];
+const THREES_MIN = 3;                     // trojky: 3, 4, 5, …
 const CLUTCH_SECS = 120;                  // rozhodující koš v posledních 2 min Q4/prodloužení
 const DD_CATS = ['pts', 'reb', 'ast', 'stl', 'blk'];
 
@@ -196,6 +196,14 @@ function analyze(d, opts) {
       }
     }
 
+    // konec čtvrtiny / poločas (konec 4. čtvrtiny s rozhodnutým zápasem pokrývá karta Hráč zápasu)
+    if (type === 'period' && e.subType === 'end' && !(e.period >= 4 && s1 !== s2)) {
+      out.push(Object.assign(moment(e, s1, s2), {
+        id: 'period-' + e.period, type: 'period', team: us, per: e.period,
+        version: 'period-' + e.period + '-' + s1 + '-' + s2
+      }));
+    }
+
     // milníky hráčů
     if (t && pno && stats[t][pno]) {
       const p = stats[t][pno];
@@ -320,9 +328,17 @@ function card(h, meta) {
     case 'doubledouble': return {label: 'Double-double', big: h.cats.map(c => h.line[c]).join('/'), line: who};
     case 'tripledouble': return {label: 'Triple-double', big: h.cats.map(c => h.line[c]).join('/'), line: who};
     case 'mvp': return {label: h.final ? 'Hráč zápasu' : 'Zatím nejlepší', big: String(p.pts), line: who};
+    case 'period': {
+      const o = meta.us === 1 ? h.s1 : h.s2, t = meta.us === 1 ? h.s2 : h.s1;
+      const opp = meta.teams[meta.them].label;
+      return {label: periodEndLabel(h.per), big: o + ':' + t,
+        line: o > t ? 'Sršni vedou' : o < t ? opp + ' vede' : 'Vyrovnáno'};
+    }
   }
   return {label: '', big: '', line: ''};
 }
+
+function periodEndLabel(p) { return p === 2 ? 'Poločas' : p <= 4 ? 'Po ' + p + '. čtvrtině' : 'Po prodloužení'; }
 
 function headline(h, meta) {
   const tn = meta.teams[h.team].short;
@@ -354,6 +370,10 @@ function headline(h, meta) {
       return {kicker: h.type === 'tripledouble' ? 'Triple-double' : 'Double-double',
         big: h.cats.map(c => h.line[c]).join('/'),
         title: p.name, sub: '#' + p.shirt + ' · ' + h.cats.map(c => cat(c, h.line[c])).join(' · ') + ' — ' + h.clock};
+    case 'period': {
+      const c = card(h, meta);
+      return {kicker: c.label, big: c.big, title: c.line, sub: scoreLine(h, meta)};
+    }
     case 'mvp':
       return {kicker: h.final ? 'Hráč zápasu' : 'Zatím nejlepší Sršeň', big: String(p.pts),
         title: p.name, sub: '#' + p.shirt + ' · ' + statLine(p) + ' · EFF ' + p.eff};
@@ -399,6 +419,11 @@ function caption(h, meta) {
     case 'tripledouble':
       text = '🤯 TRIPLE-DOUBLE! ' + p.name + ' (#' + p.shirt + '): ' + h.cats.map(c => cat(c, h.line[c])).join(', ') + '.';
       break;
+    case 'period': {
+      const o = meta.us === 1 ? h.s1 : h.s2, t = meta.us === 1 ? h.s2 : h.s1;
+      text = '⏱ ' + periodEndLabel(h.per) + ': ' + (o > t ? 'Sršni vedou ' : o < t ? 'Sršni prohrávají ' : 'vyrovnaný stav ') + o + ':' + t + '.';
+      break;
+    }
     case 'mvp':
       text = (h.final ? resultLine(h, meta) + '🏆 Hráč zápasu: ' : '⭐ Zatím nejlepší Sršeň: ') + p.name + ' (#' + p.shirt + ') — ' + statLine(p) + '.';
       break;

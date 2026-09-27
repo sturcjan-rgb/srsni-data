@@ -62,7 +62,7 @@ test('milníky hráče a rozhodující koš v závěru', () => {
   const {highlights, meta} = H.analyze(game(ev, true));
   const types = highlights.filter(h => h.ours).map(h => h.type);
   assert.ok(types.includes('points'));
-  assert.deepEqual(highlights.filter(h => h.type === 'threes' && h.ours).map(h => h.mark), [4, 5]);
+  assert.deepEqual(highlights.filter(h => h.type === 'threes' && h.ours).map(h => h.mark), [3, 4, 5]);
   assert.ok(types.includes('doubledouble'));
   const cl = highlights.find(h => h.type === 'clutch');
   assert.equal(cl.player.name, 'Matěj Burda');
@@ -77,7 +77,7 @@ test('milníky hráče a rozhodující koš v závěru', () => {
 test('čeština v počtech', () => {
   const ev = [[1, '9:00', 2, 1, 'rebound', 1], [1, '9:00', 2, 1, 'assist', 1]];
   for (let i = 0; i < 5; i++) ev.push([1, '8:00', 2, 1, '3pt', 1]);
-  const h = H.analyze(game(ev)).highlights.find(h => h.type === 'points');
+  const h = H.analyze(game(ev)).highlights.find(h => h.type === 'points' && h.mark === 15);
   assert.match(h.sub, /15 bodů · 1 doskok · 1 asistence/);
 });
 
@@ -105,4 +105,15 @@ test('týmový moment nemá fotku hráče, hráčský ano', () => {
   assert.equal(run.featured.name, 'Martin Svoboda');
   const mvp = highlights.find(h => h.type === 'mvp');
   assert.equal(mvp.photoPlayer.name, mvp.player.name);
+});
+
+test('konec čtvrtiny a poločas', () => {
+  const ev = [[1, '5:00', 2, 1, '2pt', 1], [1, '0:00', 0, 0, 'period', 1], [2, '5:00', 1, 1, '3pt', 1], [2, '0:00', 0, 0, 'period', 1]];
+  const d = game(ev);
+  d.pbp.forEach(e => { if (e.actionType === 'period') e.subType = 'end'; });
+  const per = H.analyze(d).highlights.filter(h => h.type === 'period');
+  assert.deepEqual(per.map(h => h.card.label), ['Po 1. čtvrtině', 'Poločas']);
+  assert.equal(per[1].card.big, '2:3');
+  assert.equal(per[1].card.line, 'Soupeř Test vede'.replace('Soupeř Test', H.analyze(d).meta.teams[1].label));
+  assert.equal(per[1].photoPlayer, null);
 });
