@@ -99,12 +99,19 @@ function analyze(d, opts) {
   const hit = {};                                   // už ohlášené milníky hráčů
   const st = (t, p) => stats[t][p] || (stats[t][p] = {pts: 0, reb: 0, ast: 0, stl: 0, blk: 0, tpm: 0});
 
+  // hráč, který v sérii dal nejvíc bodů (kvůli fotce u týmových momentů)
+  function topScorer(r) {
+    let best = null;
+    for (const k in r.scorers) if (!best || r.scorers[k] > r.scorers[best]) best = k;
+    return best ? playerInfo(d, r.team, best) : null;
+  }
+
   function pushRun(r) {
     if (!r || r.pts < RUN_MIN) return;
     const m = moment(r.lastEvent, r.endScore[0], r.endScore[1]);
     out.push(Object.assign(m, {
       id: 'run-' + r.start, type: 'run', team: r.team, ongoing: !!r.ongoing,
-      pts: r.pts, fromScore: r.startScore,
+      pts: r.pts, fromScore: r.startScore, featured: topScorer(r),
       version: 'run-' + r.start + '-' + r.pts + (r.ongoing ? '' : '-end')
     }));
   }
@@ -142,8 +149,9 @@ function analyze(d, opts) {
       if (run && run.team === scorer) run.pts += gained;
       else {
         if (run) { run.ongoing = false; pushRun(run); }
-        run = {team: scorer, pts: gained, start: e.actionNumber, startScore: [s1, s2]};
+        run = {team: scorer, pts: gained, start: e.actionNumber, startScore: [s1, s2], scorers: {}};
       }
+      if (pno && t === scorer) run.scorers[pno] = (run.scorers[pno] || 0) + gained;
       s1 = ns1; s2 = ns2;
       run.lastEvent = e;
       run.endScore = [s1, s2];
@@ -166,6 +174,7 @@ function analyze(d, opts) {
           } else if (maxDeficit[tm] >= COMEBACK_MIN) {
             out.push(Object.assign(moment(e, s1, s2), {
               id: 'comeback-' + e.actionNumber, type: 'comeback', team: tm, deficit: maxDeficit[tm],
+              featured: pno && t === tm ? playerInfo(d, tm, pno) : null,
               version: 'comeback-' + e.actionNumber
             }));
           }
@@ -178,6 +187,7 @@ function analyze(d, opts) {
             if (!LEAD_MARKS.some(x => x > mk && myLead >= x)) {
               out.push(Object.assign(moment(e, s1, s2), {
                 id: 'lead-' + tm + '-' + mk, type: 'lead', team: tm, mark: mk, lead: myLead,
+                featured: pno && t === tm ? playerInfo(d, tm, pno) : null,
                 version: 'lead-' + tm + '-' + mk
               }));
             }
@@ -235,6 +245,8 @@ function analyze(d, opts) {
     h.caption = caption(h, meta);
     Object.assign(h, headline(h, meta));
     h.card = card(h, meta);
+    // čí fotku ukázat: hráč momentu, u týmových momentů hlavní strůjce
+    h.photoPlayer = h.player || h.featured || null;
   }
   meta.finished = finished;
   meta.now = now;
