@@ -5,14 +5,14 @@
     "nblId": 10110,
     "nblSlug": "srsni-photomate-pisek"
   },
-  "generatedAt": "2026-09-27T18:13:44.133Z",
+  "generatedAt": "2026-09-27T22:56:09.660Z",
   "source": "https://nbl.basketball/tym/srsni-photomate-pisek",
   "counts": {
     "total": 22,
     "home": 11,
     "away": 11,
-    "final": 2,
-    "scheduled": 20
+    "final": 3,
+    "scheduled": 19
   },
   "fixtures": [
     {
@@ -155,16 +155,49 @@
       "away": "Sršni Photomate Písek",
       "opponent": "BK Loko BaliMania Plzeň",
       "venue": "away",
-      "status": "scheduled",
+      "status": "final",
       "score": {
-        "home": null,
-        "away": null,
-        "us": null,
-        "them": null,
-        "result": null,
-        "margin": null
+        "home": 81,
+        "away": 88,
+        "us": 88,
+        "them": 81,
+        "result": "W",
+        "margin": 7
       },
-      "quarters": null,
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 731,
+            "away": 3155
+          },
+          {
+            "home": -650,
+            "away": -3067
+          }
+        ],
+        "regulation": [
+          {
+            "home": 731,
+            "away": 3155
+          },
+          {
+            "home": -650,
+            "away": -3067
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 731,
+            "away": 3155
+          },
+          {
+            "home": 81,
+            "away": 88
+          }
+        ]
+      },
       "links": {
         "nbl": "https://nbl.basketball/zapas/544558",
         "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2890479/",
