@@ -364,10 +364,15 @@ const PHOTO_EXT=['png','webp','jpg'];
 const photoCache=new Map();   // klíč -> {img|null, pending}
 const slug=s=>(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 function photoKey(p){ return p.tno+'-'+p.pno; }
+// assets/hraci/hraci.json: přesné přiřazení souborů hráčům (např. svoboda-m.png → Martin Svoboda)
+let PHOTO_MAP={};
+const photoMapReady=fetch('assets/hraci/hraci.json',{cache:'no-cache'}).then(r=>r.ok?r.json():{}).then(j=>{PHOTO_MAP=j||{};}).catch(()=>{});
 function photoCandidates(p){
   const tm=DATA&&DATA.tm[String(p.tno)]; const pl=(tm&&tm.pl&&tm.pl[String(p.pno)])||{};
   const first=pl.firstName||'', fam=pl.familyName||p.family||'';
-  const names=[slug(first+' '+fam)];
+  const full=slug(first+' '+fam);
+  if(PHOTO_MAP[full]) return ['assets/hraci/'+PHOTO_MAP[full]];
+  const names=[full, slug(fam+' '+first.slice(0,1))];
   const sameFamily=tm?Object.values(tm.pl||{}).filter(x=>slug(x.familyName)===slug(fam)).length:1;
   if(sameFamily===1) names.push(slug(fam));
   return names.flatMap(n=>PHOTO_EXT.map(e=>'assets/hraci/'+n+'.'+e));
@@ -378,11 +383,30 @@ function playerPhoto(p){
   const k=photoKey(p); const c=photoCache.get(k);
   if(c) return c.img;
   const entry={img:null}; photoCache.set(k,entry);
-  (async()=>{ for(const src of photoCandidates(p)){ const img=await loadImage(src); if(img){ entry.img=img; redrawPlayer(k); return; } } })();
+  (async()=>{ await photoMapReady; for(const src of photoCandidates(p)){ const img=await loadImage(src); if(img){ img._safeRight=measureSafeRight(img); entry.img=img; redrawPlayer(k); return; } } })();
   return null;
 }
 function redrawPlayer(k){
   for(const r of rendered.values()){ const h=r.el._h; if(h&&h.photoPlayer&&photoKey(h.photoPlayer)===k) drawCanvas(r.el.querySelector('canvas'),h); }
+}
+
+// Kde na fotce začíná hráč (první „barevný“ pixel zleva v pásu s texty) → text musí skončit před ním.
+// Pozadí, stín a šedé/bílé pruhy nejsou syté barvy, hráč (dres, kůže, vlasy, míč) ano.
+function measureSafeRight(img){
+  try{
+    const W=1080,H=1920,y0=480,y1=1400,step=4;
+    const c=document.createElement('canvas'); c.width=W; c.height=H;
+    const x=c.getContext('2d'); x.drawImage(img,0,0,W,H);
+    const d=x.getImageData(0,y0,W,y1-y0).data;
+    let left=W;
+    for(let y=0;y<y1-y0;y+=step){
+      for(let px=SAFE.x;px<left;px+=step){
+        const i=(y*W+px)*4, r=d[i],g=d[i+1],b=d[i+2], mx=Math.max(r,g,b), mn=Math.min(r,g,b);
+        if(mx>90 && (mx-mn)/mx>0.28){ left=px; break; }
+      }
+    }
+    return Math.max(SAFE.x+360, Math.min(SAFE.right, left-30));
+  }catch(e){ return SAFE.right; }
 }
 
 function setFont(ctx,fam,size){ ctx.font=(fam===MONT?'700 ':'')+size+'px '+fam; }
@@ -419,10 +443,11 @@ function drawCanvas(c,h){
   const W=1080, H=1920;
   c.width=W; c.height=H;
   const ctx=c.getContext('2d');
-  const m=RESULT.meta, cd=h.card, X=SAFE.x, maxW=SAFE.right-SAFE.x;
+  const m=RESULT.meta, cd=h.card, X=SAFE.x;
 
   ctx.fillStyle=C_BG; ctx.fillRect(0,0,W,H);
   const img=playerPhoto(h.photoPlayer);
+  const maxW=((img&&img._safeRight)||SAFE.right)-SAFE.x;
   let photoMode=null;
   if(img&&Math.abs(img.naturalWidth/img.naturalHeight-W/H)<0.03) photoMode=drawPhoto(ctx,img,W,H);
   else {
@@ -458,7 +483,7 @@ function drawCanvas(c,h){
   const line=(cd.line||'').toUpperCase();
   const top=990+shift, limit=1375;
   let size=Math.round(86*PK), lines, lh;
-  for(;;){ setFont(ctx,PESHKA,size); lines=wrapLines(ctx,line,604); lh=100*size/(86*PK);
+  for(;;){ setFont(ctx,PESHKA,size); lines=wrapLines(ctx,line,Math.min(604,maxW)); lh=100*size/(86*PK);
     if((lines.length<=3&&top+lines.length*lh<=limit&&lines.every(l=>ctx.measureText(l).width<=maxW))||size<=32) break; size-=2; }
   ctx.fillStyle=C_YEL;
   lines.slice(0,3).forEach((ln,i)=>midText(ctx,ln,X,top+lh/2+i*lh));
@@ -476,7 +501,7 @@ function drawCanvas(c,h){
     ctx.font=numFont; ctx.fillStyle=col; ctx.textAlign='center'; midText(ctx,String(sc[t]),X+66,y+66);
     ctx.textAlign='left'; ctx.fillStyle=C_WHITE;
     const lbl=m.teams[t].label.toUpperCase();
-    fitSize(ctx,MONT,lbl,(photoMode?SAFE.right:W-60)-(X+166),30,18); midText(ctx,lbl,X+166,y+66);
+    fitSize(ctx,MONT,lbl,(photoMode?X+maxW:W-60)-(X+166),30,18); midText(ctx,lbl,X+166,y+66);
   }
 }
 

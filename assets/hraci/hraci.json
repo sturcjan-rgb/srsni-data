@@ -1,0 +1,13 @@
+{
+  "_poznamka": "Který soubor patří kterému hráči (klíč = jmeno-prijmeni bez diakritiky, jak je ve FIBA soupisce). Hráč, který tu není, se hledá podle názvu souboru: jmeno-prijmeni, prijmeni-inicial, nebo samotné příjmení (jen když je v soupisce jediné).",
+  "matej-burda": "burda.png",
+  "mikulas-cank": "cank.png",
+  "matyas-jezek": "jezek.png",
+  "jan-karlovsky": "karlovsky.png",
+  "ondrej-klement": "klement.png",
+  "petr-slechta": "slechta.png",
+  "tadeas-slowiak": "slowiak.png",
+  "josef-svoboda": "svoboda-j.png",
+  "martin-svoboda": "svoboda-m.png",
+  "vojtech-sykora": "sykora-1.png"
+}

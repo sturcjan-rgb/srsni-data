@@ -1,26 +1,16 @@
 # Fotky hráčů pro Highlights 2
 
-Sem patří fotky (výřezy hráčů s průhledným pozadím, PNG/WebP/JPG), jméno souboru
-= **jméno-příjmení** malými písmeny bez diakritiky:
+Hotová pozadí **1080×1920** (pozadí, pruhy, stín i hráč), na ně se kreslí jen texty.
+Texty jsou v levém sloupci, hráč má být vpravo.
 
-| hráč | soubor |
-|---|---|
-| Martin Svoboda (#71) | `martin-svoboda.png` |
-| Josef Svoboda (#77) | `josef-svoboda.png` |
-| Jakub Zvolánek (#31) | `jakub-zvolanek.png` |
-| Marek Zvolánek (#34) | `marek-zvolanek.png` |
-| Matěj Burda (#9) | `matej-burda.png` |
-| Mikuláš Čank (#19) | `mikulas-cank.png` |
-| Jan Karlovský (#41) | `jan-karlovsky.png` |
-| Matyáš Ježek (#22) | `matyas-jezek.png` |
-| Ondřej Klement (#18) | `ondrej-klement.png` |
-| Tadeáš Slowiak (#7) | `tadeas-slowiak.png` |
-| František Suchánek (#12) | `frantisek-suchanek.png` |
-| Petr Šlechta (#8) | `petr-slechta.png` |
-| Vojtěch Sýkora (#10) | `vojtech-sykora.webp` ✓ nahráno (z návrhu) |
+Který soubor patří kterému hráči, určuje **`hraci.json`**. Klíč je jméno-příjmení bez diakritiky
+(tak, jak je ve FIBA soupisce), hodnota název souboru. Nový hráč = nahrát obrázek a přidat řádek.
 
-Stačí i jen příjmení (`burda.png`), ale **jen když je v soupisce jediné** — u Svobodů
-a Zvolánků musí být vždy celé jméno, jinak se fotka nepoužije.
+Hráč, který v `hraci.json` není, se hledá podle názvu souboru v tomto pořadí:
+`jmeno-prijmeni.png` → `prijmeni-inicial.png` (např. `svoboda-m.png`) → `prijmeni.png`
+(samotné příjmení jen když je v soupisce jediné, takže se Svobodové ani Zvolánkové nepletou).
 
-- Výřez hráče (na výšku, průhledné pozadí): umístí se vpravo jako v návrhu, výška 1858 px.
-- Hotové pozadí 1080×1920: použije se přes celou plochu místo tmavého pozadí a pruhů.
+Chybí: Jakub Zvolánek (`zvolanek-j.png`), Marek Zvolánek (`zvolanek-m.png`),
+František Suchánek (`suchanek.png`). Bez fotky se kreslí výchozí tmavé pozadí s pruhy.
+
+`sykora.png` je ukázka i s texty — jako pozadí se nepoužívá (Sýkora má `sykora-1.png`).
