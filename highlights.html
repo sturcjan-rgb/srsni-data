@@ -192,28 +192,46 @@ function selectMatch(id){
   loadById(id,false); maybeAutoLive(id);
 }
 
+// Zdroje živých dat. FIBA sama CORS nepovoluje, proto přes proxy; zkouší se všechny naráz.
+const LIVE_SOURCES=[
+  // vlastní přeposílač (workflow live-relay → větev „live“), GitHub CORS povoluje
+  (u,id)=>'https://raw.githubusercontent.com/sturcjan-rgb/srsni-data/live/'+id+'.json?t='+Date.now(),
+  u=>u,
+  u=>'https://api.codetabs.com/v1/proxy/?quest='+u,
+  u=>'https://corsproxy.io/?url='+encodeURIComponent(u),
+  u=>'https://api.allorigins.win/raw?url='+encodeURIComponent(u),
+];
+async function fetchJson(u,ms=8000){
+  const ac=new AbortController(); const t=setTimeout(()=>ac.abort(),ms);
+  try{
+    const r=await fetch(u,{cache:'no-store',signal:ac.signal}); if(!r.ok) throw new Error(r.status);
+    const j=decodeParse(await r.arrayBuffer()); if(!j.tm||!j.pbp) throw new Error('bad json');
+    return j;
+  } finally { clearTimeout(t); }
+}
+
 async function loadById(id,silent){
   if(!/^\d+$/.test(id)){ showErr('Zadej platné ID zápasu (jen čísla).'); return; }
   currentId=id;
   if(!silent){ showErr(''); $('hint').textContent='Načítám…'; }
   const archive=`https://sturcjan-rgb.github.io/srsni-truth/matches/${id}.json`;
   const live=`https://fibalivestats.dcd.shared.geniussports.com/data/${id}/data.json`;
-  const liveTries=['https://api.codetabs.com/v1/proxy/?quest='+live, live, 'https://corsproxy.io/?url='+encodeURIComponent(live)];
+  const liveTries=LIVE_SOURCES.map(fn=>fn(live,id));
   const f=MATCHES[id];
-  // probíhající zápas: nejdřív FIBA (nejčerstvější), jinak nejdřív archiv
+  // probíhající zápas: živé zdroje, jinak nejdřív archiv (rychlý, bez proxy)
   const preferLive=silent || (f && f.status!=='final');
-  const tries=preferLive?[...liveTries,archive]:[archive,...liveTries];
-  for(const u of tries){
+  const groups=preferLive?[liveTries,[archive]]:[[archive],liveTries];
+  for(const g of groups){
     try{
-      const r=await fetch(u,{cache:'no-store'}); if(!r.ok) throw 0;
-      const j=decodeParse(await r.arrayBuffer()); if(!j.tm||!j.pbp) throw 0;
+      // všechny zdroje ve skupině naráz, vyhrává první platná odpověď
+      const {j,u}=await Promise.any(g.map(u=>fetchJson(u).then(j=>({j,u}))));
       if(id!==currentId) return;              // mezitím vybrán jiný zápas
       ingest(j);
-      $('hint').textContent=(silent?'Aktualizováno':'Načteno')+' ('+(u===archive?'archiv srsni-truth':'živě')+') · ID '+id+' · '+new Date().toLocaleTimeString('cs-CZ');
+      $('hint').textContent=(silent?'Aktualizováno':'Načteno')+' ('+(u===archive?'archiv srsni-truth':'živě · '+new URL(u).hostname)+') · ID '+id+' · '+new Date().toLocaleTimeString('cs-CZ');
       showErr(''); return;
     }catch(e){}
   }
-  if(silent) return;
+  if(silent){ $('hint').textContent='Živá data se teď nepodařilo obnovit, zkouším znovu… ('+new Date().toLocaleTimeString('cs-CZ')+')'; return; }
   $('hint').textContent='';
   showErr('Nepodařilo se načíst ID '+id+' ani z archivu, ani živě. Otevři odkaz, ulož ho a nahraj přes „Nahrát data.json": '+live);
 }

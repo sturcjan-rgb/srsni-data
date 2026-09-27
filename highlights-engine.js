@@ -245,8 +245,8 @@ function analyze(d, opts) {
     h.caption = caption(h, meta);
     Object.assign(h, headline(h, meta));
     h.card = card(h, meta);
-    // čí fotku ukázat: hráč momentu, u týmových momentů hlavní strůjce
-    h.photoPlayer = h.player || h.featured || null;
+    // fotka jen u momentů o konkrétním hráči; týmové momenty (série, obrat, náskok) mají výchozí pozadí
+    h.photoPlayer = h.player || null;
   }
   meta.finished = finished;
   meta.now = now;

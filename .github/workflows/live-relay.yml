@@ -1,0 +1,67 @@
+name: live-relay
+# Přeposílá živý FIBA data.json do větve "live", odkud ho highlights čtou přes
+# raw.githubusercontent.com (FIBA sama CORS nepovoluje a veřejné CORS proxy nefungují).
+on:
+  workflow_dispatch:
+    inputs:
+      fiba_id:
+        description: "FIBA ID zápasu (prázdné = dnešní zápas podle rozpisu)"
+        required: false
+  schedule:
+    - cron: "*/10 14-21 * * *"
+concurrency:
+  group: live-relay
+  cancel-in-progress: false
+permissions:
+  contents: write
+jobs:
+  relay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 200
+    steps:
+      - uses: actions/checkout@v4
+      - name: Najít zápas a přeposílat data
+        env:
+          FIBA_ID: ${{ github.event.inputs.fiba_id }}
+        run: |
+          set -u
+          ID="${FIBA_ID:-}"
+          if [ -z "$ID" ]; then
+            # zápas, který začal před max. 3 h nebo začne do 20 min a ještě není dohraný
+            ID=$(python3 - <<'PY'
+          import json,glob,datetime as dt
+          now=dt.datetime.now(dt.timezone.utc)
+          for f in sorted(glob.glob('data/season-*.json'),reverse=True):
+              for x in json.load(open(f)).get('fixtures',[]):
+                  if not x.get('fibaMatchId') or x.get('status')=='final': continue
+                  t=dt.datetime.fromisoformat(x['datetime'])
+                  if t-dt.timedelta(minutes=20)<=now<=t+dt.timedelta(hours=3):
+                      print(x['fibaMatchId']); raise SystemExit
+          PY
+          )
+          fi
+          if [ -z "$ID" ]; then echo "Žádný probíhající zápas."; exit 0; fi
+          echo "Přeposílám zápas $ID"
+          URL="https://fibalivestats.dcd.shared.geniussports.com/data/$ID/data.json"
+
+          mkdir -p /tmp/live && cd /tmp/live && git init -q -b live
+          git config user.name "srsni-bot"; git config user.email "bot@srsni.local"
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+
+          END=$(( $(date +%s) + 3*3600 )); LAST=""; ENDS=0
+          while [ "$(date +%s)" -lt "$END" ]; do
+            if curl -sf -m 10 -o new.json "$URL" && python3 -c "import json;d=json.load(open('new.json'));assert d.get('tm')" 2>/dev/null; then
+              H=$(sha1sum new.json | cut -c1-40)
+              if [ "$H" != "$LAST" ]; then
+                cp new.json "$ID.json"; LAST=$H
+                git add "$ID.json"
+                # jediný commit (bez historie), force push → větev zůstává malá
+                git commit -q --amend -m "live $ID $(date -u +%H:%M:%S)" 2>/dev/null || git commit -q -m "live $ID $(date -u +%H:%M:%S)"
+                git push -q -f origin live 2>&1 | tail -1 || true
+              fi
+              if python3 -c "import json,sys;d=json.load(open('new.json'));sys.exit(0 if any(e.get('actionType')=='game' and e.get('subType')=='end' for e in d.get('pbp',[])) else 1)"; then
+                ENDS=$((ENDS+1)); [ "$ENDS" -ge 12 ] && { echo "Zápas skončil."; break; }
+              fi
+            fi
+            sleep 4
+          done
