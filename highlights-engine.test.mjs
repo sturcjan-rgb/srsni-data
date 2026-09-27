@@ -117,3 +117,14 @@ test('konec čtvrtiny a poločas', () => {
   assert.equal(per[1].card.line, 'Soupeř Test vede'.replace('Soupeř Test', H.analyze(d).meta.teams[1].label));
   assert.equal(per[1].photoPlayer, null);
 });
+
+test('každý koš, zisk a blok je moment s hráčem a asistencí', () => {
+  const d = game([[1, '9:00', 2, 1, '3pt', 1], [1, '8:50', 2, 2, 'steal', 1], [1, '8:40', 2, 2, '2pt', 0]]);
+  const shot = d.pbp.find(e => e.actionType === '3pt');
+  d.pbp.push({actionNumber: ++n, period: 1, gt: '9:00', tno: 2, pno: 2, actionType: 'assist', previousAction: shot.actionNumber, s1: '0', s2: '3'});
+  const plays = H.analyze(d).highlights.filter(h => h.type === 'play');
+  assert.deepEqual(plays.map(h => h.card.label), ['Trojka', 'Zisk'], 'neproměněná střela není moment');
+  assert.equal(plays[0].card.big, '+3');
+  assert.equal(plays[0].photoPlayer.name, 'Martin Svoboda');
+  assert.match(plays[0].caption, /asistence Matěj Burda/);
+});

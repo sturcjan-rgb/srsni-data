@@ -84,6 +84,8 @@ function analyze(d, opts) {
   // Řadit podle herního času, ne podle actionNumber: zapisovatel občas doplní akci zpětně
   // (např. faul z Q3 zapsaný po konci zápasu) a ta pak má nejvyšší actionNumber i starý stav skóre.
   const pbp = [...(d.pbp || [])].sort((a, b) => elapsedOf(a) - elapsedOf(b) || a.actionNumber - b.actionNumber);
+  const assistOf = {};
+  for (const e of pbp) if (e.actionType === 'assist' && e.previousAction) assistOf[e.previousAction] = e;
   const out = [];
   const moment = (e, s1, s2) => ({
     action: e.actionNumber, el: elapsedOf(e), period: e.period,
@@ -201,6 +203,17 @@ function analyze(d, opts) {
       out.push(Object.assign(moment(e, s1, s2), {
         id: 'period-' + e.period, type: 'period', team: us, per: e.period,
         version: 'period-' + e.period + '-' + s1 + '-' + s2
+      }));
+    }
+
+    // jednotlivé akce: každý koš z pole, zisk a blok (s hráčem → s fotkou)
+    if (t && pno && ((made && (type === '2pt' || type === '3pt')) || type === 'steal' || type === 'block')) {
+      const a = assistOf[e.actionNumber];
+      out.push(Object.assign(moment(e, s1, s2), {
+        id: 'play-' + e.actionNumber, type: 'play', team: t, play: type, sub: e.subType || '',
+        player: playerInfo(d, t, pno), total: stats[t][pno] ? stats[t][pno].pts : 0,
+        assist: a && +a.tno === t && a.pno ? playerInfo(d, t, a.pno) : null,
+        version: 'play-' + e.actionNumber
       }));
     }
 
@@ -328,6 +341,7 @@ function card(h, meta) {
     case 'doubledouble': return {label: 'Double-double', big: h.cats.map(c => h.line[c]).join('/'), line: who};
     case 'tripledouble': return {label: 'Triple-double', big: h.cats.map(c => h.line[c]).join('/'), line: who};
     case 'mvp': return {label: h.final ? 'Hráč zápasu' : 'Zatím nejlepší', big: String(p.pts), line: who};
+    case 'play': return {label: playLabel(h), big: h.play === '3pt' ? '+3' : h.play === '2pt' ? '+2' : '#' + p.shirt, line: who};
     case 'period': {
       const o = meta.us === 1 ? h.s1 : h.s2, t = meta.us === 1 ? h.s2 : h.s1;
       const opp = meta.teams[meta.them].label;
@@ -338,6 +352,12 @@ function card(h, meta) {
   return {label: '', big: '', line: ''};
 }
 
+function playLabel(h) {
+  if (h.play === '3pt') return 'Trojka';
+  if (h.play === 'steal') return 'Zisk';
+  if (h.play === 'block') return 'Blok';
+  return /dunk/i.test(h.sub) ? 'Smeč' : /alley/i.test(h.sub) ? 'Alley-oop' : 'Koš';
+}
 function periodEndLabel(p) { return p === 2 ? 'Poločas' : p <= 4 ? 'Po ' + p + '. čtvrtině' : 'Po prodloužení'; }
 
 function headline(h, meta) {
@@ -374,6 +394,9 @@ function headline(h, meta) {
       const c = card(h, meta);
       return {kicker: c.label, big: c.big, title: c.line, sub: scoreLine(h, meta)};
     }
+    case 'play':
+      return {kicker: playLabel(h), big: card(h, meta).big, title: p.name,
+        sub: '#' + p.shirt + (h.assist ? ' · asistence ' + h.assist.name : '') + (h.play === '2pt' || h.play === '3pt' ? ' · ' + h.total + ' ' + ptsWord(h.total) : '') + ' — ' + h.clock};
     case 'mvp':
       return {kicker: h.final ? 'Hráč zápasu' : 'Zatím nejlepší Sršeň', big: String(p.pts),
         title: p.name, sub: '#' + p.shirt + ' · ' + statLine(p) + ' · EFF ' + p.eff};
@@ -419,6 +442,13 @@ function caption(h, meta) {
     case 'tripledouble':
       text = '🤯 TRIPLE-DOUBLE! ' + p.name + ' (#' + p.shirt + '): ' + h.cats.map(c => cat(c, h.line[c])).join(', ') + '.';
       break;
+    case 'play': {
+      const icon = {Trojka: '🎯', Smeč: '💥', 'Alley-oop': '🚀', Koš: '🏀', Zisk: '🖐', Blok: '🚫'}[playLabel(h)] || '🏀';
+      text = icon + ' ' + playLabel(h) + (h.ours ? '' : ' soupeře') + '! ' + p.name + ' (#' + p.shirt + ')'
+        + (h.assist ? ', asistence ' + h.assist.name : '')
+        + (h.play === '2pt' || h.play === '3pt' ? ' — už ' + h.total + ' ' + ptsWord(h.total) + '.' : '.');
+      break;
+    }
     case 'period': {
       const o = meta.us === 1 ? h.s1 : h.s2, t = meta.us === 1 ? h.s2 : h.s1;
       text = '⏱ ' + periodEndLabel(h.per) + ': ' + (o > t ? 'Sršni vedou ' : o < t ? 'Sršni prohrávají ' : 'vyrovnaný stav ') + o + ':' + t + '.';
