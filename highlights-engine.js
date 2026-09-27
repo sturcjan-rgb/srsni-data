@@ -81,7 +81,9 @@ function analyze(d, opts) {
   }
   const meta = {us, them, teams, home: teams[1], away: teams[2]};
 
-  const pbp = [...(d.pbp || [])].sort((a, b) => a.actionNumber - b.actionNumber);
+  // Řadit podle herního času, ne podle actionNumber: zapisovatel občas doplní akci zpětně
+  // (např. faul z Q3 zapsaný po konci zápasu) a ta pak má nejvyšší actionNumber i starý stav skóre.
+  const pbp = [...(d.pbp || [])].sort((a, b) => elapsedOf(a) - elapsedOf(b) || a.actionNumber - b.actionNumber);
   const out = [];
   const moment = (e, s1, s2) => ({
     action: e.actionNumber, el: elapsedOf(e), period: e.period,
@@ -125,8 +127,10 @@ function analyze(d, opts) {
       else if (type === 'block') p.blk++;
     }
 
-    const ns1 = e.s1 !== '' && e.s1 != null ? +e.s1 : s1;
-    const ns2 = e.s2 !== '' && e.s2 != null ? +e.s2 : s2;
+    // skóre se mění jen proměněným košem; stav u ostatních akcí může být zastaralý
+    const isScore = made && (type === '2pt' || type === '3pt' || type === 'freethrow');
+    const ns1 = isScore && e.s1 !== '' && e.s1 != null ? +e.s1 : s1;
+    const ns2 = isScore && e.s2 !== '' && e.s2 != null ? +e.s2 : s2;
     const scored = (ns1 !== s1 || ns2 !== s2) && t;
 
     if (scored) {
@@ -208,7 +212,12 @@ function analyze(d, opts) {
   }
 
   const finished = isFinished(d);
-  const result = dedupe(out).sort((a, b) => a.action - b.action);
+  const result = dedupe(out).sort((a, b) => a.el - b.el || a.action - b.action);
+  // po konci platí oficiální skóre z boxscore
+  if (finished) {
+    const b1 = +d.tm['1'].score, b2 = +d.tm['2'].score;
+    if (!isNaN(b1) && !isNaN(b2)) { s1 = b1; s2 = b2; }
+  }
   const last = pbp[pbp.length - 1];
   const now = last ? moment(last, s1, s2) : {el: 0, period: 1, clock: 'Q1 · ' + mmss(pl * 60), s1: 0, s2: 0};
 

@@ -80,3 +80,18 @@ test('čeština v počtech', () => {
   const h = H.analyze(game(ev)).highlights.find(h => h.type === 'points');
   assert.match(h.sub, /15 bodů · 1 doskok · 1 asistence/);
 });
+
+test('akce doplněná zpětně (vyšší actionNumber, starý stav) nerozbije konečný stav', () => {
+  const ev = [];
+  for (let i = 0; i < 6; i++) ev.push([3, '5:00', 2, 1, '2pt', 1]);          // Q3: Sršni 12:0
+  for (let i = 0; i < 5; i++) ev.push([4, '5:00', 2, 1, '2pt', 1]);          // Q4: 22:0
+  const d = game(ev, true);
+  d.tm['1'].score = 0; d.tm['2'].score = 22;
+  // zapisovatel po konci doplní faul z Q3 se stavem 0:12
+  d.pbp.unshift({actionNumber: ++n, period: 3, gt: '1:11', tno: 1, pno: 1, actionType: 'foul', success: 0, s1: '0', s2: '12'});
+  const {meta, highlights} = H.analyze(d);
+  assert.deepEqual(meta.score, {1: 0, 2: 22});
+  const mvp = highlights.find(h => h.type === 'mvp');
+  assert.equal(mvp.s1 + ':' + mvp.s2, '0:22');
+  assert.equal(highlights.filter(h => h.type === 'run').length, 1, 'žádná falešná série z doplněné akce');
+});

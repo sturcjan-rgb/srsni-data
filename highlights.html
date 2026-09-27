@@ -250,7 +250,7 @@ function visible(){
 }
 
 function drawFeed(){
-  const list=visible().slice().sort((a,b)=>(a.type==='mvp')-(b.type==='mvp')||b.action-a.action);
+  const list=visible().slice().sort((a,b)=>(a.type==='mvp')-(b.type==='mvp')||b.el-a.el||b.action-a.action);
   // mvp karta patří nahoru jen po konci zápasu
   if(RESULT.meta.finished){ const i=list.findIndex(h=>h.type==='mvp'); if(i>0) list.unshift(list.splice(i,1)[0]); }
   const feed=$('feed');
