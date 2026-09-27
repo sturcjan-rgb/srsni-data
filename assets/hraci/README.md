@@ -17,6 +17,7 @@ Sem patří fotky (výřezy hráčů s průhledným pozadím, PNG/WebP/JPG), jm�
 | Tadeáš Slowiak (#7) | `tadeas-slowiak.png` |
 | František Suchánek (#12) | `frantisek-suchanek.png` |
 | Petr Šlechta (#8) | `petr-slechta.png` |
+| Vojtěch Sýkora (#10) | `vojtech-sykora.webp` ✓ nahráno (z návrhu) |
 
 Stačí i jen příjmení (`burda.png`), ale **jen když je v soupisce jediné** — u Svobodů
 a Zvolánků musí být vždy celé jméno, jinak se fotka nepoužije.
