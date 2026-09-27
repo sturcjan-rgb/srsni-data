@@ -442,28 +442,32 @@ function drawCanvas(c,h){
   ctx.fillStyle=C_WHITE; midText(ctx,per,151,534);
   if(clk){ ctx.fillStyle=C_YEL; midText(ctx,clk,151+ctx.measureText(per).width+gap,534); }
 
-  // štítek (černě)
-  const label=cd.label.toUpperCase();
-  ctx.fillStyle=C_BLACK; fitSize(ctx,PESHKA,label,maxW,Math.round(121*PK),50);
-  midText(ctx,label,X,692);
+  // štítek (černě) — každé slovo na vlastní řádek; další prvky se posunou dolů
+  const words=cd.label.toUpperCase().split(/\s+/).filter(Boolean);
+  const longest=words.reduce((a,w)=>{ setFont(ctx,PESHKA,100); return ctx.measureText(w).width>ctx.measureText(a).width?w:a; },'');
+  ctx.fillStyle=C_BLACK; const ls=fitSize(ctx,PESHKA,longest,maxW,Math.round(121*PK),50);
+  const lhL=ls/PK;
+  words.forEach((w,i)=>midText(ctx,w,X,692+i*lhL));
+  const shift=(words.length-1)*lhL;
 
   // velké číslo (bíle)
   ctx.fillStyle=C_WHITE; fitSize(ctx,PESHKA,cd.big,maxW,Math.round(229*PK),110);
-  midText(ctx,cd.big,X,868);
+  midText(ctx,cd.big,X,868+shift);
 
-  // řádek (žlutě) — max 3 řádky v šířce 604 px, jinak se zmenší; nikdy nezasáhne do skóre
+  // řádek (žlutě) — max 3 řádky v šířce 604 px a musí skončit nad skóre, jinak se zmenší
   const line=(cd.line||'').toUpperCase();
-  let size=Math.round(86*PK), lines;
-  for(;;){ setFont(ctx,PESHKA,size); lines=wrapLines(ctx,line,604);
-    if((lines.length<=3&&lines.every(l=>ctx.measureText(l).width<=maxW))||size<=40) break; size-=4; }
-  const lh=100*size/(86*PK);
+  const top=990+shift, limit=1375;
+  let size=Math.round(86*PK), lines, lh;
+  for(;;){ setFont(ctx,PESHKA,size); lines=wrapLines(ctx,line,604); lh=100*size/(86*PK);
+    if((lines.length<=3&&top+lines.length*lh<=limit&&lines.every(l=>ctx.measureText(l).width<=maxW))||size<=32) break; size-=2; }
   ctx.fillStyle=C_YEL;
-  lines.slice(0,3).forEach((ln,i)=>midText(ctx,ln,X,990+lh/2+i*lh));
+  lines.slice(0,3).forEach((ln,i)=>midText(ctx,ln,X,top+lh/2+i*lh));
 
-  // skóre: nahoře Sršni (žlutě), dole soupeř (bíle)
+  // skóre: nahoře Sršni, dole soupeř; žlutě vždy ten, kdo vede (při remíze obě bíle)
   const us=m.us, them=m.them;
   const sc={[us]:us===1?h.s1:h.s2,[them]:them===1?h.s1:h.s2};
-  const rows=[[1395,us,C_YEL],[1541,them,C_WHITE]];
+  const col=t=>sc[t]>sc[t===us?them:us]?C_YEL:C_WHITE;
+  const rows=[[1395,us,col(us)],[1541,them,col(them)]];
   setFont(ctx,PESHKA,Math.round(66*PK));
   fitSize(ctx,PESHKA,String(Math.max(sc[us],sc[them])),110,Math.round(66*PK),36);
   const numFont=ctx.font;
