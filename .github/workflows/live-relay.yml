@@ -48,17 +48,19 @@ jobs:
           git config user.name "srsni-bot"; git config user.email "bot@srsni.local"
           git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
 
-          END=$(( $(date +%s) + 3*3600 )); LAST=""; ENDS=0
+          END=$(( $(date +%s) + 3*3600 )); ENDS=0
           while [ "$(date +%s)" -lt "$END" ]; do
             if curl -sf -m 10 -o new.json "$URL" && python3 -c "import json;d=json.load(open('new.json'));assert d.get('tm')" 2>/dev/null; then
-              H=$(sha1sum new.json | cut -c1-40)
-              if [ "$H" != "$LAST" ]; then
-                cp new.json "$ID.json"; LAST=$H
-                git add "$ID.json"
-                # jediný commit (bez historie), force push → větev zůstává malá
-                git commit -q --amend -m "live $ID $(date -u +%H:%M:%S)" 2>/dev/null || git commit -q -m "live $ID $(date -u +%H:%M:%S)"
-                git push -q -f origin live 2>&1 | tail -1 || true
-              fi
+              # raw.githubusercontent.com drží soubory v cache 5 min a parametry v URL ignoruje,
+              # proto se data ukládají i do souboru podle 5s okna (ID/<epoch/5>.json): nové jméno = vždy čerstvé
+              cp new.json "$ID.json"
+              B=$(( $(date +%s) / 5 )); mkdir -p "$ID"; cp new.json "$ID/$B.json"
+              # starší okna než 2 minuty pryč (jen číselné soubory v adresáři zápasu)
+              python3 -c "import os,sys;d,b=sys.argv[1],int(sys.argv[2]);[os.remove(os.path.join(d,f)) for f in os.listdir(d) if f[:-5].isdigit() and int(f[:-5])<b-24]" "$ID" "$B"
+              git add -A .
+              # jediný commit (bez historie), force push → větev zůstává malá
+              git commit -q --amend -m "live $ID $(date -u +%H:%M:%S)" 2>/dev/null || git commit -q -m "live $ID $(date -u +%H:%M:%S)"
+              git push -q -f origin live 2>&1 | tail -1 || true
               if python3 -c "import json,sys;d=json.load(open('new.json'));sys.exit(0 if any(e.get('actionType')=='game' and e.get('subType')=='end' for e in d.get('pbp',[])) else 1)"; then
                 ENDS=$((ENDS+1)); [ "$ENDS" -ge 12 ] && { echo "Zápas skončil."; break; }
               fi
