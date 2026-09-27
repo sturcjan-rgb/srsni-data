@@ -357,13 +357,16 @@ const PK=0.84;
 // Bezpečná oblast pro text: levý sloupec mezi okrajem a fotkou, svisle mimo horní/spodní lištu Instagramu
 const SAFE={x:138, right:790, top:250, bottom:1670};
 const DECOR=new Image(); DECOR.src='assets/h2-decor.svg';
+// výchozí pozadí (bez hráče) — když chybí, kreslí se pozadí + pruhy z návrhu
+const DEFAULT_BG=new Image(); DEFAULT_BG.src='assets/hraci/default.png';
 
 /* fotky hráčů: assets/hraci/jmeno-prijmeni.png (bez diakritiky). Podle příjmení jen když je v soupisce jediné
    — Svobodové (Martin, Josef) a Zvolánkové (Jakub, Marek) se tak nepletou. */
 const PHOTO_EXT=['png','webp','jpg'];
 const photoCache=new Map();   // klíč -> {img|null, pending}
 const slug=s=>(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-function photoKey(p){ return p.tno+'-'+p.pno; }
+// klíč podle jména, ne podle pno: pořadová čísla hráčů se mezi zápasy liší
+function photoKey(p){ return slug(p.name||p.family||'') || (p.tno+'-'+p.pno); }
 // assets/hraci/hraci.json: přesné přiřazení souborů hráčům (např. svoboda-m.png → Martin Svoboda)
 let PHOTO_MAP={};
 const photoMapReady=fetch('assets/hraci/hraci.json',{cache:'no-cache'}).then(r=>r.ok?r.json():{}).then(j=>{PHOTO_MAP=j||{};}).catch(()=>{});
@@ -371,7 +374,7 @@ function photoCandidates(p){
   const tm=DATA&&DATA.tm[String(p.tno)]; const pl=(tm&&tm.pl&&tm.pl[String(p.pno)])||{};
   const first=pl.firstName||'', fam=pl.familyName||p.family||'';
   const full=slug(first+' '+fam);
-  if(PHOTO_MAP[full]) return ['assets/hraci/'+PHOTO_MAP[full]];
+  if(PHOTO_MAP[full]) return PHOTO_MAP[full]==='default.png'?[]:['assets/hraci/'+PHOTO_MAP[full]];
   const names=[full, slug(fam+' '+first.slice(0,1))];
   const sameFamily=tm?Object.values(tm.pl||{}).filter(x=>slug(x.familyName)===slug(fam)).length:1;
   if(sameFamily===1) names.push(slug(fam));
@@ -450,6 +453,7 @@ function drawCanvas(c,h){
   const maxW=((img&&img._safeRight)||SAFE.right)-SAFE.x;
   let photoMode=null;
   if(img&&Math.abs(img.naturalWidth/img.naturalHeight-W/H)<0.03) photoMode=drawPhoto(ctx,img,W,H);
+  else if(!img&&DEFAULT_BG.complete&&DEFAULT_BG.naturalWidth) ctx.drawImage(DEFAULT_BG,0,0,W,H);
   else {
     if(DECOR.complete&&DECOR.naturalWidth) ctx.drawImage(DECOR,0,0,W,H);
     if(img) photoMode=drawPhoto(ctx,img,W,H);
@@ -533,7 +537,7 @@ $('notifyBtn').onclick=async()=>{
 
 // grafika potřebuje načtený font, jinak se vykreslí náhradním písmem
 Promise.all(['100px "CoFo Peshka"','700 30px Montserrat'].map(f=>document.fonts.load(f,'ŠČŘŽÝÁÍÉ0123456789').catch(()=>{}))
-  .concat(new Promise(r=>{ if(DECOR.complete) r(); else { DECOR.onload=DECOR.onerror=r; } })))
+  .concat([DECOR,DEFAULT_BG].map(im=>new Promise(r=>{ if(im.complete) r(); else { im.onload=im.onerror=r; } }))))
   .then(()=>{ if(RESULT) for(const r of rendered.values()) drawCanvas(r.el.querySelector('canvas'),r.el._h); });
 
 loadMatchList();
