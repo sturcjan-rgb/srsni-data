@@ -243,6 +243,18 @@ function analyze(d, opts) {
   }
 
   const finished = isFinished(d);
+  // Hodiny doběhly na 0:00, ale zapisovatel ještě nezadal „konec čtvrtiny“ → ohlásit hned
+  // (stejné id jako karta z události, takže se po jejím zadání jen nahradí)
+  const clockZero = /^0?0:00(:00)?$/.test(String(d.clock || ''));
+  const per = +d.period || 0;
+  if (!finished && clockZero && per >= 1 && !out.some(h => h.id === 'period-' + per) && !(per >= 4 && s1 !== s2)) {
+    const last = pbp[pbp.length - 1];
+    out.push(Object.assign(last ? moment(last, s1, s2) : {action: 0, el: 0, period: per, clock: periodLabel(per) + ' · 0:00', s1, s2}, {
+      id: 'period-' + per, type: 'period', team: us, per,
+      clock: periodLabel(per) + ' · 0:00', el: per <= 4 ? per * pl * 60 : 4 * pl * 60 + (per - 4) * ot * 60,
+      version: 'period-' + per + '-' + s1 + '-' + s2
+    }));
+  }
   const result = dedupe(out).sort((a, b) => a.el - b.el || a.action - b.action);
   // po konci platí oficiální skóre z boxscore
   if (finished) {

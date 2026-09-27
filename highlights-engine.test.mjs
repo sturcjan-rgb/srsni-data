@@ -128,3 +128,13 @@ test('každý koš, zisk a blok je moment s hráčem a asistencí', () => {
   assert.equal(plays[0].photoPlayer.name, 'Martin Svoboda');
   assert.match(plays[0].caption, /asistence Matěj Burda/);
 });
+
+test('poločas se ohlásí, jakmile hodiny doběhnou na 0:00 (i bez události konce)', () => {
+  const d = game([[2, '5:00', 2, 1, '2pt', 1]]);
+  d.period = 2; d.clock = '00:00';
+  const per = H.analyze(d).highlights.filter(h => h.type === 'period');
+  assert.deepEqual(per.map(h => h.card.label), ['Poločas']);
+  assert.equal(per[0].card.big, '2:0');
+  d.clock = '03:12';
+  assert.equal(H.analyze(d).highlights.filter(h => h.type === 'period').length, 0);
+});
