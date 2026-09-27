@@ -10,7 +10,7 @@ Hráč, který v `hraci.json` není, se hledá podle názvu souboru v tomto poř
 `jmeno-prijmeni.png` → `prijmeni-inicial.png` (např. `svoboda-m.png`) → `prijmeni.png`
 (samotné příjmení jen když je v soupisce jediné, takže se Svobodové ani Zvolánkové nepletou).
 
-Chybí: Jakub Zvolánek (`zvolanek-j.png`), Marek Zvolánek (`zvolanek-m.png`),
-František Suchánek (`suchanek.png`). Bez fotky se kreslí výchozí tmavé pozadí s pruhy.
+`default.png` je výchozí pozadí bez hráče: použije se pro hráče bez fotky (Zvolánkové mají
+v `hraci.json` výslovně `default.png`, Suchánek zatím fotku nemá) a pro momenty soupeře.
 
 `sykora.png` je ukázka i s texty — jako pozadí se nepoužívá (Sýkora má `sykora-1.png`).
