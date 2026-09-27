@@ -212,6 +212,7 @@ function analyze(d, opts) {
       out.push(Object.assign(moment(e, s1, s2), {
         id: 'play-' + e.actionNumber, type: 'play', team: t, play: type, sub: e.subType || '',
         player: playerInfo(d, t, pno), total: stats[t][pno] ? stats[t][pno].pts : 0,
+        line: Object.assign({}, stats[t][pno] || {}),
         assist: a && +a.tno === t && a.pno ? playerInfo(d, t, a.pno) : null,
         version: 'play-' + e.actionNumber
       }));
@@ -303,6 +304,16 @@ const cat = (c, n) => n + ' ' + WORDS[c](n);
 function scoreLine(h, meta) {
   return meta.home.short + ' ' + h.s1 + ':' + h.s2 + ' ' + meta.away.short;
 }
+// celkové statistiky hráče pro kartu (body vždy, zbytek jen nenulový)
+function cardStats(l, h) {
+  if (!l) return '';
+  const parts = [cat('pts', l.pts || 0)];
+  if (l.ast) parts.push(cat('ast', l.ast));
+  if (l.reb) parts.push(cat('reb', l.reb));
+  if (l.stl && (l.stl >= 2 || (h && h.play === 'steal'))) parts.push(cat('stl', l.stl));
+  if (l.blk && (l.blk >= 2 || (h && h.play === 'block'))) parts.push(cat('blk', l.blk));
+  return parts.join(' · ');
+}
 function statLine(l) {
   const parts = [cat('pts', l.pts)];
   if (l.reb) parts.push(cat('reb', l.reb));
@@ -348,12 +359,15 @@ function card(h, meta) {
     case 'clutch': return {label: h.deficit ? 'Obrat v závěru' : 'Klíčový koš', big: p ? '#' + p.shirt : '+' + Math.abs(h.s1 - h.s2),
       line: who || tl + ' jdou do vedení'};
     case 'lead': return {label: 'Náskok', big: '+' + h.lead, line: tl + ' utíkají'};
-    case 'points': return {label: 'Body', big: String(h.line.pts), line: who};
-    case 'threes': return {label: 'Trojky', big: h.mark + '×', line: who};
-    case 'doubledouble': return {label: 'Double-double', big: h.cats.map(c => h.line[c]).join('/'), line: who};
-    case 'tripledouble': return {label: 'Triple-double', big: h.cats.map(c => h.line[c]).join('/'), line: who};
-    case 'mvp': return {label: h.final ? 'Hráč zápasu' : 'Zatím nejlepší', big: String(p.pts), line: who};
-    case 'play': return {label: playLabel(h), big: h.play === '3pt' ? '+3' : h.play === '2pt' ? '+2' : '#' + p.shirt, line: who};
+    case 'points': return {label: 'Body', big: String(h.line.pts), line: who, stats: cardStats(h.line)};
+    case 'threes': return {label: 'Trojky', big: h.mark + '×', line: who, stats: cardStats(h.line)};
+    case 'doubledouble': return {label: 'Double-double', big: h.cats.map(c => h.line[c]).join('/'), line: who, stats: cardStats(h.line)};
+    case 'tripledouble': return {label: 'Triple-double', big: h.cats.map(c => h.line[c]).join('/'), line: who, stats: cardStats(h.line)};
+    case 'mvp': return {label: h.final ? 'Hráč zápasu' : 'Zatím nejlepší', big: String(p.pts), line: who, stats: cardStats(p)};
+    // akce: velké číslo = celkový počet (body u koše, zisky/bloky u obrany), pod jménem celkové statistiky
+    case 'play': return {label: playLabel(h),
+      big: String(h.play === 'steal' ? h.line.stl : h.play === 'block' ? h.line.blk : h.line.pts),
+      line: who, stats: cardStats(h.line, h)};
     case 'period': {
       const o = meta.us === 1 ? h.s1 : h.s2, t = meta.us === 1 ? h.s2 : h.s1;
       const opp = meta.teams[meta.them].label;

@@ -124,7 +124,9 @@ test('každý koš, zisk a blok je moment s hráčem a asistencí', () => {
   d.pbp.push({actionNumber: ++n, period: 1, gt: '9:00', tno: 2, pno: 2, actionType: 'assist', previousAction: shot.actionNumber, s1: '0', s2: '3'});
   const plays = H.analyze(d).highlights.filter(h => h.type === 'play');
   assert.deepEqual(plays.map(h => h.card.label), ['Trojka', 'Zisk'], 'neproměněná střela není moment');
-  assert.equal(plays[0].card.big, '+3');
+  assert.equal(plays[0].card.big, '3', 'celkové body hráče, ne +3');
+  assert.equal(plays[0].card.stats, '3 body');
+  assert.equal(plays[1].card.stats, '0 bodů · 1 asistence · 1 zisk');
   assert.equal(plays[0].photoPlayer.name, 'Martin Svoboda');
   assert.match(plays[0].caption, /asistence Matěj Burda/);
 });
