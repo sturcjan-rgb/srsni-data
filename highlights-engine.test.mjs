@@ -95,3 +95,13 @@ test('akce doplněná zpětně (vyšší actionNumber, starý stav) nerozbije ko
   assert.equal(mvp.s1 + ':' + mvp.s2, '0:22');
   assert.equal(highlights.filter(h => h.type === 'run').length, 1, 'žádná falešná série z doplněné akce');
 });
+
+test('týmový moment nese hráče pro fotku (nejvíc bodů v sérii)', () => {
+  const ev = [[1, '9:00', 2, 2, '2pt', 1]];                                  // Burda 2
+  for (let i = 0; i < 3; i++) ev.push([1, '8:00', 2, 1, '3pt', 1]);         // Svoboda 9
+  const {highlights} = H.analyze(game(ev));
+  const run = highlights.find(h => h.type === 'run');
+  assert.equal(run.photoPlayer.name, 'Martin Svoboda');
+  const mvp = highlights.find(h => h.type === 'mvp');
+  assert.equal(mvp.photoPlayer.name, mvp.player.name);
+});
