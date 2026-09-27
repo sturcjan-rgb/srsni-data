@@ -115,7 +115,7 @@
   <div class="empty hidden" id="empty">Zatím žádný moment. Série, obraty a milníky hráčů se tu objeví, jakmile nastanou.</div>
 </div>
 
-<script src="highlights-engine.js?v=20260927e"></script>
+<script src="highlights-engine.js?v=20260927f"></script>
 <script>
 const $=id=>document.getElementById(id);
 const FORMATS={post:{w:1080,h:1350},story:{w:1080,h:1920}};
@@ -515,12 +515,28 @@ function drawCanvas(c,h){
 
   // řádek (žlutě) — max 3 řádky v šířce 604 px a musí skončit nad skóre, jinak se zmenší
   const line=(cd.line||'').toUpperCase();
-  const top=990+shift, limit=1375;
+  // pod jménem celkové statistiky hráče (bíle, Montserrat) — místo se odečte od žlutého řádku
+  const stats=(cd.stats||'').toUpperCase();
+  let sLines=[], sSize=34, sLh=0;
+  if(stats){
+    // lámat jen mezi položkami („12 BODŮ“, „9 DOSKOKŮ“), ne uvnitř nich
+    const items=stats.split(' · ');
+    const wrapItems=()=>{ const out=[]; let cur=''; for(const it of items){ const t=cur?cur+' · '+it:it; if(ctx.measureText(t).width>maxW&&cur){ out.push(cur); cur=it; } else cur=t; } if(cur) out.push(cur); return out; };
+    for(;;){ setFont(ctx,MONT,sSize); sLines=wrapItems(); if((sLines.length<=2&&sLines.every(l=>ctx.measureText(l).width<=maxW))||sSize<=22) break; sSize-=2; }
+    sLh=sSize*1.35;
+  }
+  const statsH=stats?18+sLines.length*sLh:0;
+  const top=990+shift, limit=1375-statsH;
   let size=Math.round(86*PK), lines, lh;
   for(;;){ setFont(ctx,PESHKA,size); lines=wrapLines(ctx,line,Math.min(604,maxW)); lh=100*size/(86*PK);
     if((lines.length<=3&&top+lines.length*lh<=limit&&lines.every(l=>ctx.measureText(l).width<=maxW))||size<=32) break; size-=2; }
   ctx.fillStyle=C_YEL;
   lines.slice(0,3).forEach((ln,i)=>midText(ctx,ln,X,top+lh/2+i*lh));
+  if(stats){
+    const sy=top+lines.slice(0,3).length*lh+18;
+    ctx.fillStyle=C_WHITE; setFont(ctx,MONT,sSize);
+    sLines.forEach((ln,i)=>midText(ctx,ln,X,sy+sLh/2+i*sLh));
+  }
 
   // skóre: nahoře Sršni, dole soupeř; žlutě vždy ten, kdo vede (při remíze obě bíle)
   const us=m.us, them=m.them;

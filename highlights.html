@@ -115,7 +115,7 @@
   <div class="empty hidden" id="empty">Zatím žádný moment. Série, obraty a milníky hráčů se tu objeví, jakmile nastanou.</div>
 </div>
 
-<script src="highlights-engine.js?v=20260927e"></script>
+<script src="highlights-engine.js?v=20260927f"></script>
 <script>
 const $=id=>document.getElementById(id);
 const FORMATS={post:{w:1080,h:1350},story:{w:1080,h:1920}};
@@ -438,6 +438,14 @@ function drawCanvas(c,h){
   for(;;){ setFont(ctx,PESHKA,size); lines=wrapLines(ctx,line,712); if(lines.length<=2&&lines.every(l=>ctx.measureText(l).width<=W-120)||size<=44) break; size-=4; }
   const lh=L.lineH*size/(86*PK);
   lines.slice(0,2).forEach((ln,i)=>centerText(ctx,ln,cx,L.line+lh/2+i*lh));
+
+  // celkové statistiky hráče pod jménem (Montserrat), nad skóre
+  const stats=(cd.stats||'').toUpperCase();
+  if(stats){
+    const sy=L.line+lines.slice(0,2).length*lh+44;
+    ctx.fillStyle=C_DARK; fitSize(ctx,MONT,stats,W-120,34,20);
+    centerText(ctx,stats,cx,Math.min(sy,L.box-50));
+  }
 
   // skóre: vlevo Sršni (žlutě), vpravo soupeř (bíle)
   const us=m.us, them=m.them;
