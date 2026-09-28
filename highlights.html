@@ -210,14 +210,15 @@ async function fetchJson(u,ms=8000){
 
 // Vlastní přeposílač (workflow live-relay → větev „live“, GitHub CORS povoluje). Data jsou v souborech
 // po 5s oknech (<id>/<epoch/5>.json) — nové jméno souboru obchází 5min cache raw.githubusercontent.com.
-// Zkouší okna 10–25 s zpět (mladší ještě nemusí být nahraná) a bere nejnovější, které existuje.
+// Zkouší okna 10–25 s zpět (mladší ještě nemusí být nahraná), jinak poslední uložený stav zápasu <id>.json.
 async function fetchRelay(id){
   const RAW='https://raw.githubusercontent.com/sturcjan-rgb/srsni-data/live/';
   const b=Math.floor(Date.now()/5000);
   for(let k=2;k<=5;k++){
     try{ return await fetchJson(RAW+id+'/'+(b-k)+'.json',4000); }catch(e){}
   }
-  throw new Error('relay');
+  // po zápase (nebo když okna chybí): poslední uložený stav celého zápasu
+  return await fetchJson(RAW+id+'.json',6000);
 }
 
 async function loadById(id,silent){
