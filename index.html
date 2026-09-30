@@ -313,10 +313,11 @@ function showErr(m){
   e.classList.toggle('hidden',!m);
 }
 
-$('load').onclick=()=>{const id=$('gid').value.trim();stopLive();loadById(id,false);maybeAutoLive(id);};
+$('load').onclick=()=>{const id=$('gid').value.trim();userPicked=true;stopLive();loadById(id,false);maybeAutoLive(id);};
 $('matchSelect').onchange=()=>{
   const id=$('matchSelect').value;
   if(!id) return;
+  userPicked=true;
   $('gid').value=id;
   stopLive();
   loadById(id,false);
@@ -341,17 +342,40 @@ const SEASON_URLS=[
   'https://raw.githubusercontent.com/sturcjan-rgb/srsni-data/main/data/season-2025-26.json'
 ];
 const MATCHES={};
-let currentId=null, liveTimer=null;
+let currentId=null, liveTimer=null, userPicked=false, currentSeasonMatches=[];
 
 function stopLive(){ if(liveTimer){clearInterval(liveTimer);liveTimer=null;} $('liveToggle').checked=false; }
 function startLive(){ if(liveTimer) return; $('liveToggle').checked=true; liveTimer=setInterval(()=>{ if(currentId) loadById(currentId,true,true); },3000); }
+function inLiveWindow(f,now=Date.now()){
+  const start=new Date(f.datetime).getTime();
+  return f.status!=='final' && now>=start-15*60000 && now<=start+3*3600000;
+}
 function maybeAutoLive(id){
   const f=MATCHES[id];
   if(!f){ stopLive(); return; }
-  const start=new Date(f.datetime).getTime(), now=Date.now();
-  const inWindow=f.status!=='final' && now>=start-15*60000 && now<=start+3*3600000;
-  if(inWindow) startLive(); else stopLive();
+  if(inLiveWindow(f)) startLive(); else stopLive();
 }
+// Výchozí zápas: nejdřív ten, který právě běží (okno −15 min … +3 h), jinak poslední odehraný.
+function pickDefaultMatch(list){
+  const now=new Date();
+  const live=list.find(f=>inLiveWindow(f,now.getTime()));
+  if(live) return live;
+  const past=list.filter(f=>new Date(f.datetime)<=now);
+  return past.length?past[past.length-1]:list[0];
+}
+function selectMatch(f){
+  const id=String(f.fibaMatchId);
+  $('matchSelect').value=id; $('gid').value=id;
+  loadById(id,true);
+  maybeAutoLive(id);
+}
+// Stránka otevřená před zápasem: jakmile začne okno zápasu, sama se na něj přepne
+// (pokud uživatel ručně nevybral jiný zápas).
+setInterval(()=>{
+  if(userPicked||!currentSeasonMatches.length) return;
+  const f=currentSeasonMatches.find(x=>inLiveWindow(x));
+  if(f && String(f.fibaMatchId)!==currentId) selectMatch(f);
+},30000);
 
 async function loadMatchList(){
   try{
@@ -360,7 +384,6 @@ async function loadMatchList(){
       catch(e){ return null; }
     }));
     let html='<option value="">— vyber zápas —</option>', any=false;
-    let currentSeasonMatches=[];
     seasons.forEach((season,i)=>{
       if(!season) return;
       const isCurrent=i===0;
@@ -379,13 +402,7 @@ async function loadMatchList(){
     $('matchSelect').innerHTML=html;
     if(!any){$('hint').textContent='Žádný zápas zatím nemá přiřazené FIBA LiveStats ID.';return;}
     if(!currentSeasonMatches.length){$('hint').textContent='Aktuální sezóna zatím nemá žádný zápas s FIBA LiveStats ID — vyber ze seznamu (archiv) nebo zadej ID ručně.';return;}
-    const now=new Date();
-    const past=currentSeasonMatches.filter(f=>new Date(f.datetime)<=now);
-    const defaultMatch=past.length?past[past.length-1]:currentSeasonMatches[0];
-    const id=String(defaultMatch.fibaMatchId);
-    $('matchSelect').value=id; $('gid').value=id;
-    loadById(id,true);
-    maybeAutoLive(id);
+    selectMatch(pickDefaultMatch(currentSeasonMatches));
   }catch(e){
     console.warn('season list fetch failed',e);
     $('matchSelect').innerHTML='<option value="">(seznam se nepodařilo načíst)</option>';
@@ -412,6 +429,12 @@ async function loadById(id,quiet,silent){
       showErr('');return;}catch(e){}
   }
   if(silent) return;
+  const fx=MATCHES[id];
+  if(fx && inLiveWindow(fx)){
+    const t=new Date(fx.datetime).toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'});
+    $('hint').textContent='Čekám na živá data ('+fx.home+' – '+fx.away+', začátek '+t+') · zkouším každé 3 s…';
+    return;
+  }
   $('hint').textContent='';
   if(!quiet){const p=$('paste'),b=$('parsePaste');p.style.display='block';b.classList.remove('hidden');}
   showErr('Nepodařilo se načíst ID '+id+' ani z archivu, ani živě (CORS/expirace). Otevři odkaz, ulož a nahraj přes „Nahrát data.json": '+live);
