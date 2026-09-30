@@ -5,14 +5,14 @@
     "nblId": 10110,
     "nblSlug": "srsni-photomate-pisek"
   },
-  "generatedAt": "2026-09-30T12:21:10.129Z",
+  "generatedAt": "2026-09-30T19:02:59.544Z",
   "source": "https://nbl.basketball/tym/srsni-photomate-pisek",
   "counts": {
     "total": 22,
     "home": 11,
     "away": 11,
-    "final": 3,
-    "scheduled": 19
+    "final": 4,
+    "scheduled": 18
   },
   "fixtures": [
     {
@@ -218,16 +218,49 @@
       "away": "BK KVIS Pardubice",
       "opponent": "BK KVIS Pardubice",
       "venue": "home",
-      "status": "scheduled",
+      "status": "final",
       "score": {
-        "home": null,
-        "away": null,
-        "us": null,
-        "them": null,
-        "result": null,
-        "margin": null
+        "home": 82,
+        "away": 92,
+        "us": 82,
+        "them": 92,
+        "result": "L",
+        "margin": -10
       },
-      "quarters": null,
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 2722,
+            "away": 4450
+          },
+          {
+            "home": -2640,
+            "away": -4358
+          }
+        ],
+        "regulation": [
+          {
+            "home": 2722,
+            "away": 4450
+          },
+          {
+            "home": -2640,
+            "away": -4358
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 2722,
+            "away": 4450
+          },
+          {
+            "home": 82,
+            "away": 92
+          }
+        ]
+      },
       "links": {
         "nbl": "https://nbl.basketball/zapas/544564",
         "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2892252/",
