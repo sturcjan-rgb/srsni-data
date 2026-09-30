@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rozbor BK KVIS Pardubice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: rozbor týmu – souhrn nahoře, zápasy, čtvrtiny, mapa střel, hráči, závěry */
+:root {
+  --bg: #edf0f3; --panel: #ffffff; --ink: #17212b; --muted: #5b6776; --line: #d3dae1;
+  --accent: #d95a14; --accent-soft: #fbe6d9; --court: #e6ebef; --court-line: #9aa7b4;
+  --good: #23804b; --good-soft: #dcf0e3; --bad: #b8332a; --bad-soft: #f7dfdc; --warn: #a86b00; --warn-soft: #f6ebcf;
+  --miss: #7b8795;
+  --f-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --f-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f151b; --panel: #171f28; --ink: #e5eaef; --muted: #95a2b0; --line: #2b3743;
+  --accent: #f07c3a; --accent-soft: #3a2518; --court: #1d2731; --court-line: #5d6d7d;
+  --good: #5cc488; --good-soft: #17301f; --bad: #ef7b70; --bad-soft: #3a1c1a; --warn: #e2b04e; --warn-soft: #362a12;
+  --miss: #8795a4; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0f151b; --panel: #171f28; --ink: #e5eaef; --muted: #95a2b0; --line: #2b3743;
+  --accent: #f07c3a; --accent-soft: #3a2518; --court: #1d2731; --court-line: #5d6d7d;
+  --good: #5cc488; --good-soft: #17301f; --bad: #ef7b70; --bad-soft: #3a1c1a; --warn: #e2b04e; --warn-soft: #362a12;
+  --miss: #8795a4; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.5 var(--f-body); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 64px; display: grid; gap: 40px; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 700; letter-spacing: .01em; text-wrap: balance; margin: 0; line-height: 1.05; }
+h1 { font-size: clamp(2.4rem, 6vw, 3.6rem); text-transform: uppercase; }
+h2 { font-size: 2rem; text-transform: uppercase; }
+h3 { font-size: 1.3rem; text-transform: uppercase; letter-spacing: .03em; }
+p { margin: 0; }
+.eyebrow { font: 600 .78rem/1 var(--f-body); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.num, td.n, th.n { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+
+header.top { display: grid; gap: 12px; }
+header.top .lede { max-width: 66ch; color: var(--muted); font-size: 1.05rem; }
+nav.jump { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+nav.jump a { font: 600 .95rem var(--f-body); color: var(--ink); text-decoration: none; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); }
+nav.jump a:hover, nav.jump a:focus-visible { border-color: var(--accent); outline: none; }
+
+section { display: grid; gap: 18px; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px; min-width: 0; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 600 .74rem/1.2 var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+td.n, th.n { text-align: right; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+.hl-bad { color: var(--bad); font-weight: 600; }
+.hl-good { color: var(--good); font-weight: 600; }
+
+.pill { display: inline-block; font: 600 .74rem/1 var(--f-body); letter-spacing: .06em; text-transform: uppercase; padding: 5px 9px; border-radius: 999px; white-space: nowrap; }
+.pill.hi { background: var(--bad-soft); color: var(--bad); }
+.pill.mid { background: var(--warn-soft); color: var(--warn); }
+.pill.lo { background: var(--good-soft); color: var(--good); }
+
+/* čtvrtiny */
+.qgrid { display: grid; grid-template-columns: minmax(110px, 1.2fr) repeat(4, minmax(64px, 1fr)) minmax(70px, .9fr); gap: 4px; min-width: 520px; }
+.qgrid > div { padding: 8px 10px; border-radius: 6px; }
+.qgrid .h { font: 600 .74rem var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding-block: 4px; }
+.qgrid .t { font-weight: 600; align-self: center; }
+.qcell { display: grid; gap: 2px; text-align: center; }
+.qcell .s { font: .82rem var(--f-mono); color: var(--muted); }
+.qcell .d { font: 600 1.05rem var(--f-mono); }
+.qcell.plus { background: var(--good-soft); } .qcell.plus .d { color: var(--good); }
+.qcell.minus { background: var(--bad-soft); } .qcell.minus .d { color: var(--bad); }
+.qcell.big { outline: 2px solid var(--good); outline-offset: -2px; }
+
+/* oddíl soupeře */
+.opp-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 24px; border-bottom: 3px solid var(--ink); padding-bottom: 12px; }
+.opp-head .score { font: 700 2.4rem/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.opp-head .score small { font: 500 .95rem var(--f-body); color: var(--muted); margin-left: 6px; }
+.opp-head .meta { display: grid; gap: 6px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.stat { background: var(--panel); padding: 12px 14px; display: grid; gap: 2px; }
+.stat b { font: 600 1.45rem/1.1 var(--f-mono); font-variant-numeric: tabular-nums; }
+.stat span { font-size: .82rem; color: var(--muted); }
+.stat.bad b { color: var(--bad); } .stat.good b { color: var(--good); }
+
+.two { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 18px; align-items: start; }
+@media (max-width: 860px) { .two { grid-template-columns: 1fr; } }
+
+.map-ctrl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+.map-ctrl label { font-size: .82rem; color: var(--muted); }
+select, .qbtn { font: 500 .9rem var(--f-body); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; }
+select:focus-visible, .qbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.qbtn { cursor: pointer; min-width: 38px; }
+.qbtn[aria-pressed="true"] { background: var(--ink); color: var(--panel); border-color: var(--ink); }
+svg.court { width: 100%; max-width: 440px; height: auto; display: block; margin-inline: auto; }
+.court .fl { fill: var(--court); }
+.court .ln { fill: none; stroke: var(--court-line); stroke-width: .05; }
+.court .rim { fill: none; stroke: var(--accent); stroke-width: .06; }
+.court .mk { fill: var(--accent); stroke: var(--panel); stroke-width: .04; }
+.court .ms { fill: none; stroke: var(--miss); stroke-width: .07; }
+.legend { display: flex; gap: 16px; justify-content: center; font-size: .82rem; color: var(--muted); margin-top: 8px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+.legend .m { background: var(--accent); } .legend .x { border: 2px solid var(--miss); }
+.zones { margin-top: 14px; }
+.zones td.bar { width: 40%; }
+.zbar { height: 8px; border-radius: 4px; background: var(--court); overflow: hidden; }
+.zbar > i { display: block; height: 100%; background: var(--accent); }
+
+.plan { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media (max-width: 720px) { .plan { grid-template-columns: 1fr; } }
+.plan ul { margin: 10px 0 0; padding-left: 1.1em; display: grid; gap: 8px; }
+.plan li::marker { color: var(--muted); }
+.plan .do h3 { color: var(--good); }
+.plan .weak h3 { color: var(--bad); }
+
+.patterns { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+.patterns .panel { display: grid; gap: 8px; align-content: start; }
+.patterns b.big { font: 700 2rem/1 var(--f-display); }
+.rank { display: grid; gap: 10px; counter-reset: r; }
+.rank > div { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; align-items: baseline; }
+.rank .pos { font: 700 1.8rem/1 var(--f-display); color: var(--muted); grid-row: span 2; }
+footer { font-size: .85rem; color: var(--muted); max-width: 70ch; }
+@media (max-width: 480px) { .wrap { padding-inline: 16px; } .panel { padding: 14px; } }
+
+.hero-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.hero-stats .stat b { font-size: 2rem; }
+.shotwrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 820px) { .shotwrap { grid-template-columns: 1fr; } }
+.insight { display: grid; gap: 10px; align-content: start; }
+.insight p { max-width: 60ch; }
+.callout { border-left: 3px solid var(--accent); padding: 4px 0 4px 12px; }
+td.nm { white-space: nowrap; font-weight: 600; }
+td.note { min-width: 220px; color: var(--muted); font-size: .9rem; }
+.small { font-size: .85rem; }
+.seg { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.segbtn { font: 600 .9rem var(--f-body); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; cursor: pointer; }
+.segbtn[aria-pressed="true"] { background: var(--ink); color: var(--panel); border-color: var(--ink); }
+.segbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.segnote { font-size: .85rem; margin-left: 6px; }
+.findings { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 12px; }
+.find { display: grid; gap: 6px; align-content: start; border-top: 3px solid var(--line); }
+.find.good { border-top-color: var(--good); } .find.bad { border-top-color: var(--bad); } .find.warn { border-top-color: var(--warn); }
+.panel > h3 { margin-bottom: 4px; }
+.panel > h3 + p.small { margin-bottom: 12px; }
+.two-eq { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 500px), 1fr)); gap: 18px; }
+td.barcol, th.barcol { width: 160px; min-width: 120px; }
+.dbar { position: relative; height: 10px; background: var(--court); border-radius: 5px; }
+.dbar::after { content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--court-line); }
+.dbar i { position: absolute; top: 0; bottom: 0; border-radius: 5px; }
+.pos { color: var(--good); } .neg { color: var(--bad); }
+.matrix { display: grid; gap: 3px; min-width: 640px; }
+.matrix .hd { font: 600 .78rem var(--f-body); color: var(--muted); display: flex; align-items: flex-end; justify-content: center; text-align: center; padding: 4px 2px; }
+.matrix .rh { font: 600 .88rem var(--f-body); display: flex; align-items: center; padding-right: 8px; white-space: nowrap; }
+.matrix .cell { border-radius: 5px; min-height: 48px; display: grid; place-items: center; align-content: center; gap: 0; background: var(--court); font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.matrix .cell b { font-size: .95rem; font-weight: 600; }
+.matrix .cell small { font-size: .7rem; color: var(--muted); }
+.matrix .cell.self { background: transparent; border: 1px dashed var(--line); }
+.matrix .cell.empty { background: transparent; color: var(--muted); }
+.matrix .cell:focus-visible { outline: 2px solid var(--accent); }
+.plainlist { margin: 10px 0 0; padding-left: 1.1em; display: grid; gap: 8px; }
+.gtag { display: inline-block; font-size: .72rem; padding: 2px 6px; border-radius: 4px; background: var(--court); color: var(--muted); margin-right: 3px; white-space: nowrap; }
+td.lu { white-space: nowrap; font-weight: 600; }
+</style>
+<style>body { margin: 0; } img { max-width: 100%; } [hidden] { display: none !important; }</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">Kooperativa NBL · trenér Jan Šotnar · 3 zápasy</span>
+    <h1>BK KVIS Pardubice</h1>
+    <p class="lede">Rozbor vlastního týmu ze zápasů s Brnem, Olomouckem a Hradcem Králové: jak Pardubice skórují, odkud střílí, kdo nese tým a kde ztrácí.</p>
+    <nav class="jump" aria-label="Oddíly">
+      <a href="#zapasy">Zápasy</a><a href="#strely">Mapa střel</a><a href="#hraci">Hráči</a><a href="#sestavy">Kdo s kým</a><a href="#metriky">Metriky</a><a href="#prubeh">Průběh zápasů</a><a href="#zavery">Silné a slabé stránky</a>
+    </nav>
+  </header>
+
+  <div class="hero-stats">
+    <div class="stat good"><b>3–0</b><span>bilance, průměrný rozdíl +20,7</span></div>
+    <div class="stat"><b>91,0</b><span>bodů na zápas</span></div>
+    <div class="stat"><b>70,3</b><span>obdržených bodů na zápas</span></div>
+    <div class="stat good"><b>110,2</b><span>útočný rating (bodů na 100 držení)</span></div>
+    <div class="stat good"><b>74,6 %</b><span>trestné hody (47/63)</span></div>
+    <div class="stat bad"><b>18,0</b><span>ztrát na zápas</span></div>
+  </div>
+
+  <section id="zapasy" aria-labelledby="h-zap">
+    <h2 id="h-zap">Zápasy</h2>
+    <div class="panel scroll">
+      <table>
+        <thead><tr>
+          <th>Soupeř</th><th class="n">Skóre</th><th class="n">Body/100</th><th class="n">Soupeř/100</th><th class="n">eFG %</th><th class="n">3P</th><th class="n">TH</th><th class="n">TO %</th><th class="n">OREB %</th><th class="n">Body z lavičky</th><th class="n">Body ze ztrát</th><th class="n">Druhá šance</th><th class="n">Protiútoky</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Brno (doma)</td><td class="n">85:79</td><td class="n">104,4</td><td class="n">93,2</td><td class="n hl-bad">47,2</td><td class="n">13/37</td><td class="n">18/26</td><td class="n hl-good">16,0</td><td class="n">28,6</td><td class="n">24</td><td class="n">18</td><td class="n">11</td><td class="n">16</td></tr>
+          <tr><td>Olomoucko (venku)</td><td class="n">100:54</td><td class="n">108,7</td><td class="n hl-good">61,1</td><td class="n hl-good">61,2</td><td class="n">10/26</td><td class="n">18/25</td><td class="n hl-bad">27,2</td><td class="n">35,5</td><td class="n hl-good">42</td><td class="n hl-good">48</td><td class="n">8</td><td class="n hl-good">27</td></tr>
+          <tr><td>Hradec Králové (venku)</td><td class="n">88:78</td><td class="n hl-good">118,5</td><td class="n">106,4</td><td class="n">52,7</td><td class="n">13/40</td><td class="n hl-good">11/12</td><td class="n">21,5</td><td class="n hl-good">48,8</td><td class="n">38</td><td class="n">18</td><td class="n hl-good">24</td><td class="n hl-bad">4</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted" style="font-size:.85rem">Držení = FGA + 0,44·FTA − OREB + TO. TO % je podíl držení zakončených ztrátou. OREB % je podíl našich útočných doskoků ze všech doskoků pod košem soupeře.</p>
+
+    <div class="panel scroll">
+      <h3 style="margin-bottom:12px">Čtvrtiny: Pardubice : soupeř</h3>
+      <div class="qgrid" role="table" aria-label="Skóre po čtvrtinách">
+        <div class="h">Soupeř</div><div class="h">1. čtvrtina</div><div class="h">2. čtvrtina</div><div class="h">3. čtvrtina</div><div class="h">4. čtvrtina</div><div class="h">Celkem</div>
+        <div class="t">Brno</div>
+        <div class="qcell plus"><span class="s">17:14</span><span class="d">+3</span></div>
+        <div class="qcell plus"><span class="s">20:18</span><span class="d">+2</span></div>
+        <div class="qcell minus"><span class="s">16:24</span><span class="d">−8</span></div>
+        <div class="qcell plus big"><span class="s">32:23</span><span class="d">+9</span></div>
+        <div class="qcell plus"><span class="s">85:79</span><span class="d">+6</span></div>
+        <div class="t">Olomoucko</div>
+        <div class="qcell plus"><span class="s">18:15</span><span class="d">+3</span></div>
+        <div class="qcell plus"><span class="s">17:13</span><span class="d">+4</span></div>
+        <div class="qcell plus"><span class="s">37:11</span><span class="d">+26</span></div>
+        <div class="qcell plus big"><span class="s">28:15</span><span class="d">+13</span></div>
+        <div class="qcell plus"><span class="s">100:54</span><span class="d">+46</span></div>
+        <div class="t">Hradec</div>
+        <div class="qcell minus"><span class="s">27:29</span><span class="d">−2</span></div>
+        <div class="qcell minus"><span class="s">20:21</span><span class="d">−1</span></div>
+        <div class="qcell plus"><span class="s">25:18</span><span class="d">+7</span></div>
+        <div class="qcell plus big"><span class="s">16:10</span><span class="d">+6</span></div>
+        <div class="qcell plus"><span class="s">88:78</span><span class="d">+10</span></div>
+      </div>
+      <p class="muted" style="font-size:.85rem;margin-top:10px">4. čtvrtina vyhraná ve všech zápasech, dohromady 76:48. Proti silnějším soupeřům (Brno, Hradec) ale Pardubice dvakrát ztratily úvod nebo třetí čtvrtinu a musely dotahovat. Hradec vedl až o 13 bodů (25:12), Brno vedlo 9,5 minuty.</p>
+    </div>
+  </section>
+
+  <section id="strely" aria-labelledby="h-str">
+    <h2 id="h-str">Mapa střel</h2>
+    <div class="panel shotwrap">
+      <div data-map="Pardubice" style="min-width:0"></div>
+      <div class="insight">
+        <h3>Co ukazuje střelba</h3>
+        <p class="callout"><b>Rohové trojky 13/29 (45 %)</b>, trojky mimo roh 23/74 (31 %). Každá rohová trojka má pro nás cenu 1,34 bodu, trojka z vrcholu 0,93 bodu.</p>
+        <p><b>U koše 51/79 (65 %).</b> Hlavní zdroj bodů. Key proměnil 12 ze 16 pokusů u koše, Švrdlík 8/12, Kovář 6/6.</p>
+        <p><b>Střední vzdálenost téměř neexistuje:</b> 4 pokusy za tři zápasy, žádný proměněný. Profil střelby je moderní: obroučka a trojka.</p>
+        <p><b>Krátké střely z výmalby 8/25 (32 %)</b> jsou nejhorší zóna. Nejvíc je berou Bryant (2/7) a Tůma (2/5).</p>
+        <p class="muted" style="font-size:.85rem">Všechny střely jsou překlopené na jeden koš. Zóny: u koše do 1,8 m, krátká vzdálenost do 4,5 m, roh = trojka z úseku u základní čáry.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="hraci" aria-labelledby="h-hr">
+    <h2 id="h-hr">Hráči</h2>
+    <div class="panel scroll">
+      <table>
+        <thead><tr>
+          <th class="n">#</th><th>Hráč</th><th class="n">Body</th><th class="n">Ø</th><th class="n">Ze hry</th><th class="n">3P</th><th class="n">TH</th><th class="n">Dosk.</th><th class="n">As.</th><th class="n">Ztr.</th><th class="n">Zisky</th><th class="n">+/−</th><th class="n">Efekt.</th><th>Role a poznámka</th>
+        </tr></thead>
+        <tbody>
+          <tr><td class="n">3</td><td class="nm">R. Bonham</td><td class="n">52</td><td class="n">17,3</td><td class="n">17/36</td><td class="n hl-good">9/21</td><td class="n hl-good">9/9</td><td class="n">11</td><td class="n">13</td><td class="n">9</td><td class="n">8</td><td class="n">+60</td><td class="n">57</td><td class="note">Nejlepší střelec a nejstabilnější hráč: 15–19 bodů v každém zápase. U koše 7/10.</td></tr>
+          <tr><td class="n">23</td><td class="nm">Z. Key</td><td class="n">36</td><td class="n">12,0</td><td class="n hl-good">13/19</td><td class="n">0/1</td><td class="n">10/14</td><td class="n">11</td><td class="n">1</td><td class="n">8</td><td class="n">2</td><td class="n">+50</td><td class="n">33</td><td class="note">Finišer u koše (12/16). Roste: 7 → 12 → 17 bodů. TH 5/9 proti Brnu, 10 osobních chyb.</td></tr>
+          <tr><td class="n">4</td><td class="nm">J. Bryant</td><td class="n">34</td><td class="n">11,3</td><td class="n hl-bad">12/31</td><td class="n">4/11</td><td class="n">6/7</td><td class="n">12</td><td class="n hl-good">16</td><td class="n">8</td><td class="n hl-good">9</td><td class="n">+69</td><td class="n">44</td><td class="note">Rozehrávač a lídr obrany (8 zisků v Olomouci). Nejvyšší +/− v týmu. Střelba jen 39 %.</td></tr>
+          <tr><td class="n">21</td><td class="nm">L. Kovář</td><td class="n">31</td><td class="n">10,3</td><td class="n hl-good">12/19</td><td class="n">5/11</td><td class="n">2/4</td><td class="n">13</td><td class="n">7</td><td class="n">3</td><td class="n">5</td><td class="n">+29</td><td class="n">46</td><td class="note">Nejefektivnější střelec (eFG 76 %). Rohové trojky 3/7, u koše 6/6. Málo ztrát.</td></tr>
+          <tr><td class="n">9</td><td class="nm">K. Švrdlík (C)</td><td class="n">27</td><td class="n">9,0</td><td class="n">9/17</td><td class="n">0/2</td><td class="n">9/11</td><td class="n hl-good">24</td><td class="n">0</td><td class="n">4</td><td class="n">4</td><td class="n">+10</td><td class="n">45</td><td class="note">Doskok (8 útočných) a 4 bloky. Kapitán, 10 doskoků proti Hradci.</td></tr>
+          <tr><td class="n">13</td><td class="nm">R. Moffatt</td><td class="n">25</td><td class="n">8,3</td><td class="n">8/24</td><td class="n">7/21</td><td class="n">2/3</td><td class="n">14</td><td class="n">5</td><td class="n hl-good">1</td><td class="n">6</td><td class="n">+49</td><td class="n">32</td><td class="note">Čistý střelec: 21 z 24 pokusů za tři. Jen 1 ztráta za 76 minut.</td></tr>
+          <tr><td class="n">24</td><td class="nm">N. Stampley</td><td class="n">21</td><td class="n">7,0</td><td class="n">7/17</td><td class="n hl-good">7/14</td><td class="n">0/2</td><td class="n">7</td><td class="n">4</td><td class="n">3</td><td class="n">1</td><td class="n">+18</td><td class="n">19</td><td class="note">Všechny proměněné střely byly trojky (50 %). Proti Hradci v základní pětce.</td></tr>
+          <tr><td class="n">7</td><td class="nm">A. Lukeš</td><td class="n">20</td><td class="n">6,7</td><td class="n">7/17</td><td class="n">1/5</td><td class="n">5/7</td><td class="n">10</td><td class="n">5</td><td class="n">5</td><td class="n">5</td><td class="n">+5</td><td class="n">24</td><td class="note">Energie z lavičky, 5 útočných doskoků. Proti Olomoucku 11 bodů.</td></tr>
+          <tr><td class="n">98</td><td class="nm">J. Tůma</td><td class="n">14</td><td class="n">4,7</td><td class="n hl-bad">5/20</td><td class="n hl-bad">2/13</td><td class="n">2/4</td><td class="n">4</td><td class="n">4</td><td class="n">5</td><td class="n">1</td><td class="n">+1</td><td class="n">1</td><td class="note">Nejslabší efektivita v rotaci. Trojky mimo roh 0/8, z rohu 2/5.</td></tr>
+          <tr><td class="n">33</td><td class="nm">D. Vlk</td><td class="n">7</td><td class="n">2,3</td><td class="n">2/5</td><td class="n">1/4</td><td class="n">2/2</td><td class="n">4</td><td class="n">2</td><td class="n">2</td><td class="n">0</td><td class="n">+14</td><td class="n">7</td><td class="note">Krátké minuty, 8 osobních chyb za 26 minut.</td></tr>
+          <tr><td class="n">17</td><td class="nm">P. Šťovíček</td><td class="n">4</td><td class="n">–</td><td class="n">2/5</td><td class="n">0/0</td><td class="n">0/0</td><td class="n">1</td><td class="n">0</td><td class="n">0</td><td class="n">1</td><td class="n">+1</td><td class="n">3</td><td class="note">Hrál jen v Olomouci (7 min).</td></tr>
+          <tr><td class="n">27</td><td class="nm">H. Lejsek</td><td class="n">2</td><td class="n">–</td><td class="n">1/1</td><td class="n">0/0</td><td class="n">0/0</td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td class="n">0</td><td class="n">+4</td><td class="n">3</td><td class="note">Hrál jen v Olomouci (6 min).</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted" style="font-size:.85rem">Součty za tři zápasy, Ø = body na zápas. Efektivita podle Genius Sports (součet). Bílek nenastoupil.</p>
+  </section>
+
+  <section id="sestavy" aria-labelledby="h-ses">
+    <h2 id="h-ses">Kdo s kým</h2>
+    <p class="lede muted" style="max-width:70ch">Z play-by-play jsme zrekonstruovali, kdo byl kdy na hřišti (minuty sedí na oficiální statistiky na sekundu). Hodnoty jsou body na 100 držení: útok (ORtg), obrana (DRtg) a rozdíl (net). Protože výhra 100:54 v Olomouci vše nafukuje, přepínač ukazuje i samotné vyrovnané zápasy s Brnem a Hradcem (80 minut).</p>
+
+    <div class="seg" role="group" aria-label="Vzorek zápasů">
+      <button type="button" class="segbtn" data-set="close" aria-pressed="true">Jen Brno a Hradec</button>
+      <button type="button" class="segbtn" data-set="all" aria-pressed="false">Všechny 3 zápasy</button>
+      <span class="muted segnote" id="setnote"></span>
+    </div>
+
+    <div class="findings">
+      <div class="panel find good"><span class="eyebrow">Jádro týmu</span><p><b>Bryant, Bonham, Key a Moffatt.</b> Trojice Bonham–Bryant–Key vyhrála svých 26 minut 78:34 (+82 na 100 držení). Ve vyrovnaných zápasech byla nejlepší dvojice Bryant–Moffatt: 31 minut, 78:49.</p></div>
+      <div class="panel find good"><span class="eyebrow">Největší dopad</span><p><b>Bryant.</b> V Brně a Hradci byl tým s ním +24,7 na 100 držení, bez něj −11,1. Rozdíl 36 bodů je nejvyšší v týmu, přestože sám střílí jen 45 % eFG.</p></div>
+      <div class="panel find bad"><span class="eyebrow">Paradox</span><p><b>Kovář.</b> Nejefektivnější střelec (TS 75 %), ale ve vyrovnaných zápasech tým s ním +2,2 a bez něj +20,8. Obrana s ním inkasuje 110 bodů na 100 držení, bez něj 88.</p></div>
+      <div class="panel find bad"><span class="eyebrow">Problémová křídla</span><p><b>Kovář + Stampley.</b> V Brně a Hradci spolu 27 minut, skóre 56:70, soupeř měl eFG 69 %. Obě trojice s nimi prohrály (s Bryantem −21, se Švrdlíkem −17).</p></div>
+      <div class="panel find warn"><span class="eyebrow">Pivoti</span><p><b>Key, nebo Švrdlík, nikdy oba.</b> Spolu nehráli ani 5 minut. S Keyem je tým ve vyrovnaných zápasech +23, se Švrdlíkem −3,8. Švrdlík ale sbírá 18 doskoků na 40 minut.</p></div>
+      <div class="panel find bad"><span class="eyebrow">Bez tvořivosti</span><p><b>Tůma + Švrdlík.</b> 16 minut, 21:34, vlastní eFG 25 %. Tůma přitom bere 21 % akcí týmu s TS jen 32 %.</p></div>
+    </div>
+
+    <div class="panel scroll">
+      <h3>On/off: tým s hráčem a bez něj</h3>
+      <p class="muted small">Seřazeno podle rozdílu. Sloupec „Dopad“ = net s hráčem minus net bez něj.</p>
+      <table id="onoff">
+        <thead><tr><th>Hráč</th><th class="n">Min</th><th class="n">Skóre</th><th class="n">ORtg</th><th class="n">DRtg</th><th class="n">Net s ním</th><th class="n">Net bez něj</th><th class="n">Dopad</th><th class="barcol"></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="panel scroll">
+      <h3>Dvojice</h3>
+      <p class="muted small">Net rating dvojice na hřišti (body na 100 držení). Zelená = dvojice vyhrává, červená = prohrává, sytost barvy odpovídá odehraným minutám. Prázdné pole = spolu méně než 5 minut. Na buňku najeďte pro detail.</p>
+      <div id="matrix" class="matrix"></div>
+    </div>
+
+    <div class="two-eq">
+      <div class="panel scroll">
+        <h3>Nejlepší trojice</h3>
+        <table class="trios" id="trios-top"><thead><tr><th>Trojice</th><th class="n">Min</th><th class="n">Skóre</th><th class="n">Net</th><th class="n">eFG my/soupeř</th></tr></thead><tbody></tbody></table>
+      </div>
+      <div class="panel scroll">
+        <h3>Nejhorší trojice</h3>
+        <table class="trios" id="trios-bot"><thead><tr><th>Trojice</th><th class="n">Min</th><th class="n">Skóre</th><th class="n">Net</th><th class="n">eFG my/soupeř</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+    <p class="muted small">Trojice s alespoň 12 odehranými minutami.</p>
+
+    <div class="panel scroll">
+      <h3>Pětky</h3>
+      <p class="muted small">Pětky s alespoň 2,5 minuty. Pětky se u Pardubic hodně střídají, žádná nemá víc než 8 minut, takže jde o orientační vzorek.</p>
+      <table id="fives"><thead><tr><th>Pětka</th><th>Zápasy</th><th class="n">Min</th><th class="n">Skóre</th><th class="n">ORtg</th><th class="n">DRtg</th><th class="n">Net</th><th class="n">eFG soupeře</th></tr></thead><tbody></tbody></table>
+    </div>
+
+    <div class="panel do">
+      <h3>Co z toho plyne pro rotaci</h3>
+      <ul class="plainlist">
+        <li>V koncovkách vyrovnaných zápasů držet na hřišti Bryanta, Bonhama, Keye a Moffatta. Pátým hráčem je nejlepší Kovář (útok), nebo Švrdlík (doskok).</li>
+        <li>Nestavět Kováře a Stampleyho spolu jako dvě křídla. Obranu to rozbíjí: soupeř proti nim střílí eFG 69 %.</li>
+        <li>Když hraje Švrdlík, potřebuje vedle sebe tvořivého hráče s míčem. S Bryantem je +18, s Tůmou −40.</li>
+        <li>Základní pětka z Hradce (Bonham, Bryant, Kovář, Stampley, Švrdlík) inkasovala 20 bodů za necelých 8 minut. Úvodní pětka s Keyem a Moffattem místo Stampleyho a Švrdlíka vyšla lépe.</li>
+        <li>Tůmovy minuty omezit, nebo mu změnit roli. Bere 21 % akcí týmu s efektivitou 0,52 bodu na akci.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="metriky" aria-labelledby="h-met">
+    <h2 id="h-met">Individuální metriky</h2>
+    <div class="panel scroll">
+      <table id="adv">
+        <thead><tr>
+          <th>Hráč</th><th class="n">Min</th><th class="n" title="True shooting: body na střeleckou akci včetně TH">TS %</th><th class="n">eFG %</th><th class="n" title="Podíl akcí týmu zakončených hráčem (střela, TH, ztráta), když je na hřišti">USG %</th><th class="n" title="Body na akci hráče">Body/akci</th><th class="n">As/Ztr</th><th class="n">Body/40</th><th class="n">Dosk/40</th><th class="n">As/40</th><th class="n">Ztr/40</th><th class="n">Zisky/40</th><th class="n">Fauly/40</th><th class="n" title="Podíl trojek ze střel ze hry">3PA %</th><th class="n" title="Trestné hody na střelu ze hry">FTr</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="findings">
+      <div class="panel find good"><span class="eyebrow">Efektivita</span><p><b>Kovář 1,30 a Key 1,09 bodu na akci.</b> Oba s nízkým podílem akcí. Kovář může dostávat víc míčů. Key získá 74 trestných hodů na 100 střel ze hry.</p></div>
+      <div class="panel find warn"><span class="eyebrow">Zatížení</span><p><b>Bonham nese útok:</b> USG 28,5 %, TS 65 %, 29,6 bodu na 40 minut. Bryant má USG 25 %, ale TS jen 50 %. Jeho hodnota je v obraně a přihrávkách (9,3 as/40).</p></div>
+      <div class="panel find bad"><span class="eyebrow">Fauly</span><p><b>Vlk 12,3 a Švrdlík 6,8 faulu na 40 minut.</b> Key 6,7. Fauly pivotů mohou zkracovat minuty sestavy s Keyem.</p></div>
+      <div class="panel find good"><span class="eyebrow">Péče o míč</span><p><b>Moffatt: 1 ztráta za 76 minut</b> (0,5 na 40). Nejbezpečnější hráč s míčem v týmu.</p></div>
+    </div>
+  </section>
+
+  <section id="prubeh" aria-labelledby="h-pr">
+    <h2 id="h-pr">Průběh zápasů</h2>
+    <div class="panel scroll">
+      <table>
+        <thead><tr><th>Soupeř</th><th class="n">Ve vedení (min)</th><th class="n">Změny vedení</th><th class="n">Vyrovnání</th><th class="n">Největší vedení</th><th>Náš nejdelší běh</th><th>Jejich nejdelší běh</th><th class="n">Asistované koše</th></tr></thead>
+        <tbody>
+          <tr><td>Brno</td><td class="n">29,8 : 9,5</td><td class="n">9</td><td class="n">4</td><td class="n">+13 / −5</td><td><b class="num">11:0</b> <span class="muted">3. čtvrtina 1:25 až 4. čtvrtina 9:06, z 51:56 na 62:56</span></td><td><b class="num">10:0</b> <span class="muted">3. čtvrtina 6:23–5:11, ze 46:36 na 46:46</span></td><td class="n">67 % : 68 %</td></tr>
+          <tr><td>Olomoucko</td><td class="n">38,7 : 0</td><td class="n">0</td><td class="n">1</td><td class="n">+46 / 0</td><td><b class="num">20:0</b> <span class="muted">3. čtvrtina 7:41–4:20, ze 43:30 na 63:30</span></td><td><b class="num">6:0</b> <span class="muted">2. čtvrtina, konec poločasu</span></td><td class="n">64 % : 57 %</td></tr>
+          <tr><td>Hradec</td><td class="n">17,7 : 17,6</td><td class="n">14</td><td class="n">11</td><td class="n">+11 / −13</td><td><b class="num">11:0</b> <span class="muted">1. čtvrtina 3:19–2:01, z 12:25 na 23:25</span></td><td><b class="num">13:0</b> <span class="muted">1. čtvrtina 6:24–4:07, z 10:9 na 10:22</span></td><td class="n hl-bad">50 % : 77 %</td></tr>
+        </tbody>
+      </table>
+      <p class="muted small" style="margin-top:8px">Skóre je vždy Pardubice : soupeř. Čas je herní čas zbývající do konce čtvrtiny.</p>
+    </div>
+
+    <div class="panel scroll">
+      <h3>Začátky a konce čtvrtin</h3>
+      <p class="muted small">Body v prvních 3 minutách a v posledních 3 minutách každé čtvrtiny, součet čtvrtin. Poslední sloupec je posledních 5 minut zápasu.</p>
+      <table>
+        <thead><tr><th>Soupeř</th><th class="n">První 3 min čtvrtin</th><th class="n">Posledních 3 min čtvrtin</th><th class="n">Posledních 5 min zápasu</th></tr></thead>
+        <tbody id="segs"></tbody>
+      </table>
+      <p class="small" style="margin-top:10px">Proti Hradci jsme prohráli začátek 2., 3. i 4. čtvrtiny (celkem 30:37). Posledních 5 minut zápasů ale vyhráváme 37:23 a Hradec v nich dal jen 2 body.</p>
+    </div>
+  </section>
+
+  <section id="zavery" aria-labelledby="h-zav">
+    <h2 id="h-zav">Silné a slabé stránky</h2>
+    <div class="plan">
+      <div class="panel do"><h3>Na čem Pardubice stojí</h3><ul>
+        <li><b>Koncovky.</b> 4. čtvrtina 76:48 dohromady. Tým fyzicky vydrží a soupeři na konci padají.</li>
+        <li><b>Hloubka kádru.</b> Lavička dala 24, 42 a 38 bodů. Soupeři 13, 21 a 12.</li>
+        <li><b>Obrana na míči.</b> 42 zisků za tři zápasy, proti Olomoucku 23 zisků a 48 bodů ze ztrát.</li>
+        <li><b>Trestné hody 75 %.</b> Bonham 9/9, proti Hradci 11/12. V koncovkách se nás nevyplatí faulovat.</li>
+        <li><b>Útočný doskok, když na něj jdeme.</b> Proti Hradci 20 útočných doskoků a 24 bodů z druhé šance.</li>
+      </ul></div>
+      <div class="panel weak"><h3>Na čem pracovat</h3><ul>
+        <li><b>Ztráty: 18 na zápas.</b> Proti Olomoucku 25, proti Hradci 16. Bonham, Bryant a Key mají každý 8–9.</li>
+        <li><b>Vstupy do zápasů se silnými soupeři.</b> Hradec nás v 1. poločase přestřílel 50:47 a vedl o 13, Brno vyhrálo 3. čtvrtinu o 8.</li>
+        <li><b>Doskok v obraně proti Brnu:</b> soupeř 17 útočných doskoků (36 %), jen Ballisager Webb 9.</li>
+        <li><b>Trojky mimo roh 31 %</b> při 74 pokusech. Víc rohových trojek (45 %), méně trojek z vrcholu.</li>
+        <li><b>Tůma a Bryant ze hry:</b> dohromady 17/51 (33 %).</li>
+        <li><b>Protiútoky závisí na ztrátách soupeře:</b> v Hradci jen 4 body z přechodu.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <footer>Zdroj: oficiální statistiky zápasů Genius Sports (Pardubice–Brno 85:79, Olomoucko–Pardubice 54:100, Hradec Králové–Pardubice 78:88). Tři zápasy jsou malý vzorek, takže čísla berte jako trend.</footer>
+</div>
+
+<script>
+const SHOTS={"Brno":[[23.9,13.9,1,3,"R. Moffatt",1],[20.3,65.7,0,2,"R. Bonham",1],[12.0,24.7,1,2,"J. Bryant",1],[26.4,80.9,0,3,"D. Vlk",1],[8.9,34.3,0,2,"J. Bryant",1],[6.4,54.3,0,2,"A. Lukeš",1],[6,50,0,2,"K. Švrdlík",1],[8.3,60.3,0,2,"K. Švrdlík",1],[29.2,24.4,0,3,"D. Vlk",1],[9.2,43.3,1,2,"A. Lukeš",1],[9.1,55.8,0,2,"R. Moffatt",1],[8.9,24.4,0,2,"N. Stampley",1],[7.1,40.8,1,2,"J. Bryant",1],[13.9,44.8,0,2,"Z. Key",1],[8.3,46.2,0,2,"Z. Key",1],[32.0,51.0,0,3,"R. Bonham",1],[8.5,49.8,1,2,"J. Bryant",1],[23.9,83.7,1,3,"R. Bonham",1],[7.4,2.7,0,3,"L. Kovář",1],[25.6,18.2,1,3,"N. Stampley",2],[29.5,75.5,1,3,"R. Bonham",2],[10.2,48.1,0,2,"R. Bonham",2],[25.8,81.8,0,3,"N. Stampley",2],[9.6,55.2,1,2,"Z. Key",2],[14.2,51.8,1,2,"J. Tůma",2],[13.8,55.5,0,2,"J. Tůma",2],[8.9,38.8,0,2,"R. Moffatt",2],[7.4,47.3,0,2,"A. Lukeš",2],[8.3,3.2,1,3,"R. Moffatt",2],[31.4,25.0,0,3,"J. Bryant",2],[9.7,49.8,0,2,"J. Bryant",2],[32.5,69.6,1,3,"R. Bonham",2],[5.7,3.8,0,3,"J. Bryant",2],[26.4,13.1,0,3,"R. Moffatt",2],[37.5,48.7,0,3,"R. Bonham",2],[13.4,53.5,0,2,"R. Bonham",2],[13.1,52.4,0,2,"J. Bryant",2],[8.9,43.6,0,2,"A. Lukeš",2],[22.8,85.5,0,3,"R. Bonham",3],[7.0,96.2,1,3,"J. Tůma",3],[2.3,96.5,1,3,"J. Tůma",3],[27.1,79.3,0,3,"J. Bryant",3],[17.0,37.2,1,2,"J. Bryant",3],[4.3,97.6,0,3,"N. Stampley",3],[18.7,49.0,0,2,"J. Bryant",3],[26.2,82.9,0,3,"R. Bonham",3],[24.8,84.6,1,3,"N. Stampley",3],[6.1,1.6,0,3,"R. Moffatt",3],[31.2,48.8,0,3,"R. Moffatt",3],[6.5,55.5,0,2,"A. Lukeš",3],[29.8,16.3,0,3,"J. Bryant",3],[3.4,59.2,1,2,"L. Kovář",3],[5.9,54.7,1,2,"J. Bryant",4],[6.8,56.1,1,2,"R. Bonham",4],[5.3,95.1,1,3,"R. Moffatt",4],[5.0,57.8,1,2,"R. Bonham",4],[22.0,13.4,0,3,"R. Moffatt",4],[25.4,20.5,1,3,"J. Bryant",4],[31.3,32.1,0,3,"R. Bonham",4],[5.7,43.4,0,2,"J. Bryant",4],[5.1,2.7,0,3,"J. Tůma",4],[6,50,1,2,"L. Kovář",4],[6.8,48.8,1,2,"K. Švrdlík",4],[24.9,82.1,0,3,"J. Tůma",4],[24.6,17.1,1,3,"L. Kovář",4],[20.1,9.5,0,3,"N. Stampley",4],[25.7,19.7,0,3,"N. Stampley",4],[26.2,21.1,0,3,"R. Moffatt",4],[5.9,57.5,1,2,"L. Kovář",4],[7.3,1.3,1,3,"J. Bryant",4],[5.6,97.1,0,3,"L. Kovář",4]],"Olomoucko":[[7.3,0.8,1,3,"L. Kovář",1],[5.6,44.3,1,2,"J. Bryant",1],[4.4,2.0,0,3,"L. Kovář",1],[16.7,93.1,0,3,"R. Moffatt",1],[5.2,53.0,1,2,"L. Kovář",1],[5,56.1,1,2,"R. Bonham",1],[4.4,43.2,0,2,"A. Lukeš",1],[6,50,1,2,"K. Švrdlík",1],[5.3,55.8,0,2,"K. Švrdlík",1],[6.9,53.3,1,2,"K. Švrdlík",1],[5.2,52.2,1,2,"R. Bonham",1],[21.2,88.3,1,3,"D. Vlk",1],[7.3,57.8,0,2,"J. Bryant",1],[20.1,45.1,0,2,"R. Bonham",1],[25.7,46.5,0,2,"J. Bryant",1],[5.2,56.1,1,2,"R. Bonham",2],[27.0,16.1,0,3,"R. Bonham",2],[29.2,75.3,0,3,"R. Moffatt",2],[5.3,54.4,1,2,"K. Švrdlík",2],[5.5,54.2,0,2,"R. Bonham",2],[31.0,75.3,0,3,"J. Bryant",2],[29.0,31.0,1,3,"R. Bonham",2],[23.2,13.5,0,3,"L. Kovář",2],[7.7,40.3,0,2,"A. Lukeš",2],[5.8,48.0,1,2,"Z. Key",2],[32.1,55.6,1,3,"N. Stampley",2],[19.7,88.3,1,3,"N. Stampley",2],[19.3,29.3,0,2,"R. Bonham",2],[8.3,46.0,1,2,"D. Vlk",2],[29.0,8.2,0,3,"R. Bonham",2],[4.9,95.8,1,3,"L. Kovář",3],[17.5,92.1,1,3,"R. Bonham",3],[5.8,60.8,1,2,"Z. Key",3],[29.5,22.1,0,3,"R. Bonham",3],[7.1,46.7,1,2,"R. Moffatt",3],[5.8,59.7,1,2,"Z. Key",3],[5.4,96.3,0,3,"R. Moffatt",3],[6.6,43.0,1,2,"L. Kovář",3],[9.0,74.1,0,2,"J. Bryant",3],[6,50,1,2,"Z. Key",3],[5.5,95.8,1,3,"J. Bryant",3],[25.8,89.3,0,3,"J. Tůma",3],[5.1,3.5,0,3,"K. Švrdlík",3],[5.5,97.8,0,3,"J. Tůma",3],[23.3,93.5,0,3,"J. Tůma",3],[8.3,54.0,1,2,"K. Švrdlík",3],[6.8,57.7,1,2,"K. Švrdlík",3],[7.6,55.7,0,2,"Z. Key",3],[3.7,2.1,1,3,"R. Moffatt",3],[34.5,55.7,0,3,"R. Moffatt",3],[22.0,13.7,0,3,"R. Moffatt",4],[4.0,47.0,1,2,"R. Bonham",4],[25.5,84.5,1,3,"R. Bonham",4],[6,56.6,1,2,"Z. Key",4],[8.6,58.8,0,2,"J. Tůma",4],[8.2,54.0,0,2,"P. Šťovíček",4],[4.4,39.9,0,2,"P. Šťovíček",4],[5.8,56.8,1,2,"A. Lukeš",4],[7.6,59.1,1,2,"P. Šťovíček",4],[5.8,45.3,1,2,"A. Lukeš",4],[5.5,56.6,1,2,"A. Lukeš",4],[12.5,63.6,0,2,"P. Šťovíček",4],[4.4,42.7,1,2,"H. Lejsek",4],[8.2,48.1,1,2,"A. Lukeš",4],[15.2,3.8,0,3,"A. Lukeš",4],[8.8,44.2,0,2,"N. Stampley",4],[9.0,48.4,1,2,"P. Šťovíček",4]],"Hradec":[[3.3,2.9,0,3,"L. Kovář",1],[31.5,56.6,1,3,"N. Stampley",1],[8.3,97.0,1,3,"L. Kovář",1],[17.4,8.9,0,3,"J. Bryant",1],[28.0,85.7,0,3,"K. Švrdlík",1],[8.3,60.3,1,2,"L. Kovář",1],[33.0,52.1,0,3,"R. Bonham",1],[8.5,58.6,1,2,"K. Švrdlík",1],[10.5,66.5,0,2,"J. Tůma",1],[8.1,41.4,0,2,"N. Stampley",1],[32.6,47.0,0,3,"N. Stampley",1],[16.9,93.6,0,3,"Z. Key",1],[9.1,61.5,1,2,"J. Tůma",1],[6.4,55.8,1,2,"Z. Key",1],[8.8,96.7,0,3,"D. Vlk",1],[32.0,52.9,1,3,"R. Moffatt",1],[18.3,92.2,1,3,"A. Lukeš",1],[9.6,44.8,1,2,"J. Bryant",1],[3.3,4.3,0,3,"A. Lukeš",1],[14.5,95.9,0,3,"R. Moffatt",1],[8.6,53.8,0,2,"Z. Key",1],[8.6,55.8,1,2,"Z. Key",1],[7.1,47.8,1,2,"J. Bryant",1],[9.9,49.5,1,2,"K. Švrdlík",2],[28.4,82.9,0,3,"R. Moffatt",2],[13.6,63.7,0,2,"K. Švrdlík",2],[13.1,67.9,0,2,"J. Tůma",2],[8.9,56.0,1,2,"Z. Key",2],[30.8,49.0,0,3,"J. Tůma",2],[22.8,13.9,0,3,"J. Bryant",2],[12.0,95.9,1,3,"L. Kovář",2],[8.3,46.2,1,2,"Z. Key",2],[8.8,38.8,1,2,"L. Kovář",2],[26.4,87.1,0,3,"R. Bonham",2],[9.2,54.3,0,2,"Z. Key",2],[7.7,54.3,1,2,"A. Lukeš",2],[9.1,59.2,1,2,"Z. Key",2],[32.6,47.0,0,3,"J. Tůma",2],[8.1,36.6,1,2,"Z. Key",3],[10.6,36.6,0,2,"J. Bryant",3],[6.8,4.7,1,3,"N. Stampley",3],[7.9,60.6,0,2,"R. Bonham",3],[12.4,95.7,1,3,"N. Stampley",3],[15.1,32.4,0,2,"L. Kovář",3],[9.9,38.9,1,2,"K. Švrdlík",3],[33.3,27.8,1,3,"J. Bryant",3],[13.1,3.8,0,3,"N. Stampley",3],[25.7,13.7,1,3,"R. Moffatt",3],[8.9,47.1,0,2,"J. Bryant",3],[22.0,86.1,0,3,"R. Moffatt",3],[10.9,56.1,1,2,"J. Tůma",3],[7.3,50.7,1,2,"Z. Key",3],[6.8,57.2,0,2,"J. Bryant",3],[30.9,61.8,0,3,"J. Tůma",3],[14.9,92.0,1,3,"R. Moffatt",3],[30.4,66.3,0,3,"J. Tůma",3],[5.1,97.9,0,3,"J. Tůma",3],[25.9,80.1,0,3,"A. Lukeš",3],[10.1,3.3,0,3,"N. Stampley",4],[6.7,51.6,1,2,"R. Bonham",4],[7.0,95.7,1,3,"R. Bonham",4],[19,38.3,1,2,"R. Bonham",4],[8.7,96.8,0,3,"R. Moffatt",4],[31.8,17.7,0,3,"R. Bonham",4],[33.0,42.8,0,3,"A. Lukeš",4],[20.6,88.6,0,3,"L. Kovář",4],[24.5,77.0,0,2,"J. Bryant",4],[34.0,32.9,0,3,"R. Bonham",4],[12.0,52.7,0,2,"K. Švrdlík",4],[28.1,77.0,0,3,"J. Tůma",4],[32.4,40.8,1,3,"R. Bonham",4],[9.9,96.5,1,3,"R. Bonham",4],[8.6,52.7,0,2,"K. Švrdlík",4]]};
+(function () {
+  const W = 15, L = 14;
+  const NS = 'http://www.w3.org/2000/svg';
+  const courtSVG =
+    '<rect class="fl" x="0" y="0" width="15" height="14"/>' +
+    '<rect class="ln" x="0" y="0" width="15" height="14"/>' +
+    '<rect class="ln" x="5.05" y="0" width="4.9" height="5.8"/>' +
+    '<circle class="ln" cx="7.5" cy="5.8" r="1.8"/>' +
+    '<path class="ln" d="M0.9 0 L0.9 2.99 A6.75 6.75 0 0 0 14.1 2.99 L14.1 0"/>' +
+    '<path class="ln" d="M6.25 1.575 A1.25 1.25 0 0 0 8.75 1.575"/>' +
+    '<path class="ln" d="M5.7 14 A1.8 1.8 0 0 1 9.3 14"/>' +
+    '<line class="rim" x1="6.6" y1="1.2" x2="8.4" y2="1.2"/>' +
+    '<circle class="rim" cx="7.5" cy="1.575" r="0.225"/>';
+
+  function zoneOf(s) {
+    const X = s[0] * 0.28, Y = s[1] * 0.15;
+    const d = Math.hypot(X - 1.575, Y - 7.5);
+    if (s[3] === 3) return X < 3 ? 'Roh za 3' : 'Trojka mimo roh';
+    if (d < 1.8) return 'U koše';
+    if (d < 4.5) return 'Krátká vzdálenost';
+    return 'Střední vzdálenost';
+  }
+  const ZONES = ['U koše', 'Krátká vzdálenost', 'Střední vzdálenost', 'Roh za 3', 'Trojka mimo roh'];
+
+  function build(el) {
+    const GAMES = Object.keys(SHOTS); const all = GAMES.flatMap(g => SHOTS[g].map(s => s.concat([g]))); const team = 'Pardubice';
+    const players = [...new Set(all.map(s => s[4]))].sort((a, b) =>
+      all.filter(s => s[4] === b).length - all.filter(s => s[4] === a).length);
+    const id = 'sel-' + team;
+    el.innerHTML =
+      '<div class="map-ctrl"><label for="gsel">Zápas</label><select id="gsel"><option value="">Všechny tři</option>' + GAMES.map(g => '<option value="' + g + '">vs ' + (g === 'Hradec' ? 'Hradec Králové' : g) + '</option>').join('') + '</select>' +
+      '<label for="' + id + '">Hráč</label>' +
+      '<select id="' + id + '"><option value="">Celý tým</option>' +
+      players.map(p => '<option>' + p + '</option>').join('') + '</select>' +
+      '<span role="group" aria-label="Čtvrtina" style="display:flex;gap:4px">' +
+      ['Vše', 1, 2, 3, 4].map(q => '<button type="button" class="qbtn" data-q="' + (q === 'Vše' ? 0 : q) + '" aria-pressed="' + (q === 'Vše') + '">' + (q === 'Vše' ? q : q + '.') + '</button>').join('') +
+      '</span></div>' +
+      '<svg class="court" viewBox="-0.3 -0.3 15.6 14.6" role="img" aria-label="Mapa střel ' + team + '">' + courtSVG + '<g class="pts"></g></svg>' +
+      '<div class="legend"><span><i class="m"></i>proměněno</span><span><i class="x"></i>neproměněno</span><span class="sum num"></span></div>' +
+      '<table class="zones"><thead><tr><th>Zóna</th><th class="n">Střely</th><th class="n">%</th><th class="bar"><span class="muted">úspěšnost</span></th></tr></thead><tbody></tbody></table>';
+    const g = el.querySelector('.pts'), gsel = el.querySelector('#gsel'), sel = el.querySelector('#' + id), tb = el.querySelector('tbody'), sum = el.querySelector('.sum');
+    let q = 0;
+    function draw() {
+      const p = sel.value;
+      const gm = gsel.value; const L2 = all.filter(s => (!p || s[4] === p) && (!q || s[5] === q) && (!gm || s[6] === gm));
+      g.innerHTML = '';
+      L2.slice().sort((a, b) => a[2] - b[2]).forEach(s => {
+        const cx = s[1] * 0.15, cy = s[0] * 0.28;
+        let n;
+        if (s[2]) { n = document.createElementNS(NS, 'circle'); n.setAttribute('class', 'mk'); n.setAttribute('cx', cx); n.setAttribute('cy', cy); n.setAttribute('r', 0.24); }
+        else { n = document.createElementNS(NS, 'path'); n.setAttribute('class', 'ms'); const r = 0.17; n.setAttribute('d', `M${cx - r} ${cy - r}L${cx + r} ${cy + r}M${cx + r} ${cy - r}L${cx - r} ${cy + r}`); }
+        const t = document.createElementNS(NS, 'title');
+        t.textContent = s[4] + ' · vs ' + s[6] + ' · ' + s[3] + 'b · ' + s[5] + '. čtvrtina · ' + (s[2] ? 'proměněno' : 'neproměněno');
+        n.appendChild(t); g.appendChild(n);
+      });
+      const made = L2.filter(s => s[2]).length;
+      sum.textContent = made + '/' + L2.length;
+      tb.innerHTML = ZONES.map(z => {
+        const S = L2.filter(s => zoneOf(s) === z); if (!S.length) return '';
+        const m = S.filter(s => s[2]).length, pct = Math.round(100 * m / S.length);
+        return '<tr><td>' + z + '</td><td class="n">' + m + '/' + S.length + '</td><td class="n">' + pct + '</td><td class="bar"><div class="zbar"><i style="width:' + pct + '%"></i></div></td></tr>';
+      }).join('');
+    }
+    sel.addEventListener('change', draw); gsel.addEventListener('change', draw);
+    el.querySelectorAll('.qbtn').forEach(b => b.addEventListener('click', () => {
+      q = +b.dataset.q;
+      el.querySelectorAll('.qbtn').forEach(x => x.setAttribute('aria-pressed', x === b));
+      draw();
+    }));
+    draw();
+  }
+  document.querySelectorAll('[data-map]').forEach(build);
+})();
+</script>
+<script>
+const LU={"all":{"team":{"min":120.0,"pf":273,"pa":211,"poss":246.6,"ortg":110.7,"drtg":85.6,"net":25.1,"efg":53.6,"oefg":47.6,"to":21.8,"oto":28.5,"orb":37.2,"drb":69.5},"onoff":[{"p":"Bonham","on":{"min":70.3,"pf":175,"pa":115,"poss":142.4,"ortg":122.9,"drtg":80.7,"net":42.1,"efg":58.7,"oefg":44.5,"to":18.2,"oto":30.4,"orb":34.4,"drb":65.3},"off":{"min":49.7,"pf":98,"pa":96,"poss":104.1,"ortg":94.1,"drtg":92.2,"net":1.9,"efg":45.9,"oefg":52.0,"to":26.8,"oto":26.0,"orb":40.4,"drb":76.1}},{"p":"Bryant","on":{"min":69.2,"pf":179,"pa":110,"poss":141.4,"ortg":126.6,"drtg":77.8,"net":48.8,"efg":63.5,"oefg":48.1,"to":22.4,"oto":28.6,"orb":39.3,"drb":74.6},"off":{"min":50.8,"pf":94,"pa":101,"poss":105.2,"ortg":89.4,"drtg":96.0,"net":-6.7,"efg":39.9,"oefg":46.8,"to":21.0,"oto":28.5,"orb":35.0,"drb":62.7}},{"p":"Key","on":{"min":59.8,"pf":150,"pa":100,"poss":122.2,"ortg":122.7,"drtg":81.8,"net":40.9,"efg":59.3,"oefg":47.8,"to":20.9,"oto":30.9,"orb":41.1,"drb":66.1},"off":{"min":60.2,"pf":123,"pa":111,"poss":124.4,"ortg":98.9,"drtg":89.3,"net":9.6,"efg":47.6,"oefg":47.4,"to":22.7,"oto":26.3,"orb":33.8,"drb":72.6}},{"p":"Kovář","on":{"min":66.0,"pf":150,"pa":121,"poss":132.5,"ortg":113.2,"drtg":91.3,"net":21.9,"efg":55.3,"oefg":49.5,"to":20.5,"oto":29.3,"orb":35.4,"drb":66.1},"off":{"min":54.0,"pf":123,"pa":90,"poss":114.0,"ortg":107.9,"drtg":78.9,"net":28.9,"efg":51.5,"oefg":45.0,"to":23.3,"oto":27.6,"orb":39.3,"drb":73.2}},{"p":"Lukeš","on":{"min":52.4,"pf":103,"pa":98,"poss":107.3,"ortg":96.0,"drtg":91.3,"net":4.7,"efg":44.6,"oefg":46.2,"to":25.1,"oto":27.1,"orb":40.0,"drb":63.5},"off":{"min":67.6,"pf":170,"pa":113,"poss":139.3,"ortg":122.1,"drtg":81.1,"net":40.9,"efg":60.6,"oefg":48.6,"to":19.2,"oto":29.7,"orb":34.4,"drb":74.2}},{"p":"Moffatt","on":{"min":75.6,"pf":172,"pa":123,"poss":154.7,"ortg":111.2,"drtg":79.5,"net":31.7,"efg":52.6,"oefg":42.5,"to":22.1,"oto":27.7,"orb":40.3,"drb":69.9},"off":{"min":44.4,"pf":101,"pa":88,"poss":91.9,"ortg":109.9,"drtg":95.8,"net":14.1,"efg":55.2,"oefg":56.9,"to":21.4,"oto":29.9,"orb":31.8,"drb":68.6}},{"p":"Stampley","on":{"min":61.7,"pf":139,"pa":121,"poss":128.4,"ortg":108.3,"drtg":94.3,"net":14.0,"efg":55.6,"oefg":54.9,"to":20.3,"oto":30.3,"orb":31.7,"drb":69.8},"off":{"min":58.3,"pf":134,"pa":90,"poss":118.2,"ortg":113.4,"drtg":76.1,"net":37.2,"efg":51.5,"oefg":40.4,"to":23.4,"oto":26.5,"orb":42.6,"drb":69.2}},{"p":"Tůma","on":{"min":52.1,"pf":100,"pa":99,"poss":105.2,"ortg":95.1,"drtg":94.1,"net":1.0,"efg":38.9,"oefg":47.6,"to":22.8,"oto":23.7,"orb":41.5,"drb":69.8},"off":{"min":67.9,"pf":173,"pa":112,"poss":141.4,"ortg":122.4,"drtg":79.2,"net":43.1,"efg":64.5,"oefg":47.5,"to":21.0,"oto":32.1,"orb":32.1,"drb":69.2}},{"p":"Vlk","on":{"min":26.1,"pf":58,"pa":44,"poss":58.8,"ortg":98.7,"drtg":74.9,"net":23.8,"efg":47.9,"oefg":48.6,"to":24.3,"oto":32.3,"orb":34.5,"drb":83.3},"off":{"min":94.0,"pf":215,"pa":167,"poss":187.8,"ortg":114.5,"drtg":88.9,"net":25.6,"efg":55.2,"oefg":47.3,"to":21.0,"oto":27.4,"orb":38.0,"drb":66.0}},{"p":"Švrdlík","on":{"min":53.3,"pf":107,"pa":97,"poss":108.7,"ortg":98.4,"drtg":89.2,"net":9.2,"efg":47.8,"oefg":46.5,"to":23.2,"oto":26.5,"orb":36.2,"drb":70.9},"off":{"min":66.7,"pf":166,"pa":114,"poss":137.8,"ortg":120.4,"drtg":82.7,"net":37.7,"efg":58.0,"oefg":48.5,"to":20.7,"oto":30.2,"orb":38.1,"drb":68.3}}],"c2":[{"c":["Bonham","Bryant"],"min":47.2,"pf":131,"pa":72,"ortg":136.6,"drtg":75.1,"net":61.5,"efg":68.2,"oefg":48.6,"to":20.7,"oto":31.5,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Key"],"min":35.3,"pf":99,"pa":50,"ortg":134.3,"drtg":67.8,"net":66.5,"efg":65.6,"oefg":41.3,"to":17.2,"oto":33.4,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Kovář"],"min":43.0,"pf":112,"pa":78,"ortg":131.4,"drtg":91.5,"net":39.9,"efg":61.2,"oefg":48.5,"to":16.4,"oto":29.4,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Lukeš"],"min":18.9,"pf":32,"pa":30,"ortg":88.1,"drtg":82.6,"net":5.5,"efg":40.3,"oefg":34.4,"to":22.2,"oto":27.3,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Moffatt"],"min":43.8,"pf":108,"pa":66,"ortg":118.1,"drtg":72.2,"net":45.9,"efg":55.8,"oefg":38.9,"to":18.7,"oto":31.5,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Stampley"],"min":38.2,"pf":94,"pa":71,"ortg":123.9,"drtg":93.6,"net":30.3,"efg":61.4,"oefg":55.7,"to":15.8,"oto":33.0,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Tůma"],"min":9.4,"pf":18,"pa":15,"ortg":101.5,"drtg":84.6,"net":16.9,"efg":25.0,"oefg":27.5,"to":5.6,"oto":11.3,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Vlk"],"min":11.9,"pf":34,"pa":15,"ortg":120.8,"drtg":53.3,"net":67.5,"efg":61.4,"oefg":38.9,"to":19.7,"oto":31.1,"g":["Brno","Olomoucko"]},{"c":["Bonham","Švrdlík"],"min":33.7,"pf":72,"pa":63,"ortg":110.3,"drtg":96.5,"net":13.8,"efg":52.5,"oefg":48.2,"to":20.4,"oto":28.5,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bryant","Key"],"min":39.1,"pf":111,"pa":59,"ortg":137.9,"drtg":73.3,"net":64.6,"efg":66.9,"oefg":49.1,"to":18.5,"oto":30.0,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bryant","Kovář"],"min":40.7,"pf":101,"pa":64,"ortg":126.7,"drtg":80.3,"net":46.4,"efg":63.0,"oefg":52.7,"to":22.2,"oto":33.1,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bryant","Lukeš"],"min":11.4,"pf":27,"pa":23,"ortg":118.6,"drtg":101.1,"net":17.6,"efg":52.1,"oefg":55.0,"to":30.4,"oto":13.3,"g":["Brno","Hradec"]},{"c":["Bryant","Moffatt"],"min":45.1,"pf":117,"pa":58,"ortg":124.9,"drtg":61.9,"net":63.0,"efg":64.5,"oefg":35.7,"to":25.5,"oto":26.9,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bryant","Stampley"],"min":32.2,"pf":85,"pa":63,"ortg":132.5,"drtg":98.2,"net":34.3,"efg":65.8,"oefg":63.6,"to":17.3,"oto":29.4,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bryant","Tůma"],"min":21.2,"pf":48,"pa":38,"ortg":109.1,"drtg":86.4,"net":22.7,"efg":52.7,"oefg":51.6,"to":24.3,"oto":23.4,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bryant","Vlk"],"min":11.2,"pf":32,"pa":14,"ortg":116.7,"drtg":51.1,"net":65.6,"efg":64.3,"oefg":33.3,"to":17.5,"oto":26.6,"g":["Brno","Olomoucko"]},{"c":["Bryant","Švrdlík"],"min":28.1,"pf":62,"pa":49,"ortg":109.7,"drtg":86.7,"net":23.0,"efg":60.0,"oefg":48.9,"to":29.8,"oto":28.5,"g":["Brno","Olomoucko","Hradec"]},{"c":["Key","Kovář"],"min":31.6,"pf":78,"pa":51,"ortg":127.7,"drtg":83.5,"net":44.2,"efg":59.3,"oefg":43.3,"to":17.5,"oto":30.2,"g":["Brno","Olomoucko","Hradec"]},{"c":["Key","Lukeš"],"min":26.4,"pf":56,"pa":51,"ortg":105.5,"drtg":96.0,"net":9.4,"efg":48.9,"oefg":46.4,"to":26.0,"oto":28.6,"g":["Brno","Olomoucko","Hradec"]},{"c":["Key","Moffatt"],"min":39.2,"pf":105,"pa":59,"ortg":131.1,"drtg":73.7,"net":57.4,"efg":60.8,"oefg":45.5,"to":19.6,"oto":31.9,"g":["Brno","Olomoucko","Hradec"]},{"c":["Key","Stampley"],"min":26.9,"pf":57,"pa":50,"ortg":101.3,"drtg":88.8,"net":12.4,"efg":56.4,"oefg":55.0,"to":24.8,"oto":30.3,"g":["Brno","Olomoucko","Hradec"]},{"c":["Key","Tůma"],"min":26.8,"pf":62,"pa":54,"ortg":118.0,"drtg":102.8,"net":15.2,"efg":50.0,"oefg":52.4,"to":22.5,"oto":27.1,"g":["Brno","Olomoucko","Hradec"]},{"c":["Key","Vlk"],"min":13.8,"pf":32,"pa":26,"ortg":103.2,"drtg":83.8,"net":19.3,"efg":56.5,"oefg":58.8,"to":27.3,"oto":37.8,"g":["Brno","Olomoucko","Hradec"]},{"c":["Kovář","Lukeš"],"min":19.3,"pf":36,"pa":35,"ortg":93.2,"drtg":90.6,"net":2.6,"efg":50.0,"oefg":37.5,"to":23.4,"oto":25.7,"g":["Brno","Olomoucko","Hradec"]},{"c":["Kovář","Moffatt"],"min":35.9,"pf":76,"pa":57,"ortg":103.7,"drtg":77.7,"net":25.9,"efg":52.5,"oefg":43.0,"to":23.5,"oto":32.3,"g":["Brno","Olomoucko","Hradec"]},{"c":["Kovář","Stampley"],"min":31.3,"pf":72,"pa":71,"ortg":114.2,"drtg":112.6,"net":1.6,"efg":53.3,"oefg":63.3,"to":17.7,"oto":28.2,"g":["Brno","Olomoucko","Hradec"]},{"c":["Kovář","Tůma"],"min":27.3,"pf":51,"pa":56,"ortg":90.8,"drtg":99.8,"net":-8.9,"efg":38.8,"oefg":49.0,"to":22.0,"oto":24.2,"g":["Brno","Olomoucko","Hradec"]},{"c":["Kovář","Švrdlík"],"min":30.9,"pf":64,"pa":63,"ortg":99.8,"drtg":98.3,"net":1.6,"efg":55.7,"oefg":56.4,"to":25.6,"oto":30.4,"g":["Brno","Olomoucko","Hradec"]},{"c":["Lejsek","Lukeš"],"min":6.1,"pf":16,"pa":12,"ortg":108.8,"drtg":81.6,"net":27.2,"efg":70.0,"oefg":56.2,"to":26.1,"oto":28.4,"g":["Olomoucko"]},{"c":["Lejsek","Stampley"],"min":5.7,"pf":14,"pa":10,"ortg":102.2,"drtg":73.0,"net":29.2,"efg":66.7,"oefg":50.0,"to":27.9,"oto":30.6,"g":["Olomoucko"]},{"c":["Lejsek","Šťovíček"],"min":5.8,"pf":14,"pa":12,"ortg":106.1,"drtg":90.9,"net":15.2,"efg":75.0,"oefg":56.2,"to":30.0,"oto":22.9,"g":["Olomoucko"]},{"c":["Lukeš","Moffatt"],"min":30.9,"pf":60,"pa":63,"ortg":96.6,"drtg":101.4,"net":-4.8,"efg":40.5,"oefg":55.8,"to":21.2,"oto":25.4,"g":["Brno","Olomoucko","Hradec"]},{"c":["Lukeš","Stampley"],"min":21.5,"pf":42,"pa":38,"ortg":87.8,"drtg":79.5,"net":8.4,"efg":50.0,"oefg":40.6,"to":27.2,"oto":33.4,"g":["Brno","Olomoucko","Hradec"]},{"c":["Lukeš","Tůma"],"min":32.6,"pf":66,"pa":60,"ortg":101.9,"drtg":92.6,"net":9.3,"efg":41.7,"oefg":44.1,"to":24.9,"oto":26.0,"g":["Brno","Olomoucko","Hradec"]},{"c":["Lukeš","Vlk"],"min":14.7,"pf":26,"pa":30,"ortg":84.3,"drtg":97.3,"net":-13.0,"efg":36.5,"oefg":70.0,"to":31.0,"oto":37.4,"g":["Brno","Olomoucko","Hradec"]},{"c":["Lukeš","Švrdlík"],"min":21.0,"pf":37,"pa":35,"ortg":87.2,"drtg":82.5,"net":4.7,"efg":36.5,"oefg":40.6,"to":23.7,"oto":23.4,"g":["Brno","Olomoucko","Hradec"]},{"c":["Lukeš","Šťovíček"],"min":6.9,"pf":14,"pa":15,"ortg":89.5,"drtg":95.9,"net":-6.4,"efg":54.5,"oefg":61.1,"to":26.1,"oto":25.1,"g":["Olomoucko"]},{"c":["Moffatt","Stampley"],"min":22.5,"pf":51,"pa":41,"ortg":111.9,"drtg":90.0,"net":21.9,"efg":60.8,"oefg":42.1,"to":18.2,"oto":27.6,"g":["Brno","Olomoucko","Hradec"]},{"c":["Moffatt","Tůma"],"min":34.8,"pf":65,"pa":59,"ortg":96.8,"drtg":87.8,"net":8.9,"efg":38.5,"oefg":45.1,"to":25.5,"oto":23.6,"g":["Brno","Olomoucko","Hradec"]},{"c":["Moffatt","Vlk"],"min":13.6,"pf":35,"pa":23,"ortg":116.8,"drtg":76.8,"net":40.1,"efg":48.1,"oefg":40.9,"to":18.8,"oto":21.4,"g":["Brno","Olomoucko","Hradec"]},{"c":["Moffatt","Švrdlík"],"min":31.8,"pf":53,"pa":55,"ortg":82.0,"drtg":85.1,"net":-3.1,"efg":42.2,"oefg":38.6,"to":28.8,"oto":25.5,"g":["Brno","Olomoucko","Hradec"]},{"c":["Stampley","Tůma"],"min":19.3,"pf":32,"pa":45,"ortg":76.7,"drtg":107.9,"net":-31.2,"efg":30.3,"oefg":59.1,"to":21.5,"oto":24.0,"g":["Brno","Olomoucko","Hradec"]},{"c":["Stampley","Vlk"],"min":12.4,"pf":23,"pa":21,"ortg":79.9,"drtg":72.9,"net":6.9,"efg":47.6,"oefg":60.7,"to":30.0,"oto":43.4,"g":["Olomoucko"]},{"c":["Stampley","Švrdlík"],"min":31.3,"pf":74,"pa":64,"ortg":115.2,"drtg":99.6,"net":15.6,"efg":53.5,"oefg":54.3,"to":14.0,"oto":29.6,"g":["Brno","Olomoucko","Hradec"]},{"c":["Stampley","Šťovíček"],"min":5.3,"pf":12,"pa":10,"ortg":98.4,"drtg":82.0,"net":16.4,"efg":71.4,"oefg":50.0,"to":32.5,"oto":24.8,"g":["Olomoucko"]},{"c":["Tůma","Vlk"],"min":11.7,"pf":20,"pa":24,"ortg":83.5,"drtg":100.2,"net":-16.7,"efg":32.6,"oefg":56.2,"to":24.2,"oto":26.0,"g":["Brno","Olomoucko","Hradec"]},{"c":["Tůma","Švrdlík"],"min":23.6,"pf":36,"pa":42,"ortg":73.1,"drtg":85.3,"net":-12.2,"efg":28.2,"oefg":42.5,"to":24.6,"oto":20.1,"g":["Brno","Olomoucko","Hradec"]},{"c":["Vlk","Švrdlík"],"min":8.5,"pf":20,"pa":11,"ortg":107.3,"drtg":59.0,"net":48.3,"efg":40.0,"oefg":35.7,"to":15.4,"oto":22.5,"g":["Brno","Olomoucko"]}],"c3":[{"c":["Bonham","Bryant","Key"],"min":25.8,"pf":78,"pa":34,"ortg":145.9,"drtg":63.6,"net":82.3,"efg":72.9,"oefg":45.8,"to":16.5,"oto":34.3,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Bryant","Kovář"],"min":28.7,"pf":79,"pa":45,"ortg":140.9,"drtg":80.2,"net":60.6,"efg":66.7,"oefg":55.3,"to":19.5,"oto":34.1,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Bryant","Moffatt"],"min":28.4,"pf":79,"pa":36,"ortg":132.0,"drtg":60.2,"net":71.9,"efg":68.8,"oefg":36.0,"to":21.8,"oto":30.0,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Bryant","Stampley"],"min":26.4,"pf":77,"pa":47,"ortg":149.6,"drtg":91.3,"net":58.3,"efg":71.4,"oefg":61.8,"to":17.3,"oto":31.5,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Bryant","Švrdlík"],"min":20.0,"pf":49,"pa":36,"ortg":125.7,"drtg":92.4,"net":33.4,"efg":64.7,"oefg":53.1,"to":28.8,"oto":30.2,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Key","Kovář"],"min":19.5,"pf":58,"pa":29,"ortg":151.9,"drtg":76.0,"net":76.0,"efg":68.6,"oefg":37.1,"to":15.1,"oto":30.1,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Key","Moffatt"],"min":21.4,"pf":63,"pa":29,"ortg":136.0,"drtg":62.6,"net":73.4,"efg":67.9,"oefg":41.9,"to":16.9,"oto":35.2,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Key","Stampley"],"min":16.2,"pf":41,"pa":25,"ortg":120.3,"drtg":73.4,"net":46.9,"efg":60.9,"oefg":55.3,"to":17.2,"oto":36.1,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Kovář","Moffatt"],"min":21.8,"pf":55,"pa":35,"ortg":120.2,"drtg":76.5,"net":43.7,"efg":56.1,"oefg":41.4,"to":17.6,"oto":34.7,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Kovář","Stampley"],"min":20.1,"pf":53,"pa":47,"ortg":136.2,"drtg":120.8,"net":15.4,"efg":62.2,"oefg":71.4,"to":12.9,"oto":30.8,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Kovář","Švrdlík"],"min":22.1,"pf":50,"pa":47,"ortg":114.6,"drtg":107.7,"net":6.9,"efg":57.1,"oefg":60.6,"to":19.1,"oto":30.8,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Moffatt","Stampley"],"min":15.9,"pf":38,"pa":28,"ortg":116.9,"drtg":86.1,"net":30.8,"efg":64.0,"oefg":42.0,"to":16.1,"oto":35.3,"g":["Brno","Hradec"]},{"c":["Bonham","Moffatt","Švrdlík"],"min":21.1,"pf":41,"pa":35,"ortg":98.4,"drtg":84.0,"net":14.4,"efg":44.3,"oefg":36.8,"to":22.6,"oto":29.9,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Stampley","Švrdlík"],"min":22.0,"pf":53,"pa":46,"ortg":126.8,"drtg":110.0,"net":16.7,"efg":61.8,"oefg":55.9,"to":14.6,"oto":30.6,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bryant","Key","Kovář"],"min":19.2,"pf":52,"pa":28,"ortg":148.0,"drtg":79.7,"net":68.3,"efg":68.2,"oefg":50.0,"to":14.1,"oto":34.4,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bryant","Key","Moffatt"],"min":26.4,"pf":78,"pa":36,"ortg":142.4,"drtg":65.7,"net":76.7,"efg":70.4,"oefg":41.2,"to":20.2,"oto":29.0,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bryant","Key","Stampley"],"min":17.8,"pf":47,"pa":31,"ortg":127.0,"drtg":83.7,"net":43.2,"efg":66.7,"oefg":58.3,"to":16.4,"oto":29.4,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bryant","Key","Tůma"],"min":12.5,"pf":33,"pa":25,"ortg":129.3,"drtg":98.0,"net":31.3,"efg":55.8,"oefg":64.7,"to":19.5,"oto":23.6,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bryant","Kovář","Moffatt"],"min":20.9,"pf":49,"pa":18,"ortg":114.3,"drtg":42.0,"net":72.3,"efg":64.5,"oefg":28.1,"to":30.0,"oto":37.7,"g":["Brno","Olomoucko"]},{"c":["Bryant","Kovář","Stampley"],"min":18.0,"pf":48,"pa":42,"ortg":141.8,"drtg":124.0,"net":17.7,"efg":61.4,"oefg":80.4,"to":11.9,"oto":26.4,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bryant","Kovář","Švrdlík"],"min":19.6,"pf":43,"pa":34,"ortg":107.0,"drtg":84.6,"net":22.4,"efg":60.6,"oefg":60.0,"to":31.9,"oto":35.3,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bryant","Moffatt","Tůma"],"min":15.8,"pf":38,"pa":22,"ortg":117.6,"drtg":68.1,"net":49.5,"efg":57.1,"oefg":39.6,"to":29.7,"oto":22.6,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bryant","Moffatt","Švrdlík"],"min":16.8,"pf":33,"pa":20,"ortg":95.7,"drtg":58.0,"net":37.7,"efg":56.2,"oefg":30.3,"to":37.1,"oto":26.6,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bryant","Stampley","Švrdlík"],"min":14.4,"pf":38,"pa":32,"ortg":140.0,"drtg":117.9,"net":22.1,"efg":64.6,"oefg":70.0,"to":18.5,"oto":29.4,"g":["Brno","Olomoucko","Hradec"]},{"c":["Key","Kovář","Moffatt"],"min":17.5,"pf":43,"pa":22,"ortg":127.2,"drtg":65.1,"net":62.1,"efg":60.0,"oefg":38.5,"to":17.3,"oto":36.5,"g":["Brno","Olomoucko","Hradec"]},{"c":["Key","Kovář","Stampley"],"min":14.5,"pf":30,"pa":30,"ortg":106.6,"drtg":106.6,"net":0.0,"efg":50.0,"oefg":58.3,"to":24.5,"oto":21.6,"g":["Brno","Olomoucko","Hradec"]},{"c":["Key","Kovář","Tůma"],"min":13.7,"pf":31,"pa":26,"ortg":119.4,"drtg":100.2,"net":19.3,"efg":47.6,"oefg":46.2,"to":15.4,"oto":27.0,"g":["Brno","Olomoucko","Hradec"]},{"c":["Key","Lukeš","Moffatt"],"min":18.4,"pf":44,"pa":33,"ortg":120.0,"drtg":90.0,"net":30.0,"efg":50.0,"oefg":56.5,"to":21.3,"oto":30.8,"g":["Brno","Olomoucko","Hradec"]},{"c":["Key","Lukeš","Tůma"],"min":19.4,"pf":46,"pa":37,"ortg":121.4,"drtg":97.6,"net":23.7,"efg":54.3,"oefg":42.2,"to":25.7,"oto":27.1,"g":["Brno","Olomoucko","Hradec"]},{"c":["Key","Moffatt","Tůma"],"min":17.5,"pf":44,"pa":30,"ortg":134.6,"drtg":91.8,"net":42.8,"efg":50.0,"oefg":57.1,"to":21.0,"oto":31.3,"g":["Brno","Olomoucko","Hradec"]},{"c":["Kovář","Moffatt","Tůma"],"min":14.6,"pf":25,"pa":26,"ortg":86.7,"drtg":90.2,"net":-3.5,"efg":36.8,"oefg":50.0,"to":29.0,"oto":26.6,"g":["Brno","Olomoucko","Hradec"]},{"c":["Kovář","Moffatt","Švrdlík"],"min":14.9,"pf":25,"pa":28,"ortg":77.6,"drtg":87.0,"net":-9.3,"efg":52.2,"oefg":46.0,"to":35.8,"oto":32.7,"g":["Brno","Olomoucko","Hradec"]},{"c":["Kovář","Stampley","Švrdlík"],"min":16.8,"pf":42,"pa":41,"ortg":118.6,"drtg":115.8,"net":2.8,"efg":57.1,"oefg":68.0,"to":11.5,"oto":33.3,"g":["Brno","Olomoucko","Hradec"]},{"c":["Kovář","Tůma","Švrdlík"],"min":12.0,"pf":18,"pa":27,"ortg":67.2,"drtg":100.7,"net":-33.6,"efg":34.4,"oefg":52.4,"to":31.3,"oto":21.4,"g":["Brno","Olomoucko","Hradec"]},{"c":["Lukeš","Moffatt","Tůma"],"min":21.1,"pf":39,"pa":39,"ortg":96.3,"drtg":96.3,"net":0.0,"efg":38.1,"oefg":51.9,"to":25.3,"oto":26.5,"g":["Brno","Olomoucko","Hradec"]},{"c":["Lukeš","Tůma","Švrdlík"],"min":12.1,"pf":20,"pa":20,"ortg":81.8,"drtg":81.8,"net":0.0,"efg":27.3,"oefg":44.4,"to":25.8,"oto":23.4,"g":["Brno","Olomoucko","Hradec"]},{"c":["Moffatt","Stampley","Švrdlík"],"min":12.3,"pf":24,"pa":26,"ortg":99.4,"drtg":107.7,"net":-8.3,"efg":55.6,"oefg":45.2,"to":17.3,"oto":31.7,"g":["Brno","Hradec"]},{"c":["Moffatt","Tůma","Švrdlík"],"min":15.7,"pf":19,"pa":26,"ortg":61.1,"drtg":83.5,"net":-22.5,"efg":26.1,"oefg":35.7,"to":32.9,"oto":15.7,"g":["Brno","Olomoucko","Hradec"]}],"c5":[{"c":["Bonham","Bryant","Key","Kovář","Moffatt"],"min":8.1,"pf":25,"pa":8,"ortg":157.4,"drtg":50.4,"net":107.1,"efg":84.6,"oefg":33.3,"to":19.0,"oto":43.8,"g":["Brno","Olomoucko"]},{"c":["Bonham","Bryant","Key","Kovář","Stampley"],"min":5.3,"pf":17,"pa":10,"ortg":172.1,"drtg":101.2,"net":70.9,"efg":62.5,"oefg":75.0,"to":9.2,"oto":22.5,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Bryant","Key","Moffatt","Stampley"],"min":4.6,"pf":14,"pa":8,"ortg":135.7,"drtg":77.5,"net":58.1,"efg":77.8,"oefg":50.0,"to":10.0,"oto":28.2,"g":["Brno"]},{"c":["Bonham","Bryant","Key","Moffatt","Vlk"],"min":3.1,"pf":12,"pa":2,"ortg":152.3,"drtg":25.4,"net":126.9,"efg":90.0,"oefg":16.7,"to":22.8,"oto":28.6,"g":["Olomoucko"]},{"c":["Bonham","Bryant","Key","Stampley","Vlk"],"min":4.0,"pf":10,"pa":4,"ortg":117.6,"drtg":47.1,"net":70.6,"efg":62.5,"oefg":50.0,"to":22.2,"oto":50.0,"g":["Olomoucko"]},{"c":["Bonham","Bryant","Kovář","Moffatt","Švrdlík"],"min":4.5,"pf":8,"pa":3,"ortg":86.8,"drtg":32.5,"net":54.2,"efg":44.4,"oefg":25.0,"to":33.3,"oto":42.4,"g":["Brno","Olomoucko"]},{"c":["Bonham","Bryant","Kovář","Stampley","Švrdlík"],"min":7.7,"pf":23,"pa":20,"ortg":156.9,"drtg":136.4,"net":20.5,"efg":71.9,"oefg":100.0,"to":14.3,"oto":32.6,"g":["Brno","Olomoucko","Hradec"]},{"c":["Bonham","Bryant","Moffatt","Stampley","Švrdlík"],"min":4.7,"pf":13,"pa":5,"ortg":160.5,"drtg":61.7,"net":98.8,"efg":100.0,"oefg":27.8,"to":36.6,"oto":25.0,"g":["Hradec"]},{"c":["Bonham","Key","Kovář","Lukeš","Moffatt"],"min":2.9,"pf":5,"pa":6,"ortg":84.2,"drtg":101.0,"net":-16.8,"efg":35.7,"oefg":50.0,"to":14.3,"oto":20.5,"g":["Olomoucko","Hradec"]},{"c":["Bonham","Kovář","Moffatt","Stampley","Švrdlík"],"min":3.1,"pf":7,"pa":10,"ortg":100.0,"drtg":142.9,"net":-42.9,"efg":58.3,"oefg":66.7,"to":16.7,"oto":50.0,"g":["Hradec"]},{"c":["Bryant","Key","Kovář","Stampley","Tůma"],"min":2.8,"pf":6,"pa":7,"ortg":135.1,"drtg":157.7,"net":-22.5,"efg":62.5,"oefg":87.5,"to":0.0,"oto":20.0,"g":["Brno","Hradec"]},{"c":["Bryant","Key","Lukeš","Moffatt","Tůma"],"min":7.3,"pf":23,"pa":13,"ortg":150.7,"drtg":85.2,"net":65.5,"efg":58.3,"oefg":50.0,"to":25.0,"oto":13.8,"g":["Hradec"]},{"c":["Bryant","Kovář","Moffatt","Tůma","Švrdlík"],"min":3.8,"pf":6,"pa":2,"ortg":67.1,"drtg":22.4,"net":44.7,"efg":83.3,"oefg":16.7,"to":60.7,"oto":37.5,"g":["Brno","Olomoucko"]},{"c":["Key","Lukeš","Moffatt","Tůma","Vlk"],"min":2.8,"pf":5,"pa":9,"ortg":101.2,"drtg":182.2,"net":-81.0,"efg":33.3,"oefg":150.0,"to":18.4,"oto":45.0,"g":["Brno","Hradec"]},{"c":["Lukeš","Moffatt","Tůma","Vlk","Švrdlík"],"min":2.5,"pf":3,"pa":3,"ortg":58.8,"drtg":58.8,"net":0.0,"efg":16.7,"oefg":33.3,"to":41.0,"oto":18.8,"g":["Brno"]},{"c":["Lukeš","Stampley","Tůma","Vlk","Švrdlík"],"min":3.2,"pf":9,"pa":4,"ortg":132.0,"drtg":58.7,"net":73.3,"efg":42.9,"oefg":50.0,"to":13.1,"oto":33.3,"g":["Olomoucko"]}]},"close":{"team":{"min":80.0,"pf":173,"pa":157,"poss":156.4,"ortg":110.6,"drtg":100.4,"net":10.2,"efg":50.0,"oefg":50.4,"to":18.6,"oto":22.3,"orb":37.8,"drb":66.7},"onoff":[{"p":"Bonham","on":{"min":46.9,"pf":108,"pa":90,"poss":90.9,"ortg":118.8,"drtg":99.0,"net":19.8,"efg":53.0,"oefg":48.7,"to":14.5,"oto":22.8,"orb":32.7,"drb":63.3},"off":{"min":33.1,"pf":65,"pa":67,"poss":65.5,"ortg":99.3,"drtg":102.3,"net":-3.1,"efg":45.9,"oefg":52.9,"to":24.2,"oto":21.6,"orb":43.9,"drb":71.9}},{"p":"Bryant","on":{"min":48.0,"pf":118,"pa":95,"poss":93.3,"ortg":126.5,"drtg":101.8,"net":24.7,"efg":60.6,"oefg":57.2,"to":20.3,"oto":19.3,"orb":39.1,"drb":75.0},"off":{"min":32.0,"pf":55,"pa":62,"poss":63.1,"ortg":87.2,"drtg":98.3,"net":-11.1,"efg":34.7,"oefg":40.9,"to":16.1,"oto":26.6,"orb":36.4,"drb":56.8}},{"p":"Key","on":{"min":38.1,"pf":89,"pa":72,"poss":73.8,"ortg":120.6,"drtg":97.6,"net":23.0,"efg":52.1,"oefg":51.6,"to":18.6,"oto":22.1,"orb":44.2,"drb":64.9},"off":{"min":41.9,"pf":84,"pa":85,"poss":82.6,"ortg":101.7,"drtg":102.9,"net":-1.2,"efg":47.9,"oefg":49.3,"to":18.6,"oto":22.4,"orb":31.9,"drb":68.2}},{"p":"Kovář","on":{"min":45.9,"pf":100,"pa":98,"poss":89.0,"ortg":112.4,"drtg":110.2,"net":2.2,"efg":52.5,"oefg":55.2,"to":16.8,"oto":21.5,"orb":32.7,"drb":65.1},"off":{"min":34.1,"pf":73,"pa":59,"poss":67.4,"ortg":108.3,"drtg":87.5,"net":20.8,"efg":46.9,"oefg":43.5,"to":21.1,"oto":23.3,"orb":43.9,"drb":68.4}},{"p":"Lukeš","on":{"min":33.9,"pf":64,"pa":59,"poss":65.7,"ortg":97.4,"drtg":89.8,"net":7.6,"efg":41.4,"oefg":40.2,"to":22.8,"oto":24.4,"orb":43.2,"drb":57.9},"off":{"min":46.1,"pf":109,"pa":98,"poss":90.7,"ortg":120.2,"drtg":108.1,"net":12.1,"efg":56.9,"oefg":58.0,"to":15.6,"oto":20.8,"orb":32.6,"drb":74.4}},{"p":"Moffatt","on":{"min":54.5,"pf":115,"pa":94,"poss":107.5,"ortg":107.0,"drtg":87.5,"net":19.5,"efg":47.4,"oefg":44.3,"to":19.9,"oto":24.7,"orb":41.3,"drb":69.5},"off":{"min":25.4,"pf":58,"pa":63,"poss":48.9,"ortg":118.6,"drtg":128.8,"net":-10.2,"efg":55.4,"oefg":62.5,"to":16.0,"oto":16.7,"orb":29.6,"drb":59.1}},{"p":"Stampley","on":{"min":41.6,"pf":90,"pa":94,"poss":82.7,"ortg":108.8,"drtg":113.7,"net":-4.8,"efg":54.1,"oefg":58.1,"to":17.2,"oto":23.9,"orb":30.2,"drb":64.9},"off":{"min":38.4,"pf":83,"pa":63,"poss":73.7,"ortg":112.6,"drtg":85.5,"net":27.1,"efg":45.7,"oefg":42.1,"to":20.2,"oto":20.5,"orb":44.7,"drb":68.2}},{"p":"Tůma","on":{"min":41.5,"pf":83,"pa":82,"poss":80.7,"ortg":102.8,"drtg":101.6,"net":1.2,"efg":41.3,"oefg":47.8,"to":19.8,"oto":19.9,"orb":41.5,"drb":66.7},"off":{"min":38.5,"pf":90,"pa":75,"poss":75.7,"ortg":119.0,"drtg":99.1,"net":19.8,"efg":59.4,"oefg":53.2,"to":17.4,"oto":24.8,"orb":32.4,"drb":66.7}},{"p":"Vlk","on":{"min":9.1,"pf":18,"pa":18,"poss":18.7,"ortg":96.3,"drtg":96.3,"net":0.0,"efg":35.0,"oefg":46.7,"to":15.6,"oto":16.5,"orb":40.0,"drb":81.8},"off":{"min":70.9,"pf":155,"pa":139,"poss":137.7,"ortg":112.6,"drtg":101.0,"net":11.6,"efg":52.4,"oefg":50.9,"to":19.0,"oto":23.0,"orb":37.3,"drb":64.3}},{"p":"Švrdlík","on":{"min":40.5,"pf":80,"pa":83,"poss":79.6,"ortg":100.5,"drtg":104.2,"net":-3.8,"efg":49.3,"oefg":50.0,"to":19.3,"oto":23.3,"orb":33.3,"drb":66.7},"off":{"min":39.5,"pf":93,"pa":74,"poss":76.7,"ortg":121.2,"drtg":96.4,"net":24.8,"efg":50.7,"oefg":50.8,"to":17.9,"oto":21.2,"orb":42.2,"drb":66.7}}],"c2":[{"c":["Bonham","Bryant"],"min":28.9,"pf":74,"pa":59,"ortg":130.8,"drtg":104.3,"net":26.5,"efg":64.0,"oefg":60.9,"to":19.7,"oto":20.9,"g":["Brno","Hradec"]},{"c":["Bonham","Key"],"min":15.2,"pf":38,"pa":28,"ortg":130.2,"drtg":96.0,"net":34.3,"efg":55.6,"oefg":48.1,"to":10.4,"oto":17.0,"g":["Brno","Hradec"]},{"c":["Bonham","Kovář"],"min":29.4,"pf":72,"pa":64,"ortg":127.6,"drtg":113.4,"net":14.2,"efg":55.6,"oefg":55.1,"to":12.3,"oto":19.6,"g":["Brno","Hradec"]},{"c":["Bonham","Lukeš"],"min":14.0,"pf":22,"pa":18,"ortg":89.3,"drtg":73.1,"net":16.2,"efg":35.4,"oefg":26.9,"to":16.5,"oto":23.9,"g":["Brno","Hradec"]},{"c":["Bonham","Moffatt"],"min":28.6,"pf":61,"pa":48,"ortg":107.4,"drtg":84.5,"net":22.9,"efg":46.9,"oefg":41.8,"to":14.7,"oto":27.0,"g":["Brno","Hradec"]},{"c":["Bonham","Stampley"],"min":29.9,"pf":74,"pa":64,"ortg":125.4,"drtg":108.5,"net":16.9,"efg":60.0,"oefg":58.9,"to":13.6,"oto":27.1,"g":["Brno","Hradec"]},{"c":["Bonham","Tůma"],"min":9.2,"pf":18,"pa":15,"ortg":104.4,"drtg":87.0,"net":17.4,"efg":26.7,"oefg":27.5,"to":5.9,"oto":11.3,"g":["Brno","Hradec"]},{"c":["Bonham","Švrdlík"],"min":30.4,"pf":66,"pa":60,"ortg":113.2,"drtg":103.0,"net":10.3,"efg":52.8,"oefg":50.0,"to":17.6,"oto":26.8,"g":["Brno","Hradec"]},{"c":["Bryant","Key"],"min":23.5,"pf":60,"pa":47,"ortg":132.5,"drtg":103.8,"net":28.7,"efg":58.9,"oefg":61.4,"to":17.6,"oto":15.5,"g":["Brno","Hradec"]},{"c":["Bryant","Kovář"],"min":26.9,"pf":62,"pa":57,"ortg":123.0,"drtg":113.1,"net":9.9,"efg":60.0,"oefg":70.3,"to":19.5,"oto":22.2,"g":["Brno","Hradec"]},{"c":["Bryant","Lukeš"],"min":11.4,"pf":27,"pa":23,"ortg":118.6,"drtg":101.1,"net":17.6,"efg":52.1,"oefg":55.0,"to":30.4,"oto":13.3,"g":["Brno","Hradec"]},{"c":["Bryant","Moffatt"],"min":30.6,"pf":78,"pa":49,"ortg":126.1,"drtg":79.2,"net":46.9,"efg":62.3,"oefg":43.4,"to":22.7,"oto":19.3,"g":["Brno","Hradec"]},{"c":["Bryant","Stampley"],"min":25.5,"pf":63,"pa":57,"ortg":131.7,"drtg":119.1,"net":12.5,"efg":64.0,"oefg":65.8,"to":17.0,"oto":20.5,"g":["Brno","Hradec"]},{"c":["Bryant","Tůma"],"min":18.3,"pf":44,"pa":36,"ortg":124.9,"drtg":102.2,"net":22.7,"efg":55.7,"oefg":57.4,"to":19.1,"oto":17.7,"g":["Brno","Hradec"]},{"c":["Bryant","Švrdlík"],"min":23.1,"pf":54,"pa":46,"ortg":121.1,"drtg":103.2,"net":17.9,"efg":64.9,"oefg":55.3,"to":25.0,"oto":24.4,"g":["Brno","Hradec"]},{"c":["Key","Kovář"],"min":20.9,"pf":44,"pa":40,"ortg":113.5,"drtg":103.1,"net":10.3,"efg":47.1,"oefg":47.4,"to":17.2,"oto":16.3,"g":["Brno","Hradec"]},{"c":["Key","Lukeš"],"min":20.6,"pf":46,"pa":35,"ortg":113.9,"drtg":86.6,"net":27.2,"efg":47.5,"oefg":41.4,"to":22.0,"oto":27.6,"g":["Brno","Hradec"]},{"c":["Key","Moffatt"],"min":26.6,"pf":64,"pa":44,"ortg":124.4,"drtg":85.5,"net":38.9,"efg":53.8,"oefg":51.4,"to":19.1,"oto":25.7,"g":["Brno","Hradec"]},{"c":["Key","Stampley"],"min":17.8,"pf":37,"pa":37,"ortg":101.3,"drtg":101.3,"net":0.0,"efg":51.6,"oefg":56.7,"to":21.9,"oto":21.9,"g":["Brno","Hradec"]},{"c":["Key","Tůma"],"min":25.0,"pf":62,"pa":48,"ortg":128.7,"drtg":99.7,"net":29.1,"efg":51.1,"oefg":50.0,"to":20.2,"oto":25.6,"g":["Brno","Hradec"]},{"c":["Kovář","Lukeš"],"min":13.0,"pf":25,"pa":19,"ortg":102.6,"drtg":78.0,"net":24.6,"efg":52.6,"oefg":27.8,"to":19.6,"oto":21.6,"g":["Brno","Hradec"]},{"c":["Kovář","Moffatt"],"min":20.4,"pf":42,"pa":35,"ortg":104.8,"drtg":87.4,"net":17.5,"efg":48.5,"oefg":45.5,"to":17.7,"oto":27.1,"g":["Brno","Hradec"]},{"c":["Kovář","Stampley"],"min":26.6,"pf":56,"pa":70,"ortg":106.2,"drtg":132.7,"net":-26.5,"efg":50.0,"oefg":68.9,"to":17.1,"oto":20.8,"g":["Brno","Hradec"]},{"c":["Kovář","Tůma"],"min":21.2,"pf":43,"pa":49,"ortg":101.5,"drtg":115.6,"net":-14.2,"efg":43.9,"oefg":52.5,"to":16.7,"oto":18.6,"g":["Brno","Hradec"]},{"c":["Kovář","Švrdlík"],"min":23.6,"pf":52,"pa":56,"ortg":110.1,"drtg":118.5,"net":-8.5,"efg":59.3,"oefg":65.7,"to":17.5,"oto":26.7,"g":["Brno","Hradec"]},{"c":["Lukeš","Moffatt"],"min":24.4,"pf":42,"pa":43,"ortg":89.9,"drtg":92.0,"net":-2.1,"efg":35.0,"oefg":47.1,"to":22.0,"oto":27.1,"g":["Brno","Hradec"]},{"c":["Lukeš","Stampley"],"min":8.4,"pf":15,"pa":17,"ortg":79.0,"drtg":89.6,"net":-10.5,"efg":46.7,"oefg":36.7,"to":21.2,"oto":31.4,"g":["Brno","Hradec"]},{"c":["Lukeš","Tůma"],"min":25.1,"pf":53,"pa":45,"ortg":106.9,"drtg":90.7,"net":16.1,"efg":43.8,"oefg":40.2,"to":24.1,"oto":24.3,"g":["Brno","Hradec"]},{"c":["Lukeš","Vlk"],"min":5.3,"pf":8,"pa":12,"ortg":79.7,"drtg":119.5,"net":-39.8,"efg":25.0,"oefg":80.0,"to":29.1,"oto":30.7,"g":["Brno","Hradec"]},{"c":["Lukeš","Švrdlík"],"min":13.3,"pf":18,"pa":24,"ortg":71.1,"drtg":94.9,"net":-23.7,"efg":31.2,"oefg":38.1,"to":24.2,"oto":19.3,"g":["Brno","Hradec"]},{"c":["Moffatt","Stampley"],"min":21.4,"pf":45,"pa":39,"ortg":104.9,"drtg":90.9,"net":14.0,"efg":57.4,"oefg":41.7,"to":19.5,"oto":29.0,"g":["Brno","Hradec"]},{"c":["Moffatt","Tůma"],"min":30.5,"pf":63,"pa":52,"ortg":108.1,"drtg":89.2,"net":18.9,"efg":41.2,"oefg":45.5,"to":22.1,"oto":22.5,"g":["Brno","Hradec"]},{"c":["Moffatt","Vlk"],"min":9.1,"pf":18,"pa":18,"ortg":96.3,"drtg":96.3,"net":0.0,"efg":35.0,"oefg":46.7,"to":15.6,"oto":16.5,"g":["Brno","Hradec"]},{"c":["Moffatt","Švrdlík"],"min":26.6,"pf":47,"pa":48,"ortg":88.5,"drtg":90.4,"net":-1.9,"efg":42.0,"oefg":39.4,"to":21.7,"oto":25.2,"g":["Brno","Hradec"]},{"c":["Stampley","Tůma"],"min":13.0,"pf":17,"pa":35,"ortg":65.0,"drtg":133.9,"net":-68.9,"efg":27.3,"oefg":62.0,"to":19.6,"oto":14.9,"g":["Brno","Hradec"]},{"c":["Stampley","Švrdlík"],"min":23.8,"pf":53,"pa":57,"ortg":113.5,"drtg":122.1,"net":-8.6,"efg":57.0,"oefg":59.2,"to":13.0,"oto":25.4,"g":["Brno","Hradec"]},{"c":["Tůma","Vlk"],"min":7.1,"pf":11,"pa":14,"ortg":83.0,"drtg":105.6,"net":-22.6,"efg":30.0,"oefg":50.0,"to":22.5,"oto":22.7,"g":["Brno","Hradec"]},{"c":["Tůma","Švrdlík"],"min":16.4,"pf":21,"pa":34,"ortg":64.5,"drtg":104.4,"net":-39.9,"efg":25.0,"oefg":44.8,"to":19.1,"oto":11.9,"g":["Brno","Hradec"]}],"c3":[{"c":["Bonham","Bryant","Kovář"],"min":17.5,"pf":44,"pa":38,"ortg":132.8,"drtg":114.7,"net":18.1,"efg":60.9,"oefg":76.1,"to":17.8,"oto":21.4,"g":["Brno","Hradec"]},{"c":["Bonham","Bryant","Moffatt"],"min":16.3,"pf":42,"pa":27,"ortg":127.2,"drtg":81.8,"net":45.4,"efg":65.4,"oefg":45.0,"to":18.8,"oto":20.5,"g":["Brno","Hradec"]},{"c":["Bonham","Bryant","Stampley"],"min":20.2,"pf":57,"pa":43,"ortg":146.3,"drtg":110.4,"net":35.9,"efg":69.4,"oefg":65.5,"to":17.9,"oto":23.2,"g":["Brno","Hradec"]},{"c":["Bonham","Bryant","Švrdlík"],"min":16.7,"pf":43,"pa":33,"ortg":134.5,"drtg":103.2,"net":31.3,"efg":67.9,"oefg":57.4,"to":25.6,"oto":27.5,"g":["Brno","Hradec"]},{"c":["Bonham","Kovář","Stampley"],"min":17.2,"pf":43,"pa":46,"ortg":128.4,"drtg":137.4,"net":-9.0,"efg":56.9,"oefg":76.9,"to":11.8,"oto":24.2,"g":["Brno","Hradec"]},{"c":["Bonham","Kovář","Švrdlík"],"min":18.8,"pf":44,"pa":44,"ortg":120.1,"drtg":120.1,"net":0.0,"efg":58.3,"oefg":66.1,"to":14.3,"oto":28.6,"g":["Brno","Hradec"]},{"c":["Bonham","Moffatt","Stampley"],"min":15.9,"pf":38,"pa":28,"ortg":116.9,"drtg":86.1,"net":30.8,"efg":64.0,"oefg":42.0,"to":16.1,"oto":35.3,"g":["Brno","Hradec"]},{"c":["Bonham","Moffatt","Švrdlík"],"min":18.1,"pf":35,"pa":32,"ortg":99.5,"drtg":91.0,"net":8.5,"efg":43.1,"oefg":37.9,"to":18.3,"oto":29.3,"g":["Brno","Hradec"]},{"c":["Bonham","Stampley","Švrdlík"],"min":21.6,"pf":53,"pa":46,"ortg":128.3,"drtg":111.4,"net":16.9,"efg":61.8,"oefg":55.9,"to":14.6,"oto":28.9,"g":["Brno","Hradec"]},{"c":["Bryant","Key","Moffatt"],"min":16.8,"pf":47,"pa":30,"ortg":138.4,"drtg":88.3,"net":50.1,"efg":65.2,"oefg":54.0,"to":20.7,"oto":17.6,"g":["Brno","Hradec"]},{"c":["Bryant","Kovář","Stampley"],"min":15.6,"pf":36,"pa":42,"ortg":126.7,"drtg":147.8,"net":-21.1,"efg":56.9,"oefg":84.1,"to":14.4,"oto":17.2,"g":["Brno","Hradec"]},{"c":["Bryant","Kovář","Švrdlík"],"min":14.6,"pf":35,"pa":31,"ortg":123.8,"drtg":109.7,"net":14.2,"efg":68.0,"oefg":79.4,"to":25.1,"oto":31.4,"g":["Brno","Hradec"]},{"c":["Bryant","Moffatt","Tůma"],"min":13.5,"pf":36,"pa":22,"ortg":131.6,"drtg":80.4,"net":51.2,"efg":59.3,"oefg":47.5,"to":24.3,"oto":19.3,"g":["Brno","Hradec"]},{"c":["Bryant","Moffatt","Švrdlík"],"min":12.5,"pf":27,"pa":17,"ortg":110.3,"drtg":69.4,"net":40.8,"efg":61.8,"oefg":34.0,"to":29.1,"oto":24.1,"g":["Brno","Hradec"]},{"c":["Bryant","Stampley","Švrdlík"],"min":13.7,"pf":36,"pa":32,"ortg":142.9,"drtg":127.0,"net":15.9,"efg":67.4,"oefg":70.0,"to":19.8,"oto":23.8,"g":["Brno","Hradec"]},{"c":["Key","Kovář","Tůma"],"min":13.2,"pf":31,"pa":26,"ortg":121.8,"drtg":102.1,"net":19.6,"efg":47.6,"oefg":46.2,"to":15.4,"oto":24.1,"g":["Brno","Hradec"]},{"c":["Key","Lukeš","Moffatt"],"min":15.4,"pf":34,"pa":24,"ortg":117.8,"drtg":83.2,"net":34.7,"efg":46.9,"oefg":50.0,"to":20.9,"oto":31.1,"g":["Brno","Hradec"]},{"c":["Key","Lukeš","Tůma"],"min":18.5,"pf":46,"pa":33,"ortg":124.7,"drtg":89.4,"net":35.2,"efg":54.3,"oefg":40.3,"to":23.7,"oto":27.9,"g":["Brno","Hradec"]},{"c":["Key","Moffatt","Tůma"],"min":17.1,"pf":44,"pa":30,"ortg":136.7,"drtg":93.2,"net":43.5,"efg":50.0,"oefg":57.1,"to":21.0,"oto":29.1,"g":["Brno","Hradec"]},{"c":["Kovář","Stampley","Švrdlík"],"min":14.7,"pf":36,"pa":41,"ortg":119.8,"drtg":136.5,"net":-16.6,"efg":59.4,"oefg":73.9,"to":10.0,"oto":26.6,"g":["Brno","Hradec"]},{"c":["Lukeš","Moffatt","Tůma"],"min":19.1,"pf":39,"pa":32,"ortg":106.7,"drtg":87.5,"net":19.1,"efg":41.0,"oefg":45.8,"to":24.6,"oto":27.3,"g":["Brno","Hradec"]},{"c":["Moffatt","Stampley","Švrdlík"],"min":12.3,"pf":24,"pa":26,"ortg":99.4,"drtg":107.7,"net":-8.3,"efg":55.6,"oefg":45.2,"to":17.3,"oto":31.7,"g":["Brno","Hradec"]},{"c":["Moffatt","Tůma","Švrdlík"],"min":13.4,"pf":19,"pa":22,"ortg":72.7,"drtg":84.2,"net":-11.5,"efg":27.3,"oefg":34.8,"to":23.6,"oto":14.9,"g":["Brno","Hradec"]}],"c5":[{"c":["Bonham","Bryant","Key","Kovář","Stampley"],"min":3.6,"pf":7,"pa":10,"ortg":109.7,"drtg":156.7,"net":-47.0,"efg":35.7,"oefg":90.0,"to":14.5,"oto":0.0,"g":["Brno","Hradec"]},{"c":["Bonham","Bryant","Key","Moffatt","Stampley"],"min":4.6,"pf":14,"pa":8,"ortg":135.7,"drtg":77.5,"net":58.1,"efg":77.8,"oefg":50.0,"to":10.0,"oto":28.2,"g":["Brno"]},{"c":["Bonham","Bryant","Kovář","Stampley","Švrdlík"],"min":7.3,"pf":23,"pa":20,"ortg":162.4,"drtg":141.2,"net":21.2,"efg":71.9,"oefg":100.0,"to":14.3,"oto":27.9,"g":["Brno","Hradec"]},{"c":["Bonham","Bryant","Moffatt","Stampley","Švrdlík"],"min":4.7,"pf":13,"pa":5,"ortg":160.5,"drtg":61.7,"net":98.8,"efg":100.0,"oefg":27.8,"to":36.6,"oto":25.0,"g":["Hradec"]},{"c":["Bonham","Kovář","Moffatt","Stampley","Švrdlík"],"min":3.1,"pf":7,"pa":10,"ortg":100.0,"drtg":142.9,"net":-42.9,"efg":58.3,"oefg":66.7,"to":16.7,"oto":50.0,"g":["Hradec"]},{"c":["Bryant","Key","Kovář","Stampley","Tůma"],"min":2.8,"pf":6,"pa":7,"ortg":135.1,"drtg":157.7,"net":-22.5,"efg":62.5,"oefg":87.5,"to":0.0,"oto":20.0,"g":["Brno","Hradec"]},{"c":["Bryant","Key","Lukeš","Moffatt","Tůma"],"min":7.3,"pf":23,"pa":13,"ortg":150.7,"drtg":85.2,"net":65.5,"efg":58.3,"oefg":50.0,"to":25.0,"oto":13.8,"g":["Hradec"]},{"c":["Key","Lukeš","Moffatt","Tůma","Vlk"],"min":2.8,"pf":5,"pa":9,"ortg":101.2,"drtg":182.2,"net":-81.0,"efg":33.3,"oefg":150.0,"to":18.4,"oto":45.0,"g":["Brno","Hradec"]},{"c":["Lukeš","Moffatt","Tůma","Vlk","Švrdlík"],"min":2.5,"pf":3,"pa":3,"ortg":58.8,"drtg":58.8,"net":0.0,"efg":16.7,"oefg":33.3,"to":41.0,"oto":18.8,"g":["Brno"]}]},"adv":[{"p":"Moffatt","min":75.6,"ts":49.4,"efg":47.9,"usg":14.5,"ast_to":5.0,"pts40":13.2,"reb40":7.4,"ast40":2.6,"to40":0.5,"stl40":3.2,"pf40":2.6,"fd40":2.1,"tpar":88.0,"ftr":12.0,"ppp":0.95},{"p":"Bonham","min":70.3,"ts":65.1,"efg":59.7,"usg":28.5,"ast_to":1.44,"pts40":29.6,"reb40":6.3,"ast40":7.4,"to40":5.1,"stl40":4.5,"pf40":2.3,"fd40":8.0,"tpar":58.0,"ftr":25.0,"ppp":1.06},{"p":"Bryant","min":69.2,"ts":49.9,"efg":45.2,"usg":25.0,"ast_to":2.0,"pts40":19.7,"reb40":6.9,"ast40":9.3,"to40":4.6,"stl40":5.2,"pf40":4.0,"fd40":3.5,"tpar":35.0,"ftr":23.0,"ppp":0.81},{"p":"Kovář","min":66.0,"ts":74.7,"efg":76.3,"usg":15.0,"ast_to":2.33,"pts40":18.8,"reb40":7.9,"ast40":4.2,"to40":1.8,"stl40":3.0,"pf40":3.6,"fd40":3.6,"tpar":58.0,"ftr":21.0,"ppp":1.3},{"p":"Stampley","min":61.7,"ts":58.7,"efg":61.8,"usg":14.0,"ast_to":1.33,"pts40":13.6,"reb40":4.5,"ast40":2.6,"to40":1.9,"stl40":0.6,"pf40":2.6,"fd40":1.9,"tpar":82.0,"ftr":12.0,"ppp":1.01},{"p":"Key","min":59.8,"ts":71.5,"efg":68.4,"usg":22.5,"ast_to":0.12,"pts40":24.1,"reb40":7.4,"ast40":0.7,"to40":5.4,"stl40":1.3,"pf40":6.7,"fd40":6.7,"tpar":5.0,"ftr":74.0,"ppp":1.09},{"p":"Švrdlík","min":53.3,"ts":61.8,"efg":52.9,"usg":20.0,"ast_to":0.0,"pts40":20.3,"reb40":18.0,"ast40":0.0,"to40":3.0,"stl40":3.0,"pf40":6.8,"fd40":4.5,"tpar":12.0,"ftr":65.0,"ppp":1.04},{"p":"Lukeš","min":52.4,"ts":49.8,"efg":44.1,"usg":19.5,"ast_to":1.0,"pts40":15.3,"reb40":7.6,"ast40":3.8,"to40":3.8,"stl40":3.8,"pf40":3.8,"fd40":3.8,"tpar":29.0,"ftr":41.0,"ppp":0.8},{"p":"Tůma","min":52.1,"ts":32.2,"efg":30.0,"usg":21.0,"ast_to":0.8,"pts40":10.7,"reb40":3.1,"ast40":3.1,"to40":3.8,"stl40":0.8,"pf40":1.5,"fd40":6.1,"tpar":65.0,"ftr":20.0,"ppp":0.52},{"p":"Vlk","min":26.1,"ts":59.5,"efg":50.0,"usg":12.5,"ast_to":0.5,"pts40":10.7,"reb40":6.1,"ast40":1.5,"to40":3.1,"stl40":0.0,"pf40":12.3,"fd40":1.5,"tpar":80.0,"ftr":40.0,"ppp":0.89}],"extra":[{"g":"Brno","runP":{"pts":11,"from_":"51:56","to":"62:56","per":3,"gt":"01:25","per2":4,"gt2":"09:06"},"runO":{"pts":10,"from_":"46:36","to":"46:46","per":3,"gt":"06:23","per2":3,"gt2":"05:11"},"last5":[18,11],"first3":[[7,6],[9,3],[7,4],[12,6]],"last3":[[7,3],[3,11],[4,3],[10,8]],"lead":29.8,"olead":9.5,"big":13,"obig":5,"lc":9,"ties":4,"astr":66.7,"oastr":67.9,"blkd":7,"fouls":24,"ofouls":25},{"g":"Olomoucko","runP":{"pts":20,"from_":"43:30","to":"63:30","per":3,"gt":"07:41","per2":3,"gt2":"04:20"},"runO":{"pts":6,"from_":"35:24","to":"35:28","per":2,"gt":"00:41","per2":2,"gt2":"00:15"},"last5":[10,10],"first3":[[7,2],[4,2],[16,2],[12,0]],"last3":[[5,6],[5,6],[7,5],[8,6]],"lead":38.7,"olead":0,"big":46,"obig":0,"lc":0,"ties":1,"astr":63.9,"oastr":57.1,"blkd":4,"fouls":22,"ofouls":23},{"g":"Hradec","runP":{"pts":11,"from_":"12:25","to":"23:25","per":1,"gt":"03:19","per2":1,"gt2":"02:01"},"runO":{"pts":15,"from_":"10:9","to":"10:22","per":1,"gt":"06:24","per2":1,"gt2":"04:07"},"last5":[9,2],"first3":[[6,6],[7,11],[10,12],[7,8]],"last3":[[12,4],[19,23],[7,1],[3,2]],"lead":17.7,"olead":17.6,"big":11,"obig":13,"lc":14,"ties":11,"astr":50.0,"oastr":76.7,"blkd":4,"fouls":17,"ofouls":17}]};
+(function () {
+  const fmt = (v, d = 1) => v == null ? '–' : v.toFixed(d).replace('.', ',').replace('-', '−');
+  const sgn = (v, d = 1) => v == null ? '–' : (v > 0 ? '+' : '') + fmt(v, d);
+  const cls = v => v == null ? '' : v > 0 ? 'pos' : v < 0 ? 'neg' : '';
+  const ORDER = ['Bryant', 'Bonham', 'Key', 'Moffatt', 'Kovář', 'Stampley', 'Švrdlík', 'Lukeš', 'Tůma', 'Vlk'];
+  const tint = (net, min) => {
+    const a = Math.min(1, Math.abs(net) / 60) * Math.min(1, min / 30) * 70 + 8;
+    return 'color-mix(in srgb, var(' + (net >= 0 ? '--good' : '--bad') + ') ' + a.toFixed(0) + '%, var(--panel))';
+  };
+  let set = 'close';
+
+  function onoff() {
+    const rows = LU[set].onoff.map(r => ({ ...r, d: (r.on.net ?? 0) - (r.off.net ?? 0) })).sort((a, b) => b.d - a.d);
+    const max = Math.max(...rows.map(r => Math.abs(r.d)));
+    document.querySelector('#onoff tbody').innerHTML = rows.map(r => {
+      const w = 50 * Math.abs(r.d) / max;
+      const bar = '<div class="dbar"><i style="' + (r.d >= 0 ? 'left:50%' : 'right:50%') + ';width:' + w + '%;background:var(' + (r.d >= 0 ? '--good' : '--bad') + ')"></i></div>';
+      return '<tr><td class="nm">' + r.p + '</td><td class="n">' + fmt(r.on.min, 0) + '</td><td class="n">' + r.on.pf + ':' + r.on.pa + '</td><td class="n">' + fmt(r.on.ortg) + '</td><td class="n">' + fmt(r.on.drtg) + '</td><td class="n ' + cls(r.on.net) + '">' + sgn(r.on.net) + '</td><td class="n ' + cls(r.off.net) + '">' + sgn(r.off.net) + '</td><td class="n ' + cls(r.d) + '"><b>' + sgn(r.d) + '</b></td><td class="barcol">' + bar + '</td></tr>';
+    }).join('');
+  }
+
+  function matrix() {
+    const pairs = {};
+    LU[set].c2.forEach(r => { pairs[r.c.slice().sort().join('|')] = r; });
+    const P = ORDER.filter(p => LU[set].onoff.some(r => r.p === p));
+    const el = document.getElementById('matrix');
+    el.style.gridTemplateColumns = 'max-content repeat(' + P.length + ', minmax(52px, 1fr))';
+    let h = '<div></div>' + P.map(p => '<div class="hd">' + p + '</div>').join('');
+    P.forEach((a, i) => {
+      h += '<div class="rh">' + a + '</div>';
+      P.forEach((b, j) => {
+        if (a === b) { h += '<div class="cell self" aria-hidden="true"></div>'; return; }
+        const r = pairs[[a, b].sort().join('|')];
+        if (!r) { h += '<div class="cell empty" title="' + a + ' + ' + b + ': spolu méně než 5 minut">·</div>'; return; }
+        const tip = a + ' + ' + b + ': ' + fmt(r.min) + ' min, skóre ' + r.pf + ':' + r.pa + ', útok ' + fmt(r.ortg) + ', obrana ' + fmt(r.drtg) + ', eFG ' + fmt(r.efg) + ' / soupeř ' + fmt(r.oefg);
+        h += '<div class="cell" tabindex="0" title="' + tip + '" aria-label="' + tip + '" style="background:' + tint(r.net, r.min) + '"><b>' + sgn(r.net, 0) + '</b><small>' + fmt(r.min, 0) + ' min</small></div>';
+      });
+    });
+    el.innerHTML = h;
+  }
+
+  function trios() {
+    const L = LU[set].c3.slice().sort((a, b) => b.net - a.net);
+    const row = r => '<tr><td class="lu">' + r.c.join(' – ') + '</td><td class="n">' + fmt(r.min) + '</td><td class="n">' + r.pf + ':' + r.pa + '</td><td class="n ' + cls(r.net) + '"><b>' + sgn(r.net) + '</b></td><td class="n">' + fmt(r.efg, 0) + ' / ' + fmt(r.oefg, 0) + '</td></tr>';
+    document.querySelector('#trios-top tbody').innerHTML = L.slice(0, 6).map(row).join('');
+    document.querySelector('#trios-bot tbody').innerHTML = L.slice(-6).reverse().map(row).join('');
+  }
+
+  function fives() {
+    const L = LU[set].c5.slice().sort((a, b) => b.min - a.min);
+    document.querySelector('#fives tbody').innerHTML = L.map(r => '<tr><td class="lu">' + r.c.join(', ') + '</td><td>' + r.g.map(g => '<span class="gtag">' + g + '</span>').join('') + '</td><td class="n">' + fmt(r.min) + '</td><td class="n">' + r.pf + ':' + r.pa + '</td><td class="n">' + fmt(r.ortg, 0) + '</td><td class="n">' + fmt(r.drtg, 0) + '</td><td class="n ' + cls(r.net) + '"><b>' + sgn(r.net, 0) + '</b></td><td class="n">' + fmt(r.oefg, 0) + '</td></tr>').join('');
+  }
+
+  function note() {
+    const t = LU[set].team;
+    document.getElementById('setnote').textContent = 'Tým celkem: ' + fmt(t.min, 0) + ' min, útok ' + fmt(t.ortg) + ', obrana ' + fmt(t.drtg) + ', net ' + sgn(t.net);
+  }
+
+  function adv() {
+    const hi = { ts: [60, 45], efg: [55, 42], ppp: [1.05, 0.8] };
+    const c = (k, v) => hi[k] ? (v >= hi[k][0] ? 'hl-good' : v < hi[k][1] ? 'hl-bad' : '') : '';
+    document.querySelector('#adv tbody').innerHTML = LU.adv.map(r => '<tr><td class="nm">' + r.p + '</td><td class="n">' + fmt(r.min, 0) + '</td><td class="n ' + c('ts', r.ts) + '">' + fmt(r.ts) + '</td><td class="n ' + c('efg', r.efg) + '">' + fmt(r.efg) + '</td><td class="n">' + fmt(r.usg) + '</td><td class="n ' + c('ppp', r.ppp) + '">' + fmt(r.ppp, 2) + '</td><td class="n">' + fmt(r.ast_to, 1) + '</td><td class="n">' + fmt(r.pts40) + '</td><td class="n">' + fmt(r.reb40) + '</td><td class="n">' + fmt(r.ast40) + '</td><td class="n">' + fmt(r.to40) + '</td><td class="n">' + fmt(r.stl40) + '</td><td class="n' + (r.pf40 >= 6 ? ' hl-bad' : '') + '">' + fmt(r.pf40) + '</td><td class="n">' + fmt(r.tpar, 0) + '</td><td class="n">' + fmt(r.ftr, 0) + '</td></tr>').join('');
+  }
+
+  function segs() {
+    const sum = a => a.reduce((s, x) => [s[0] + x[0], s[1] + x[1]], [0, 0]);
+    const cell = ([a, b]) => '<td class="n ' + cls(a - b) + '">' + a + ':' + b + ' <span class="muted">(' + sgn(a - b, 0) + ')</span></td>';
+    document.getElementById('segs').innerHTML = LU.extra.map(x => '<tr><td>' + x.g + '</td>' + cell(sum(x.first3)) + cell(sum(x.last3)) + cell(x.last5) + '</tr>').join('');
+  }
+
+  function render() { note(); onoff(); matrix(); trios(); fives(); }
+  document.querySelectorAll('.segbtn').forEach(b => b.addEventListener('click', () => {
+    set = b.dataset.set;
+    document.querySelectorAll('.segbtn').forEach(x => x.setAttribute('aria-pressed', x === b));
+    render();
+  }));
+  render(); adv(); segs();
+})();
+
+</script>
+
+</body>
+</html>
