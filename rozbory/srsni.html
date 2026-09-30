@@ -196,7 +196,11 @@ footer { font-size: .85rem; color: var(--muted); max-width: 72ch; }
     </div>
     <div class="panel scroll">
       <h3>Dvojice</h3>
-      <p class="muted small">Net rating dvojice na hřišti. Zelená = dvojice vyhrává, červená = prohrává, sytost odpovídá rozdílu a odehraným minutám. Prázdné pole = spolu méně než 5 minut. Na buňku najeďte pro detail.</p>
+      <div class="seg" role="group" aria-label="Jednotka" style="margin:8px 0 10px">
+        <button type="button" class="mbtn segbtn" data-mode="rtg" aria-pressed="true">Na 100 držení</button>
+        <button type="button" class="mbtn segbtn" data-mode="pm" aria-pressed="false">Skutečné +/−</button>
+      </div>
+      <p class="muted small" id="mdesc"></p>
       <div id="matrix" class="matrix"></div>
     </div>
     <div class="two-eq">
@@ -339,7 +343,11 @@ const NOTES={"M. Svoboda": "Nejlepší hráč: v každém zápase 19–23 bodů.
   // lineups
   const ORDER = D.all.onoff.slice().sort((a, b) => b.on.min - a.on.min).map(r => r.p);
   const tint = (net, min) => 'color-mix(in srgb, var(' + (net >= 0 ? '--good' : '--bad') + ') ' + (Math.min(1, Math.abs(net) / 60) * Math.min(1, min / 30) * 60 + 6).toFixed(0) + '%, var(--panel))';
-  let set = 'close';
+  let set = 'close', mode = 'rtg';
+  const MDESC = {
+    rtg: 'Net rating dvojice: rozdíl skóre přepočtený na 100 držení, takže se dají srovnat dvojice s různými minutami. U krátkých vzorků (pod 15 minut) ale jeden koš pohne číslem o 10 i víc bodů.',
+    pm: 'Skutečný rozdíl skóre, když byla dvojice spolu na hřišti (body dané minus obdržené), bez přepočtu. Ukazuje, kolik dvojice reálně vyhrála nebo prohrála, a malé vzorky nezveličuje.'
+  };
   function lineups() {
     const S = D[set], t = S.team;
     $('#setnote').textContent = 'Tým celkem: ' + fmt(t.min, 0) + ' min, útok ' + fmt(t.ortg) + ', obrana ' + fmt(t.drtg) + ', net ' + sgn(t.net);
@@ -348,6 +356,7 @@ const NOTES={"M. Svoboda": "Nejlepší hráč: v každém zápase 19–23 bodů.
     $('#onoff tbody').innerHTML = rows.map(r => '<tr><td class="nm">' + r.p + '</td><td class="n">' + fmt(r.on.min, 0) + '</td><td class="n">' + r.on.pf + ':' + r.on.pa + '</td><td class="n">' + fmt(r.on.ortg) + '</td><td class="n">' + fmt(r.on.drtg) + '</td><td class="n ' + cls(r.on.net) + '">' + sgn(r.on.net) + '</td><td class="n ' + cls(r.off.net) + '">' + sgn(r.off.net) + '</td><td class="n ' + cls(r.d) + '"><b>' + sgn(r.d) + '</b></td><td class="barcol"><div class="dbar"><i style="' + (r.d >= 0 ? 'left:50%' : 'right:50%') + ';width:' + (50 * Math.abs(r.d) / mx) + '%;background:var(' + (r.d >= 0 ? '--good' : '--bad') + ')"></i></div></td></tr>').join('');
     const pairs = {}; S.c2.forEach(r => { pairs[r.c.slice().sort().join('|')] = r; });
     const PL = ORDER.filter(p => S.onoff.some(r => r.p === p));
+    $('#mdesc').textContent = MDESC[mode] + ' Zelená = dvojice vyhrává, červená = prohrává. Prázdné pole = spolu méně než 5 minut. Na buňku najeďte pro detail.';
     const m = $('#matrix'); m.style.gridTemplateColumns = 'max-content repeat(' + PL.length + ', minmax(54px, 1fr))';
     let h = '<div></div>' + PL.map(p => '<div class="hd">' + p + '</div>').join('');
     PL.forEach(a => { h += '<div class="rh">' + a + '</div>'; PL.forEach(b => {
@@ -355,7 +364,10 @@ const NOTES={"M. Svoboda": "Nejlepší hráč: v každém zápase 19–23 bodů.
       const r = pairs[[a, b].sort().join('|')];
       if (!r) { h += '<div class="cell empty" title="' + a + ' + ' + b + ': spolu méně než 5 minut">·</div>'; return; }
       const tip = a + ' + ' + b + ': ' + fmt(r.min) + ' min, skóre ' + r.pf + ':' + r.pa + ', útok ' + fmt(r.ortg) + ', obrana ' + fmt(r.drtg) + ', eFG ' + fmt(r.efg) + ' / soupeř ' + fmt(r.oefg);
-      h += '<div class="cell" tabindex="0" title="' + tip + '" aria-label="' + tip + '" style="background:' + tint(r.net, r.min) + '"><b>' + sgn(r.net, 0) + '</b><small>' + fmt(r.min, 0) + ' min</small></div>'; }); });
+      const pmv = r.pf - r.pa;
+      const bg = mode === 'rtg' ? tint(r.net, r.min) : 'color-mix(in srgb, var(' + (pmv >= 0 ? '--good' : '--bad') + ') ' + (Math.min(1, Math.abs(pmv) / 20) * 60 + 6).toFixed(0) + '%, var(--panel))';
+      const tip2 = tip + ', rozdíl ' + sgn(pmv, 0) + ', na 100 držení ' + sgn(r.net, 0);
+      h += '<div class="cell" tabindex="0" title="' + tip2 + '" aria-label="' + tip2 + '" style="background:' + bg + '"><b>' + (mode === 'rtg' ? sgn(r.net, 0) : sgn(pmv, 0)) + '</b><small>' + (mode === 'rtg' ? fmt(r.min, 0) + ' min' : r.pf + ':' + r.pa) + '</small></div>'; }); });
     m.innerHTML = h;
     const tr = S.c3.filter(r => r.min >= 12).sort((a, b) => b.net - a.net);
     const row = r => '<tr><td class="lu">' + r.c.join(' – ') + '</td><td class="n">' + fmt(r.min) + '</td><td class="n">' + r.pf + ':' + r.pa + '</td><td class="n ' + cls(r.net) + '"><b>' + sgn(r.net) + '</b></td><td class="n">' + fmt(r.efg, 0) + ' / ' + fmt(r.oefg, 0) + '</td></tr>';
@@ -363,7 +375,8 @@ const NOTES={"M. Svoboda": "Nejlepší hráč: v každém zápase 19–23 bodů.
     $('#trios-bot tbody').innerHTML = tr.slice(-6).reverse().map(row).join('');
     $('#fives tbody').innerHTML = S.c5.slice().sort((a, b) => b.min - a.min).map(r => '<tr><td class="lu">' + r.c.join(', ') + '</td><td>' + r.g.map(x => '<span class="gtag">' + L(x) + '</span>').join('') + '</td><td class="n">' + fmt(r.min) + '</td><td class="n">' + r.pf + ':' + r.pa + '</td><td class="n">' + fmt(r.ortg, 0) + '</td><td class="n">' + fmt(r.drtg, 0) + '</td><td class="n ' + cls(r.net) + '"><b>' + sgn(r.net, 0) + '</b></td><td class="n">' + fmt(r.efg, 0) + ' / ' + fmt(r.oefg, 0) + '</td></tr>').join('');
   }
-  document.querySelectorAll('.segbtn').forEach(b => b.addEventListener('click', () => { set = b.dataset.set; document.querySelectorAll('.segbtn').forEach(x => x.setAttribute('aria-pressed', x === b)); lineups(); }));
+  document.querySelectorAll('.segbtn[data-set]').forEach(b => b.addEventListener('click', () => { set = b.dataset.set; document.querySelectorAll('.segbtn[data-set]').forEach(x => x.setAttribute('aria-pressed', x === b)); lineups(); }));
+  document.querySelectorAll('.mbtn').forEach(b => b.addEventListener('click', () => { mode = b.dataset.mode; document.querySelectorAll('.mbtn').forEach(x => x.setAttribute('aria-pressed', x === b)); lineups(); }));
   lineups();
 
   // advanced
