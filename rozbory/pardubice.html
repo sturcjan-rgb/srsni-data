@@ -300,7 +300,11 @@ td.lu { white-space: nowrap; font-weight: 600; }
 
     <div class="panel scroll">
       <h3>Dvojice</h3>
-      <p class="muted small">Net rating dvojice na hřišti (body na 100 držení). Zelená = dvojice vyhrává, červená = prohrává, sytost barvy odpovídá odehraným minutám. Prázdné pole = spolu méně než 5 minut. Na buňku najeďte pro detail.</p>
+      <div class="seg" role="group" aria-label="Jednotka" style="margin:8px 0 10px">
+        <button type="button" class="mbtn segbtn" data-mode="rtg" aria-pressed="true">Na 100 držení</button>
+        <button type="button" class="mbtn segbtn" data-mode="pm" aria-pressed="false">Skutečné +/−</button>
+      </div>
+      <p class="muted small" id="mdesc"></p>
       <div id="matrix" class="matrix"></div>
     </div>
 
@@ -488,7 +492,11 @@ const LU={"all":{"team":{"min":120.0,"pf":273,"pa":211,"poss":246.6,"ortg":110.7
     const a = Math.min(1, Math.abs(net) / 60) * Math.min(1, min / 30) * 70 + 8;
     return 'color-mix(in srgb, var(' + (net >= 0 ? '--good' : '--bad') + ') ' + a.toFixed(0) + '%, var(--panel))';
   };
-  let set = 'close';
+  let set = 'close', mode = 'rtg';
+  const MDESC = {
+    rtg: 'Net rating dvojice: rozdíl skóre přepočtený na 100 držení, takže se dají srovnat dvojice s různými minutami. U krátkých vzorků (pod 15 minut) ale jeden koš pohne číslem o 10 i víc bodů.',
+    pm: 'Skutečný rozdíl skóre, když byla dvojice spolu na hřišti (body dané minus obdržené), bez přepočtu. Ukazuje, kolik dvojice reálně vyhrála nebo prohrála, a malé vzorky nezveličuje.'
+  };
 
   function onoff() {
     const rows = LU[set].onoff.map(r => ({ ...r, d: (r.on.net ?? 0) - (r.off.net ?? 0) })).sort((a, b) => b.d - a.d);
@@ -504,6 +512,7 @@ const LU={"all":{"team":{"min":120.0,"pf":273,"pa":211,"poss":246.6,"ortg":110.7
     const pairs = {};
     LU[set].c2.forEach(r => { pairs[r.c.slice().sort().join('|')] = r; });
     const P = ORDER.filter(p => LU[set].onoff.some(r => r.p === p));
+    document.getElementById('mdesc').textContent = MDESC[mode] + ' Zelená = dvojice vyhrává, červená = prohrává. Prázdné pole = spolu méně než 5 minut. Na buňku najeďte pro detail.';
     const el = document.getElementById('matrix');
     el.style.gridTemplateColumns = 'max-content repeat(' + P.length + ', minmax(52px, 1fr))';
     let h = '<div></div>' + P.map(p => '<div class="hd">' + p + '</div>').join('');
@@ -514,7 +523,10 @@ const LU={"all":{"team":{"min":120.0,"pf":273,"pa":211,"poss":246.6,"ortg":110.7
         const r = pairs[[a, b].sort().join('|')];
         if (!r) { h += '<div class="cell empty" title="' + a + ' + ' + b + ': spolu méně než 5 minut">·</div>'; return; }
         const tip = a + ' + ' + b + ': ' + fmt(r.min) + ' min, skóre ' + r.pf + ':' + r.pa + ', útok ' + fmt(r.ortg) + ', obrana ' + fmt(r.drtg) + ', eFG ' + fmt(r.efg) + ' / soupeř ' + fmt(r.oefg);
-        h += '<div class="cell" tabindex="0" title="' + tip + '" aria-label="' + tip + '" style="background:' + tint(r.net, r.min) + '"><b>' + sgn(r.net, 0) + '</b><small>' + fmt(r.min, 0) + ' min</small></div>';
+        const pmv = r.pf - r.pa;
+        const bg = mode === 'rtg' ? tint(r.net, r.min) : 'color-mix(in srgb, var(' + (pmv >= 0 ? '--good' : '--bad') + ') ' + (Math.min(1, Math.abs(pmv) / 20) * 70 + 8).toFixed(0) + '%, var(--panel))';
+        const tip2 = tip + ', rozdíl ' + sgn(pmv, 0) + ', na 100 držení ' + sgn(r.net, 0);
+        h += '<div class="cell" tabindex="0" title="' + tip2 + '" aria-label="' + tip2 + '" style="background:' + bg + '"><b>' + (mode === 'rtg' ? sgn(r.net, 0) : sgn(pmv, 0)) + '</b><small>' + (mode === 'rtg' ? fmt(r.min, 0) + ' min' : r.pf + ':' + r.pa) + '</small></div>';
       });
     });
     el.innerHTML = h;
@@ -550,10 +562,15 @@ const LU={"all":{"team":{"min":120.0,"pf":273,"pa":211,"poss":246.6,"ortg":110.7
   }
 
   function render() { note(); onoff(); matrix(); trios(); fives(); }
-  document.querySelectorAll('.segbtn').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.segbtn[data-set]').forEach(b => b.addEventListener('click', () => {
     set = b.dataset.set;
-    document.querySelectorAll('.segbtn').forEach(x => x.setAttribute('aria-pressed', x === b));
+    document.querySelectorAll('.segbtn[data-set]').forEach(x => x.setAttribute('aria-pressed', x === b));
     render();
+  }));
+  document.querySelectorAll('.mbtn').forEach(b => b.addEventListener('click', () => {
+    mode = b.dataset.mode;
+    document.querySelectorAll('.mbtn').forEach(x => x.setAttribute('aria-pressed', x === b));
+    matrix();
   }));
   render(); adv(); segs();
 })();
