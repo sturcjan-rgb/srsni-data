@@ -410,13 +410,20 @@ async function loadMatchList(){
   }
 }
 
+// Přeposílač (workflow live-relay → větev „live“; FIBA sama CORS nepovoluje). Soubory po 5s oknech
+// obcházejí 5min cache raw.githubusercontent.com; fallback je poslední uložený stav <id>.json.
+const RELAY_RAW='https://raw.githubusercontent.com/sturcjan-rgb/srsni-data/live/';
+function relayUrls(id){
+  const b=Math.floor(Date.now()/5000);
+  return [2,3,4,5].map(k=>RELAY_RAW+id+'/'+(b-k)+'.json').concat(RELAY_RAW+id+'.json');
+}
 async function loadById(id,quiet,silent){
   if(!/^\d+$/.test(id)){ if(!silent){$('hint').textContent='';showErr('Zadej platné ID zápasu (jen čísla).');} return; }
   currentId=id;
   if(!silent){ showErr(''); $('hint').textContent='Načítám…'; }
   const archive=`https://sturcjan-rgb.github.io/srsni-truth/matches/${id}.json`;
   const live=`https://fibalivestats.dcd.shared.geniussports.com/data/${id}/data.json`;
-  const liveTries=['https://api.codetabs.com/v1/proxy/?quest='+live, live, 'https://corsproxy.io/?url='+encodeURIComponent(live)];
+  const liveTries=[...relayUrls(id),'https://api.codetabs.com/v1/proxy/?quest='+live, live, 'https://corsproxy.io/?url='+encodeURIComponent(live)];
   // Při živém pollování zkoušej nejdřív přímo FIBA (nejčerstvější), archiv jen jako fallback.
   // Jinak (ruční/výchozí načtení) nejdřív archiv (rychlý, spolehlivý, bez CORS proxy) -
   // FIBA přestává starší zápasy servirovat, takže archiv je pro ně jediná trvalá cesta.
@@ -424,7 +431,7 @@ async function loadById(id,quiet,silent){
   for(const u of tries){
     try{const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw 0;const j=decodeParse(await r.arrayBuffer());if(!j.tm)throw 0;render(j);
       const t=new Date().toLocaleTimeString('cs-CZ');
-      const src=u===archive?'archiv srsni-truth':'živě';
+      const src=u===archive?'archiv srsni-truth':u.startsWith(RELAY_RAW)?'živě · přeposílač':'živě';
       $('hint').textContent=(silent?'Aktualizováno':'Data načtena')+' ('+src+') · ID '+id+' · '+t;
       showErr('');return;}catch(e){}
   }
