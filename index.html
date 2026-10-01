@@ -176,12 +176,6 @@
   @media(max-width:520px){.factors{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.stat b{font-size:1.45rem}}
   .exp{font:600 .62rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink);background:var(--accent);padding:3px 6px;vertical-align:middle}
   table.at tr.tot td{border-top:2px solid var(--line);font-weight:600}
-  table.at td.c{position:relative}
-  table.at td.c i{position:absolute;left:10px;right:10px;bottom:3px;height:3px;background:var(--court)}
-  table.at td.c i b{display:block;height:100%;background:var(--bar,var(--accent))}
-  table.at small{color:var(--muted);font-size:.72rem;margin-left:4px}
-  canvas.scatter{width:100%;height:420px;display:block;background:var(--court)}
-  @media(max-width:600px){canvas.scatter{height:340px}}
   table.hm td.h{text-align:center;color:var(--ink)}
   table.hm td.h.z{color:var(--muted)}
   .tabs label{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:.86rem;cursor:pointer;margin-left:6px}
@@ -301,21 +295,11 @@
     </section>
 
     <section id="utok" data-label="Čas útoku">
-      <div class="sec-h"><h2>Body podle času útoku <span class="exp">experiment</span></h2><span class="sub">Kdo dal kolik bodů do 5, 10, 15 a 20 sekund útoku. Začátek útoku je odvozený z play-by-play (doskok v obraně, ztráta soupeře, jeho koš nebo poslední proměněná TH, rozskok, začátek čtvrtiny), čas se počítá z herních hodin.</span></div>
+      <div class="sec-h"><h2>Body podle času útoku <span class="exp">experiment</span></h2><span class="sub">Kdo dal kolik bodů v kterém pásmu útoku (0–5, 5–10, 10–15, 15–20, 20+ s). Začátek útoku je odvozený z play-by-play (doskok v obraně, ztráta soupeře, jeho koš nebo poslední proměněná TH, rozskok, začátek čtvrtiny), čas se počítá z herních hodin.</span></div>
       <div class="panel" style="display:grid;gap:12px">
         <div class="tabs"><span id="atTabs" class="tabs"></span><span class="sep"></span><label><input type="checkbox" id="atOreb" style="accent-color:var(--accent)"> doskok v útoku = nový útok</label></div>
-        <div class="tblwrap"><table class="at" id="atTable"></table></div>
-        <div class="caption" id="atNote"></div>
-      </div>
-      <div class="panel" style="display:grid;gap:10px">
-        <h3>Varianta C · body × rychlost</h3>
-        <canvas id="atScatter" class="scatter" aria-label="Bodový graf: počet bodů a průměrný čas útoku"></canvas>
-        <div class="caption" id="atScNote"></div>
-      </div>
-      <div class="panel" style="display:grid;gap:10px">
-        <h3>Varianta D · heatmapa podle pásem</h3>
         <div class="tblwrap"><table class="at hm" id="atHeat"></table></div>
-        <div class="caption">Pásma se nesčítají: každý bod je jen v jednom sloupci. Čím sytější buňka, tím víc bodů. Ø čas = průměrná sekunda útoku, ve které hráč skóroval (váženo body).</div>
+        <div class="caption" id="atNote"></div>
       </div>
     </section>
 
@@ -880,7 +864,6 @@ function drawPlayers(){
 /* ---------- body podle času útoku (experiment) ---------- */
 // Rekonstrukce držení z pbp: kdo má míč a od kdy (herní čas). Body se připíší s délkou útoku
 // v okamžiku akce (u TH čas faulu = čas TH). Hodiny mají rozlišení 1 s, takže hranice jsou ±1 s.
-const AT_CUTS=[5,10,15,20];
 function attackPoints(E,T,orebNew){
   const P={1:{},2:{}}, team={1:[0,0,0,0,0,0],2:[0,0,0,0,0,0]}; // [≤5, ≤10, ≤15, ≤20, >20, nezařazeno]
   const sec={1:{},2:{}}, tsec={1:[0,0],2:[0,0]}; // [Σ délka útoku × body, body se známým časem]
@@ -940,74 +923,15 @@ function setupAttackTabs(){
 }
 function drawAttack(){
   if(!STATE)return;
-  const t=ATteam, R=attackPoints(ENGINE,STATE.T,$('atOreb').checked), pls=ENGINE.tm[t].pl;
-  const cum=r=>{let c=0;return [0,1,2,3].map(i=>c+=r[i]);};
-  const tot=r=>r.reduce((a,b)=>a+b,0);
-  const col=t===1?'var(--home)':'var(--away)';
-  const rows=Object.entries(R.P[t]).filter(([p])=>p!=='0'&&p!=='undefined').map(([p,r])=>({p,r,c:cum(r),all:tot(r)}))
-    .filter(x=>x.all>0).sort((a,b)=>b.c[0]-a.c[0]||b.c[1]-a.c[1]||b.c[2]-a.c[2]||b.c[3]-a.c[3]||b.all-a.all);
-  const unk=R.team[t][5];
-  const th=['Hráč','do 5 s','do 10 s','do 15 s','do 20 s','nad 20 s','Celkem'];
-  const cell=(v,all)=>`<td class="c" style="--bar:${col}">${v}${all?`<small>${Math.round(100*v/all)}%</small>`:''}<i><b style="width:${all?100*v/all:0}%"></b></i></td>`;
-  const line=(name,c,r,all,cls)=>`<tr${cls?` class="${cls}"`:''}><td class="name">${name}</td>${c.map(v=>cell(v,all)).join('')}<td>${r[4]}</td><td style="font-weight:600">${all}</td></tr>`;
-  const tr=R.team[t], tc=cum(tr), tall=tot(tr);
-  $('atTable').innerHTML=`<thead><tr>${th.map((x,i)=>`<th${i===0?' style="text-align:left"':''}>${x}</th>`).join('')}</tr></thead><tbody>`+
-    (rows.map(x=>{const i=pls[x.p];return line(i?i.shirtNumber+' '+i.name:'#'+x.p,x.c,x.r,x.all);}).join('')||`<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">Zatím žádné body.</td></tr>`)+
-    line('Tým'+(unk?` <span class="sh">(${unk} b. nezařazeno)</span>`:''),tc,tr,tall,'tot')+'</tbody>';
-  drawAttackScatter(R,t,col);
+  const t=ATteam, R=attackPoints(ENGINE,STATE.T,$('atOreb').checked);
   drawAttackHeat(R,t);
-  const n=R.poss[t];
-  $('atNote').textContent=`Kumulativně: „do 10 s" zahrnuje i body do 5 s. Procento = podíl z bodů hráče. Útoků ${ENGINE.tm[t].shortName}: ~${n}${n?`, z toho bodů na útok ${f1(tall/n)}`:''}. `+
+  const n=R.poss[t], tall=R.team[t].reduce((a,b)=>a+b,0);
+  $('atNote').textContent=`Pásma se nesčítají: každý bod je jen v jednom sloupci. Čím sytější buňka, tím víc bodů. Ø čas = průměrná sekunda útoku, ve které hráč skóroval (váženo body). Útoků ${ENGINE.tm[t].shortName}: ~${n}${n?`, bodů na útok ${f1(tall/n)}`:''}. `+
     ($('atOreb').checked?'Doskok v útoku spouští nový útok (jako reset časomíry na 14 s). ':'Doskok v útoku pokračuje v témže útoku (čas běží od zisku míče). ')+
     `Nezařazeno = TH mimo vlastní útok (technické chyby apod.). Odhad: hodiny mají rozlišení 1 s a přesný okamžik zisku míče se z dat určit nedá${R.approx?`; ${R.approx}× musel být začátek útoku dopočten z chybějící změny držení`:''}. Stav k ${STATE.clock}.`;
 }
 
 const avgSec=q=>q&&q[1]?q[0]/q[1]:null;
-const AT_MINPTS=4;
-function drawAttackScatter(R,t,col){
-  const cv=$('atScatter'),dpr=window.devicePixelRatio||1,W=cv.clientWidth,H=cv.clientHeight;
-  if(!W)return;
-  cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
-  const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
-  const css=getComputedStyle(document.documentElement),C=v=>css.getPropertyValue(v).trim();
-  col=C(t===1?'--home':'--away');
-  const pls=ENGINE.tm[t].pl;
-  const pts=Object.entries(R.P[t]).filter(([p])=>pls[p]).map(([p,r])=>({p,pts:r.reduce((a,b)=>a+b,0),avg:avgSec(R.sec[t][p])}))
-    .filter(x=>x.pts>0&&x.avg!=null);
-  const ta=avgSec(R.tsec[t]);
-  const padL=44,padR=16,padT=26,padB=34,pw=W-padL-padR,ph=H-padT-padB;
-  const maxP=Math.max(10,...pts.map(x=>x.pts))+2, maxS=Math.max(20,...pts.map(x=>Math.ceil(x.avg/5)*5));
-  const X=v=>padL+pw*v/maxP, Y=v=>padT+ph*v/maxS; // nahoře 0 s = rychle
-  ctx.font='11px "IBM Plex Mono", monospace';ctx.lineWidth=1;
-  // pásma 5/10/15/20 s
-  for(let s=0;s<=maxS;s+=5){ctx.strokeStyle=C('--line');ctx.beginPath();ctx.moveTo(padL,Y(s));ctx.lineTo(W-padR,Y(s));ctx.stroke();
-    ctx.fillStyle=C('--muted');ctx.textAlign='right';ctx.textBaseline='middle';ctx.fillText(s+' s',padL-6,Y(s));}
-  const step=maxP>30?10:5;
-  for(let v=0;v<=maxP;v+=step){ctx.fillStyle=C('--muted');ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(v,X(v),padT+ph+6);}
-  ctx.textAlign='left';ctx.textBaseline='alphabetic';ctx.fillStyle=C('--muted');
-  ctx.fillText('↑ rychleji',padL,14);ctx.textAlign='right';ctx.fillText('body →',W-padR,H-4);
-  const placed=[],hit=(a)=>placed.some(b=>a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y);
-  if(ta!=null){ctx.setLineDash([5,4]);ctx.strokeStyle=col;ctx.beginPath();ctx.moveTo(padL,Y(ta));ctx.lineTo(W-padR,Y(ta));ctx.stroke();ctx.setLineDash([]);
-    // legenda nad grafem (v ploše by ji překrývala kolečka)
-    const lab='Ø tým '+f1(ta)+' s',w=ctx.measureText(lab).width,lx=W-padR-w;
-    ctx.textAlign='left';ctx.textBaseline='alphabetic';ctx.fillStyle=col;ctx.fillText(lab,lx,14);
-    ctx.setLineDash([5,4]);ctx.beginPath();ctx.moveTo(lx-30,10);ctx.lineTo(lx-6,10);ctx.stroke();ctx.setLineDash([]);}
-  // body + popisky bez překryvů
-  ctx.font='600 12px "Space Grotesk", sans-serif';
-  pts.sort((a,b)=>b.pts-a.pts).forEach(x=>{
-    const cx=X(x.pts),cy=Y(x.avg),small=x.pts<AT_MINPTS,r=small?4:4+Math.sqrt(x.pts)*1.3;
-    ctx.globalAlpha=small?.45:1;ctx.beginPath();ctx.arc(cx,cy,r,0,7);ctx.fillStyle=col;ctx.fill();ctx.strokeStyle=C('--court');ctx.lineWidth=1.5;ctx.stroke();
-    placed.push({x:cx-r,y:cy-r,w:2*r,h:2*r});
-    const lab=pls[x.p].shirtNumber+' '+shortNm(t,x.p),w=ctx.measureText(lab).width,h=13;
-    const cand=[[cx+r+4,cy-h/2],[cx-r-4-w,cy-h/2],[cx-w/2,cy-r-3-h],[cx-w/2,cy+r+3]].map(([lx,ly])=>({x:lx,y:ly,w,h}))
-      .filter(b=>b.x>=2&&b.x+b.w<=W-2&&b.y>=2&&b.y+b.h<=H-2);
-    const b=cand.find(c=>!hit(c))||cand[0];
-    if(b){placed.push(b);ctx.fillStyle=C('--ink');ctx.textAlign='left';ctx.textBaseline='top';ctx.fillText(lab,b.x,b.y);}
-    ctx.globalAlpha=1;
-  });
-  if(!pts.length){ctx.fillStyle=C('--muted');ctx.textAlign='center';ctx.fillText('Zatím žádné body.',W/2,H/2);}
-  $('atScNote').textContent=`Vodorovně počet bodů, svisle průměrná sekunda útoku, ve které hráč skóroval (váženo body, nahoře = rychleji). Vpravo nahoře = hodně a rychle. Hráči pod ${AT_MINPTS} body jsou průhlední, u nich je průměr hodně náhodný. Velikost kolečka = body.`;
-}
 function drawAttackHeat(R,t){
   const pls=ENGINE.tm[t].pl,BANDS=['0–5 s','5–10 s','10–15 s','15–20 s','20+ s'];
   const rows=Object.entries(R.P[t]).filter(([p])=>pls[p]).map(([p,r])=>({p,r,all:r.reduce((a,b)=>a+b,0),avg:avgSec(R.sec[t][p])}))
@@ -1018,7 +942,8 @@ function drawAttackHeat(R,t){
   const tr=R.team[t],ta=avgSec(R.tsec[t]);
   $('atHeat').innerHTML=`<thead><tr><th style="text-align:left">Hráč</th>${BANDS.map(b=>`<th style="text-align:center">${b}</th>`).join('')}<th>Celkem</th><th>Ø čas</th></tr></thead><tbody>`+
     rows.map(x=>`<tr><td class="name">${pls[x.p].shirtNumber} ${pls[x.p].name}</td>${x.r.slice(0,5).map(cell).join('')}<td style="font-weight:600">${x.all}</td><td>${x.avg==null?'—':f1(x.avg)+' s'}</td></tr>`).join('')+
-    `<tr class="tot"><td class="name">Tým</td>${tr.slice(0,5).map(v=>`<td class="h">${v}</td>`).join('')}<td>${tr.reduce((a,b)=>a+b,0)}</td><td>${ta==null?'—':f1(ta)+' s'}</td></tr></tbody>`;
+    (rows.length?'':`<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px">Zatím žádné body.</td></tr>`)+
+    `<tr class="tot"><td class="name">Tým${tr[5]?` <span class="sh">(${tr[5]} b. nezařazeno)</span>`:''}</td>${tr.slice(0,5).map(v=>`<td class="h">${v}</td>`).join('')}<td>${tr.reduce((a,b)=>a+b,0)}</td><td>${ta==null?'—':f1(ta)+' s'}</td></tr></tbody>`;
 }
 
 /* ---------- navigace (boční na širokém displeji, lišta v panelu na tabletu) ---------- */
@@ -1045,7 +970,7 @@ function buildNav(){
     });
   };
   let tk=false; window.addEventListener('scroll',()=>{if(tk)return;tk=true;requestAnimationFrame(()=>{tk=false;spy();});},{passive:true});
-  window.addEventListener('resize',()=>{spy();if(STATE){drawLead(STATE.T);drawAttack();}}); spy();
+  window.addEventListener('resize',()=>{spy();if(STATE)drawLead(STATE.T);}); spy();
 }
 
 /* auto-load: seznam zápasů ze season-2026-27.json, pak automaticky nejrelevantnější */
