@@ -174,6 +174,13 @@
 
   @media(min-width:1200px){.factors{grid-template-columns:repeat(4,1fr)}.stats{grid-template-columns:repeat(6,1fr)}}
   @media(max-width:520px){.factors{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.stat b{font-size:1.45rem}}
+  .exp{font:600 .62rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink);background:var(--accent);padding:3px 6px;vertical-align:middle}
+  table.at tr.tot td{border-top:2px solid var(--line);font-weight:600}
+  table.at td.c{position:relative}
+  table.at td.c i{position:absolute;left:10px;right:10px;bottom:3px;height:3px;background:var(--court)}
+  table.at td.c i b{display:block;height:100%;background:var(--bar,var(--accent))}
+  table.at small{color:var(--muted);font-size:.72rem;margin-left:4px}
+  .tabs label{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:.86rem;cursor:pointer;margin-left:6px}
   .hidden{display:none!important}
 
   /* tablet / dotyk */
@@ -285,6 +292,15 @@
         <div class="tabs"><span id="luTabs" class="tabs"></span><span class="sep"></span><span id="luSize" class="tabs"></span></div>
         <div class="tblwrap"><table class="lu" id="luTable"></table></div>
         <div class="caption" id="luNote"></div>
+      </div>
+    </section>
+
+    <section id="utok" data-label="Čas útoku">
+      <div class="sec-h"><h2>Body podle času útoku <span class="exp">experiment</span></h2><span class="sub">Kdo dal kolik bodů do 5, 10, 15 a 20 sekund útoku. Začátek útoku je odvozený z play-by-play (doskok v obraně, ztráta soupeře, jeho koš nebo poslední proměněná TH, rozskok, začátek čtvrtiny), čas se počítá z herních hodin.</span></div>
+      <div class="panel" style="display:grid;gap:12px">
+        <div class="tabs"><span id="atTabs" class="tabs"></span><span class="sep"></span><label><input type="checkbox" id="atOreb" style="accent-color:var(--accent)"> doskok v útoku = nový útok</label></div>
+        <div class="tblwrap"><table class="at" id="atTable"></table></div>
+        <div class="caption" id="atNote"></div>
       </div>
     </section>
 
@@ -583,7 +599,7 @@ function render(d){
     sc.value=v; refresh(v);
   });
   drawQmarks();
-  setupMatrixTabs(); setupLineupTabs(); setupPlayerTabs(); buildNav();
+  setupMatrixTabs(); setupLineupTabs(); setupAttackTabs(); setupPlayerTabs(); buildNav();
   refresh(ENGINE.total);
   if(!render.done){render.done=true;}
 }
@@ -593,7 +609,7 @@ function schedule(T){pend=T;if(rafP)return;rafP=true;requestAnimationFrame(()=>{
 function refresh(T){
   STATE=computeState(T);
   updateControl(T);
-  renderFactors(); renderRatings(); renderCharts(); drawMatrix(); drawLU(); drawPlayers(); drawLead(T);
+  renderFactors(); renderRatings(); renderCharts(); drawMatrix(); drawLU(); drawAttack(); drawPlayers(); drawLead(T);
 }
 
 function updateControl(T){
@@ -836,6 +852,87 @@ function drawPlayers(){
     </tr>`;
   }).join('');
   $('plTable').innerHTML=`<thead><tr>${th.map((x,i)=>`<th${i===0?' style="text-align:left"':''}>${x}</th>`).join('')}</tr></thead><tbody>${body}</tbody>`;
+}
+
+/* ---------- body podle času útoku (experiment) ---------- */
+// Rekonstrukce držení z pbp: kdo má míč a od kdy (herní čas). Body se připíší s délkou útoku
+// v okamžiku akce (u TH čas faulu = čas TH). Hodiny mají rozlišení 1 s, takže hranice jsou ±1 s.
+const AT_CUTS=[5,10,15,20];
+function attackPoints(E,T,orebNew){
+  const P={1:{},2:{}}, team={1:[0,0,0,0,0,0],2:[0,0,0,0,0,0]}; // [≤5, ≤10, ≤15, ≤20, >20, nezařazeno]
+  const poss={1:0,2:0};
+  let owner=0,start=0,prev=null,approx=0,keep=0; // keep = tým, kterému po TH zůstává míč (U/D faul)
+  const other=t=>3-t;
+  const gain=(t,el)=>{if(owner&&owner!==t)prev={team:owner,start,end:el};if(owner!==t||!owner){poss[t]++;}owner=t;start=el;};
+  const ensure=(t,el)=>{if(owner===t)return;if(!owner){owner=t;poss[t]++;return;}approx++;gain(t,el);};
+  const add=(t,p,pts,len)=>{
+    const b=len==null?5:len<=5?0:len<=10?1:len<=15?2:len<=20?3:4;
+    const row=P[t][p]||(P[t][p]=[0,0,0,0,0,0]);row[b]+=pts;team[t][b]+=pts;
+  };
+  // zapisovatel občas zapíše akci se zpožděním (vyšší actionNumber, dřívější čas) -> řadit podle času
+  const evs=E.pbpByTime||(E.pbpByTime=E.pbp.map(e=>[E.elapsedOf(e),e]).sort((x,y)=>x[0]-y[0]||x[1].actionNumber-y[1].actionNumber));
+  for(const [el,e] of evs){
+    if(el>T)break;
+    const t=e.tno,at=e.actionType,ok=e.success===1;
+    if(at==='period'&&e.subType==='start'){owner=0;start=el;prev=null;continue;}
+    if(t!==1&&t!==2)continue;
+    if(at==='foul'&&(e.subType==='unsportsmanlike'||e.subType==='disqualifying')){keep=other(t);continue;}
+    if(at==='jumpball'&&e.subType==='won'){gain(t,el);continue;}
+    if(at==='rebound'){
+      if(e.subType==='defensive')gain(t,el);
+      else if(e.subType==='offensive'){ensure(t,el);if(orebNew){start=el;poss[t]++;}}
+      continue;
+    }
+    if(at==='turnover'){ensure(t,el);gain(other(t),el);continue;}
+    if(at==='2pt'||at==='3pt'){
+      ensure(t,el);
+      if(ok){add(t,e.pno,at==='3pt'?3:2,el-start);gain(other(t),el);}
+      continue;
+    }
+    if(at==='freethrow'){
+      const m=/^(\d)of(\d)$/.exec(e.subType||''), last=!m||m[1]===m[2];
+      let len=null;
+      if(owner===t)len=el-start;
+      else if(prev&&prev.team===t&&prev.end===el)len=el-prev.start; // and-one po proměněném koši
+      if(ok)add(t,e.pno,1,len);
+      if(len!=null&&owner!==t){ // and-one: míč se vrací střílejícímu týmu, než doběhnou TH
+        owner=t;start=prev.start;poss[other(t)]--;prev=null;
+      }
+      if(last&&keep===t){keep=0;if(owner!==t)gain(t,el);else{start=el;poss[t]++;}} // míč zpět, nový útok
+      else if(last&&owner===t&&ok)gain(other(t),el);
+      continue;
+    }
+  }
+  return {P,team,poss,approx};
+}
+
+let ATteam=1;
+function setupAttackTabs(){
+  const h=ENGINE.tm[1],a=ENGINE.tm[2];
+  $('atTabs').innerHTML=`<button class="${ATteam===1?'on':''}" data-t="1">${h.shortName}</button><button class="${ATteam===2?'on away':''}" data-t="2">${a.shortName}</button>`;
+  $('atTabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{ATteam=+b.dataset.t;setupAttackTabs();drawAttack();});
+  $('atOreb').onchange=drawAttack;
+}
+function drawAttack(){
+  if(!STATE)return;
+  const t=ATteam, R=attackPoints(ENGINE,STATE.T,$('atOreb').checked), pls=ENGINE.tm[t].pl;
+  const cum=r=>{let c=0;return [0,1,2,3].map(i=>c+=r[i]);};
+  const tot=r=>r.reduce((a,b)=>a+b,0);
+  const col=t===1?'var(--home)':'var(--away)';
+  const rows=Object.entries(R.P[t]).filter(([p])=>p!=='0'&&p!=='undefined').map(([p,r])=>({p,r,c:cum(r),all:tot(r)}))
+    .filter(x=>x.all>0).sort((a,b)=>b.c[0]-a.c[0]||b.c[1]-a.c[1]||b.c[2]-a.c[2]||b.c[3]-a.c[3]||b.all-a.all);
+  const unk=R.team[t][5];
+  const th=['Hráč','do 5 s','do 10 s','do 15 s','do 20 s','nad 20 s','Celkem'];
+  const cell=(v,all)=>`<td class="c" style="--bar:${col}">${v}${all?`<small>${Math.round(100*v/all)}%</small>`:''}<i><b style="width:${all?100*v/all:0}%"></b></i></td>`;
+  const line=(name,c,r,all,cls)=>`<tr${cls?` class="${cls}"`:''}><td class="name">${name}</td>${c.map(v=>cell(v,all)).join('')}<td>${r[4]}</td><td style="font-weight:600">${all}</td></tr>`;
+  const tr=R.team[t], tc=cum(tr), tall=tot(tr);
+  $('atTable').innerHTML=`<thead><tr>${th.map((x,i)=>`<th${i===0?' style="text-align:left"':''}>${x}</th>`).join('')}</tr></thead><tbody>`+
+    (rows.map(x=>{const i=pls[x.p];return line(i?i.shirtNumber+' '+i.name:'#'+x.p,x.c,x.r,x.all);}).join('')||`<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">Zatím žádné body.</td></tr>`)+
+    line('Tým'+(unk?` <span class="sh">(${unk} b. nezařazeno)</span>`:''),tc,tr,tall,'tot')+'</tbody>';
+  const n=R.poss[t];
+  $('atNote').textContent=`Kumulativně: „do 10 s" zahrnuje i body do 5 s. Procento = podíl z bodů hráče. Útoků ${ENGINE.tm[t].shortName}: ~${n}${n?`, z toho bodů na útok ${f1(tall/n)}`:''}. `+
+    ($('atOreb').checked?'Doskok v útoku spouští nový útok (jako reset časomíry na 14 s). ':'Doskok v útoku pokračuje v témže útoku (čas běží od zisku míče). ')+
+    `Nezařazeno = TH mimo vlastní útok (technické chyby apod.). Odhad: hodiny mají rozlišení 1 s a přesný okamžik zisku míče se z dat určit nedá${R.approx?`; ${R.approx}× musel být začátek útoku dopočten z chybějící změny držení`:''}. Stav k ${STATE.clock}.`;
 }
 
 /* ---------- navigace (boční na širokém displeji, lišta v panelu na tabletu) ---------- */
