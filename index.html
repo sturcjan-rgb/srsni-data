@@ -226,6 +226,7 @@
     <button id="togglePaste" class="ghost">…nebo vložit ručně</button>
     <span class="hint" id="hint">Vyber zápas ze seznamu (historie všech sezón, archivní zápasy se tahají z srsni-truth), nebo zadej ID ručně. „živě" = auto-refresh každé 3 s.</span>
     <div class="err hidden" id="err"></div>
+    <div class="err hidden" id="relayWarn">Přeposílač nemá čerstvá data. Pokud už zápas běží, <a href="https://github.com/sturcjan-rgb/srsni-data/actions/workflows/live-relay.yml" target="_blank" rel="noopener">spusť live-relay ↗</a> (Run workflow). Data naskočí do ~30 s.</div>
     <textarea id="paste" placeholder="Sem vlož celý obsah data.json…"></textarea>
     <button id="parsePaste" class="ghost hidden" style="margin-top:8px">Zpracovat vložený JSON</button>
   </div>
@@ -342,7 +343,7 @@ const SEASON_URLS=[
   'https://raw.githubusercontent.com/sturcjan-rgb/srsni-data/main/data/season-2025-26.json'
 ];
 const MATCHES={};
-let currentId=null, liveTimer=null, userPicked=false, currentSeasonMatches=[];
+let currentId=null, liveTimer=null, userPicked=false, currentSeasonMatches=[], lastFreshRelay=0;
 
 function stopLive(){ if(liveTimer){clearInterval(liveTimer);liveTimer=null;} $('liveToggle').checked=false; }
 function startLive(){ if(liveTimer) return; $('liveToggle').checked=true; liveTimer=setInterval(()=>{ if(currentId) loadById(currentId,true,true); },3000); }
@@ -371,6 +372,12 @@ function selectMatch(f){
 }
 // Stránka otevřená před zápasem: jakmile začne okno zápasu, sama se na něj přepne
 // (pokud uživatel ručně nevybral jiný zápas).
+// Varování, když zápas běží, ale přeposílač 2 min nenahrál čerstvá data (cron GitHubu umí vynechat).
+setInterval(()=>{
+  const f=MATCHES[currentId], now=Date.now();
+  const show=!!f && inLiveWindow(f,now) && now>new Date(f.datetime).getTime()-5*60000 && now-lastFreshRelay>120000;
+  $('relayWarn').classList.toggle('hidden',!show);
+},10000);
 setInterval(()=>{
   if(userPicked||!currentSeasonMatches.length) return;
   const f=currentSeasonMatches.find(x=>inLiveWindow(x));
@@ -419,6 +426,7 @@ function relayUrls(id){
 }
 async function loadById(id,quiet,silent){
   if(!/^\d+$/.test(id)){ if(!silent){$('hint').textContent='';showErr('Zadej platné ID zápasu (jen čísla).');} return; }
+  if(id!==currentId) lastFreshRelay=0;
   currentId=id;
   if(!silent){ showErr(''); $('hint').textContent='Načítám…'; }
   const archive=`https://sturcjan-rgb.github.io/srsni-truth/matches/${id}.json`;
@@ -431,6 +439,7 @@ async function loadById(id,quiet,silent){
   for(const u of tries){
     try{const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw 0;const j=decodeParse(await r.arrayBuffer());if(!j.tm)throw 0;render(j);
       const t=new Date().toLocaleTimeString('cs-CZ');
+      if(u.startsWith(RELAY_RAW+id+'/')) lastFreshRelay=Date.now();
       const src=u===archive?'archiv srsni-truth':u.startsWith(RELAY_RAW)?'živě · přeposílač':'živě';
       $('hint').textContent=(silent?'Aktualizováno':'Data načtena')+' ('+src+') · ID '+id+' · '+t;
       showErr('');return;}catch(e){}

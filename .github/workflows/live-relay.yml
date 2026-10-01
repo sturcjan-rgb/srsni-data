@@ -17,7 +17,8 @@ permissions:
 jobs:
   relay:
     runs-on: ubuntu-latest
-    timeout-minutes: 200
+    # season-scraper může relay spustit až 3 h před výkopem → výkop + 3 h ≈ 6 h
+    timeout-minutes: 360
     steps:
       - uses: actions/checkout@v4
       - name: Najít zápas a přeposílat data
@@ -41,6 +42,16 @@ jobs:
           )
           fi
           if [ -z "$ID" ]; then echo "Žádný probíhající zápas."; exit 0; fi
+          # výkop zápasu podle rozpisu (pro konec smyčky); neznámé ID → teď
+          KICK=$(python3 - "$ID" <<'PY'
+          import json,glob,sys,time,datetime as dt
+          for f in glob.glob('data/season-*.json'):
+              for x in json.load(open(f)).get('fixtures',[]):
+                  if str(x.get('fibaMatchId'))==sys.argv[1]:
+                      print(int(dt.datetime.fromisoformat(x['datetime']).timestamp())); raise SystemExit
+          print(int(time.time()))
+          PY
+          )
           echo "Přeposílám zápas $ID"
           URL="https://fibalivestats.dcd.shared.geniussports.com/data/$ID/data.json"
 
@@ -50,7 +61,9 @@ jobs:
           # navázat na existující větev, ať zůstanou data předchozích zápasů (<id>.json slouží i po zápase)
           if git fetch -q --depth 1 origin live 2>/dev/null; then git reset -q --soft FETCH_HEAD && git checkout -q FETCH_HEAD -- . ; fi
 
-          END=$(( $(date +%s) + 3*3600 )); ENDS=0
+          # sledovat do výkop + 3 h (min. 3 h od teď), ale ne déle než ~5h50 kvůli timeoutu jobu
+          NOW=$(date +%s); END=$(( KICK + 3*3600 )); [ "$END" -lt $(( NOW + 3*3600 )) ] && END=$(( NOW + 3*3600 ))
+          [ "$END" -gt $(( NOW + 350*60 )) ] && END=$(( NOW + 350*60 )); ENDS=0
           while [ "$(date +%s)" -lt "$END" ]; do
             if curl -sf -m 10 -o /tmp/relay-new.json "$URL" && python3 -c "import json;d=json.load(open('/tmp/relay-new.json'));assert d.get('tm')" 2>/dev/null; then
               # raw.githubusercontent.com drží soubory v cache 5 min a parametry v URL ignoruje,

@@ -2,12 +2,14 @@ name: season-scraper
 on:
   schedule:
     - cron: "5 */2 * * *"   # každé 2 hodiny
+    - cron: "35 13-19 * * *" # navíc každou hodinu odpoledne/večer (pojistka pro live-relay)
   workflow_dispatch:
 jobs:
   scrape:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      actions: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -21,3 +23,25 @@ jobs:
           git add data/season-*.json
           git diff --cached --quiet || git commit -m "chore: season data refresh"
           git push
+      # Pojistka: cron live-relay umí GitHub vynechat. Když do 3 h začíná (nebo běží)
+      # zápas a live-relay zrovna neběží ani nečeká, spustit ho rovnou pro ten zápas.
+      - name: spustit live-relay pro blížící se zápas
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ID=$(python3 - <<'PY'
+          import json,glob,datetime as dt
+          now=dt.datetime.now(dt.timezone.utc)
+          for f in sorted(glob.glob('data/season-*.json'),reverse=True):
+              for x in json.load(open(f)).get('fixtures',[]):
+                  if not x.get('fibaMatchId') or x.get('status')=='final': continue
+                  t=dt.datetime.fromisoformat(x['datetime'])
+                  if now<=t+dt.timedelta(hours=2) and t-dt.timedelta(hours=3)<=now:
+                      print(x['fibaMatchId']); raise SystemExit
+          PY
+          )
+          [ -z "$ID" ] && { echo "Žádný zápas v příštích 3 h."; exit 0; }
+          ACTIVE=$(gh run list --workflow live-relay.yml --limit 10 --json status --jq '[.[]|select(.status!="completed")]|length')
+          if [ "$ACTIVE" != "0" ]; then echo "live-relay už běží/čeká ($ACTIVE)."; exit 0; fi
+          gh workflow run live-relay.yml --ref main -f fiba_id="$ID"
+          echo "Spuštěn live-relay pro $ID"
