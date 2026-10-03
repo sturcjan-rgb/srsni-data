@@ -23,8 +23,8 @@ jobs:
           git add data/season-*.json
           git diff --cached --quiet || git commit -m "chore: season data refresh"
           git push
-      # Pojistka: cron live-relay umí GitHub vynechat. Když do 3 h začíná (nebo běží)
-      # zápas a live-relay zrovna neběží ani nečeká, spustit ho rovnou pro ten zápas.
+      # Pojistka: cron live-relay umí GitHub vynechat. Když do 14 h začíná (nebo běží)
+      # zápas a live-relay zrovna neběží ani nečeká, spustit ho rovnou — relay počká na výkop.
       - name: spustit live-relay pro blížící se zápas
         env:
           GH_TOKEN: ${{ github.token }}
@@ -36,11 +36,11 @@ jobs:
               for x in json.load(open(f)).get('fixtures',[]):
                   if not x.get('fibaMatchId') or x.get('status')=='final': continue
                   t=dt.datetime.fromisoformat(x['datetime'])
-                  if now<=t+dt.timedelta(hours=2) and t-dt.timedelta(hours=3)<=now:
+                  if now<=t+dt.timedelta(hours=2) and t-dt.timedelta(hours=14)<=now:
                       print(x['fibaMatchId']); raise SystemExit
           PY
           )
-          [ -z "$ID" ] && { echo "Žádný zápas v příštích 3 h."; exit 0; }
+          [ -z "$ID" ] && { echo "Žádný zápas v příštích 14 h."; exit 0; }
           ACTIVE=$(gh run list --workflow live-relay.yml --limit 10 --json status --jq '[.[]|select(.status!="completed")]|length')
           if [ "$ACTIVE" != "0" ]; then echo "live-relay už běží/čeká ($ACTIVE)."; exit 0; fi
           gh workflow run live-relay.yml --ref main -f fiba_id="$ID"

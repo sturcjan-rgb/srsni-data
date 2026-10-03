@@ -14,10 +14,11 @@ concurrency:
   cancel-in-progress: false
 permissions:
   contents: write
+  actions: write
 jobs:
   relay:
     runs-on: ubuntu-latest
-    # season-scraper může relay spustit až 3 h před výkopem → výkop + 3 h ≈ 6 h
+    # relay startuje klidně ráno a čeká na výkop; když je výkop moc daleko, po ~5,5 h spustí sám sebe znovu
     timeout-minutes: 360
     steps:
       - uses: actions/checkout@v4
@@ -26,9 +27,11 @@ jobs:
           FIBA_ID: ${{ github.event.inputs.fiba_id }}
         run: |
           set -u
+          START=$(date +%s)
           ID="${FIBA_ID:-}"
           if [ -z "$ID" ]; then
-            # zápas, který začal před max. 3 h nebo začne do 20 min a ještě není dohraný
+            # zápas, který začal před max. 3 h nebo začne do 14 h a ještě není dohraný
+            # (cron GitHubu často vynechá, proto stačí jakýkoli běh v den zápasu — relay pak počká na výkop)
             ID=$(python3 - <<'PY'
           import json,glob,datetime as dt
           now=dt.datetime.now(dt.timezone.utc)
@@ -36,7 +39,7 @@ jobs:
               for x in json.load(open(f)).get('fixtures',[]):
                   if not x.get('fibaMatchId') or x.get('status')=='final': continue
                   t=dt.datetime.fromisoformat(x['datetime'])
-                  if t-dt.timedelta(minutes=20)<=now<=t+dt.timedelta(hours=3):
+                  if t-dt.timedelta(hours=14)<=now<=t+dt.timedelta(hours=3):
                       print(x['fibaMatchId']); raise SystemExit
           PY
           )
@@ -52,6 +55,17 @@ jobs:
           print(int(time.time()))
           PY
           )
+          # čekat do 20 min před výkopem; job má max. 6 h, takže když by čekání + zápas (3 h) nevyšly,
+          # počkat ~5,5 h a předat štafetu novému běhu (workflow_dispatch z GITHUB_TOKEN je povolený)
+          WAIT=$(( KICK - 20*60 - $(date +%s) ))
+          if [ "$WAIT" -gt $(( 150*60 )) ]; then
+            echo "Výkop za $(( WAIT/60 )) min — čekám a pak spustím relay znovu."
+            S=$(( WAIT - 120*60 )); [ "$S" -gt $(( 330*60 )) ] && S=$(( 330*60 ))
+            sleep "$S"
+            GH_TOKEN="${{ github.token }}" gh workflow run live-relay.yml --repo "${{ github.repository }}" --ref main -f fiba_id="$ID"
+            exit 0
+          fi
+          if [ "$WAIT" -gt 0 ]; then echo "Čekám $(( WAIT/60 )) min na výkop."; sleep "$WAIT"; fi
           echo "Přeposílám zápas $ID"
           URL="https://fibalivestats.dcd.shared.geniussports.com/data/$ID/data.json"
 
@@ -61,9 +75,9 @@ jobs:
           # navázat na existující větev, ať zůstanou data předchozích zápasů (<id>.json slouží i po zápase)
           if git fetch -q --depth 1 origin live 2>/dev/null; then git reset -q --soft FETCH_HEAD && git checkout -q FETCH_HEAD -- . ; fi
 
-          # sledovat do výkop + 3 h (min. 3 h od teď), ale ne déle než ~5h50 kvůli timeoutu jobu
+          # sledovat do výkop + 3 h (min. 3 h od teď), ale ne déle než ~5h50 od startu jobu (kvůli timeoutu)
           NOW=$(date +%s); END=$(( KICK + 3*3600 )); [ "$END" -lt $(( NOW + 3*3600 )) ] && END=$(( NOW + 3*3600 ))
-          [ "$END" -gt $(( NOW + 350*60 )) ] && END=$(( NOW + 350*60 )); ENDS=0
+          [ "$END" -gt $(( START + 350*60 )) ] && END=$(( START + 350*60 )); ENDS=0
           while [ "$(date +%s)" -lt "$END" ]; do
             if curl -sf -m 10 -o /tmp/relay-new.json "$URL" && python3 -c "import json;d=json.load(open('/tmp/relay-new.json'));assert d.get('tm')" 2>/dev/null; then
               # raw.githubusercontent.com drží soubory v cache 5 min a parametry v URL ignoruje,
