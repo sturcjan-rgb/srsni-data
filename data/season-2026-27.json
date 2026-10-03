@@ -5,14 +5,14 @@
     "nblId": 10110,
     "nblSlug": "srsni-photomate-pisek"
   },
-  "generatedAt": "2026-10-03T17:33:17.726Z",
+  "generatedAt": "2026-10-03T19:10:51.489Z",
   "source": "https://nbl.basketball/tym/srsni-photomate-pisek",
   "counts": {
     "total": 22,
     "home": 11,
     "away": 11,
-    "final": 4,
-    "scheduled": 18
+    "final": 5,
+    "scheduled": 17
   },
   "fixtures": [
     {
@@ -281,16 +281,49 @@
       "away": "Sršni Photomate Písek",
       "opponent": "USK Praha",
       "venue": "away",
-      "status": "scheduled",
+      "status": "final",
       "score": {
-        "home": null,
-        "away": null,
-        "us": null,
-        "them": null,
-        "result": null,
-        "margin": null
+        "home": 105,
+        "away": 89,
+        "us": 89,
+        "them": 105,
+        "result": "L",
+        "margin": -16
       },
-      "quarters": null,
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 2127,
+            "away": 4744
+          },
+          {
+            "home": -2022,
+            "away": -4655
+          }
+        ],
+        "regulation": [
+          {
+            "home": 2127,
+            "away": 4744
+          },
+          {
+            "home": -2022,
+            "away": -4655
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 2127,
+            "away": 4744
+          },
+          {
+            "home": 105,
+            "away": 89
+          }
+        ]
+      },
       "links": {
         "nbl": "https://nbl.basketball/zapas/544570",
         "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2893123/",
