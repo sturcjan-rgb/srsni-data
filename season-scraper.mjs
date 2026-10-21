@@ -13,6 +13,12 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 
 const TEAM_URL = "https://nbl.basketball/tym/srsni-photomate-pisek";
+// nbl.basketball od 15. 10. 2026 vrací 403 na ne-prohlížečové požadavky z GitHub Actions
+const BROWSER_HEADERS = {
+  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+  "Accept-Language": "cs-CZ,cs;q=0.9,en;q=0.8",
+};
 const TEAM = "Sršni Photomate Písek";
 const TEAM_ID = 10110;
 const OUT_DIR = resolve(process.cwd(), "data");
@@ -227,8 +233,13 @@ async function main() {
   let html;
   if (htmlArg !== -1) html = readFileSync(args[htmlArg + 1], "utf-8");
   else {
-    const res = await fetch(TEAM_URL, { headers: { "User-Agent": "srsni-agent/1.0" } });
-    if (!res.ok) throw new Error(`fetch ${res.status}`);
+    const res = await fetch(TEAM_URL, { headers: BROWSER_HEADERS });
+    if (!res.ok) {
+      // diagnostika blokace (WAF/anti-bot): hlavičky + začátek těla odpovědi
+      console.error([...res.headers].map(([k, v]) => `${k}: ${v}`).join("\n"));
+      console.error((await res.text()).slice(0, 800));
+      throw new Error(`fetch ${res.status}`);
+    }
     html = await res.text();
   }
   const { season, fixtures } = parseTeamPage(html, debug);
