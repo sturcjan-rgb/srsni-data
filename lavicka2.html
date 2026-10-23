@@ -50,7 +50,7 @@ select:focus-visible,.btn:focus-visible,input:focus-visible{outline:2px solid va
 .tmrow .btn{font-size:clamp(11px,1.5vh,14px);padding:.3em .6em}
 
 /* grid */
-.grid{display:grid;grid-template-columns:1fr 1.3fr .95fr .95fr;grid-template-rows:1fr 1fr;gap:1.2vh 1vw;min-height:0;position:relative}
+.grid{display:grid;grid-template-columns:1.12fr 1.3fr .92fr .92fr;grid-template-rows:1fr 1fr;gap:1.2vh 1vw;min-height:0;position:relative}
 .t{container-type:inline-size;background:var(--panel);padding:1.6vh 1.1vw;display:flex;flex-direction:column;gap:1vh;min-width:0;min-height:0;overflow:hidden}
 .t h2{margin:0;font-weight:500;font-size:clamp(12px,min(2.1vh,6.4cqw),22px);letter-spacing:.01em;color:var(--muted);line-height:1.05;display:flex;align-items:center;gap:.5em;white-space:nowrap;overflow:hidden}
 .t h2::before{content:"";width:.6em;height:.6em;background:var(--accent);flex:none}
@@ -60,13 +60,17 @@ select:focus-visible,.btn:focus-visible,input:focus-visible{outline:2px solid va
 .hero{grid-row:1/3;border-top:4px solid var(--accent);padding:0;gap:0}
 .hero.alarm{border-top-color:var(--bad)}
 .hero h2{white-space:normal;padding:1.6vh 1.1vw;color:var(--ink);font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:clamp(13px,1.9vh,20px)}
-.rows{flex:1;display:grid;grid-template-rows:repeat(4,1fr);gap:1px;background:rgba(0,0,0,.35)}
-.row{background:var(--panel-2);display:grid;grid-template-columns:1fr auto;align-content:center;padding:0 1.1vw;column-gap:.6vw}
-.row .lab{font-size:clamp(14px,2.1vh,22px);font-weight:600;text-transform:uppercase;letter-spacing:.04em;align-self:end}
-.row .val{font:600 clamp(34px,7.4vh,80px)/.95 var(--f-mono);white-space:nowrap;text-align:right;grid-row:1/3;grid-column:2;align-self:center}
-.row .was{font:500 clamp(13px,1.9vh,19px) var(--f-mono);opacity:.85}
-.row.bad{background:var(--bad-fill)} .row.bad .val{color:var(--bad)}
-.row.good{background:var(--good-fill)} .row.good .val{color:var(--good)}
+.rows{flex:1;display:grid;grid-template-rows:auto repeat(5,1fr);gap:1px;background:rgba(0,0,0,.45);min-height:0}
+.rhd{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--panel)}
+.rhd span{padding:.7vh 1.1vw;font-weight:700;font-size:clamp(12px,1.7vh,17px);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rhd span.us{color:var(--accent)}
+.row{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr;gap:1px;min-height:0}
+.row .lab{grid-column:1/-1;background:var(--panel);padding:.5vh 1.1vw;font-size:clamp(12px,1.75vh,18px);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.cell{background:var(--panel-2);display:flex;flex-direction:column;justify-content:center;padding:0 1.1vw;min-width:0}
+.cell .val{font:600 clamp(28px,5.6vh,62px)/1 var(--f-mono);white-space:nowrap}
+.cell .was{font:500 clamp(11px,1.6vh,16px) var(--f-mono);opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cell.bad{background:var(--bad-fill)} .cell.bad .val{color:var(--bad)}
+.cell.good{background:var(--good-fill)} .cell.good .val{color:var(--good)}
 .flag{background:var(--accent);color:var(--accent-ink);font-weight:700;text-transform:uppercase;font-size:clamp(17px,2.8vh,30px);padding:1.4vh 1.1vw;line-height:1.05}
 
 /* matrix */
@@ -146,7 +150,7 @@ select:focus-visible,.btn:focus-visible,input:focus-visible{outline:2px solid va
 
   <div class="grid">
     <section class="t hero" id="hero">
-      <h2 id="heroTitle">Soupeř · posledních 5 min</h2>
+      <h2 id="heroTitle">Posledních 5 min</h2>
       <div class="rows" id="heroRows"></div>
       <div class="flag" id="flag">—</div>
     </section>
@@ -173,7 +177,7 @@ select:focus-visible,.btn:focus-visible,input:focus-visible{outline:2px solid va
 <script>
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const LAST=300, TO_WIN=120, MIN_SECS=180;
+const LAST=300, TO_WIN=120, MIN_SECS=180, TREND_FROM=480;
 let DATA=null, US=1, THEM=2, SNAP=null, liveTimer=null, currentId=null, lastSig='';
 
 /* ---------- načítání (stejné zdroje jako Lavička 1) ---------- */
@@ -352,37 +356,47 @@ function drawChips(M){
 }
 
 function drawHero(M){
-  $('heroTitle').textContent=shortTeam(THEM)+' · posledních 5 min';
-  const a=Math.max(0,M.T-LAST), enough=a>=180;
-  const tL=windowStats(M.pbp,THEM,a,M.T), tB=windowStats(M.pbp,THEM,-1,a);
-  const uL=windowStats(M.pbp,US,a,M.T), uB=windowStats(M.pbp,US,-1,a);
-  const f2=x=>x==null?'–':x.toFixed(2).replace('.',','), f0=x=>x==null?'–':Math.round(x);
-  const rows=[];
-  // 1 body na držení
-  let c='';if(enough&&tL.ppp!=null&&tB.ppp!=null){if(tL.ppp-tB.ppp>=.1)c='bad';else if(tB.ppp-tL.ppp>=.1)c='good';}
-  rows.push({c,lab:'Body / držení',val:f2(tL.ppp),was:enough?'předtím '+f2(tB.ppp):'předtím –'});
-  // 2 eFG
-  c='';if(enough&&tL.efg!=null&&tB.efg!=null){if(tL.efg-tB.efg>=8)c='bad';else if(tB.efg-tL.efg>=8)c='good';}
-  rows.push({c,lab:'eFG %',val:f0(tL.efg),was:enough?'předtím '+f0(tB.efg):'předtím –'});
-  // 3 trestné hody
-  const rL=tL.fta/Math.max(tL.mins,1), rB=tB.mins>0?tB.fta/tB.mins:0;
-  c='';if(enough){if(tL.fta>=4&&rL>=1.5*rB)c='bad';else if(tL.fta===0&&rB>0.6)c='good';}
-  rows.push({c,lab:'Trestné hody',val:String(tL.fta),was:enough?'předtím '+tB.fta+' / '+Math.round(tB.mins)+' min':'předtím –'});
-  // 4 naše útočné doskoky
-  c='';if(uL.orbPct!=null){if(uL.orbPct>=35&&uL.orbPct>(tL.orbPct??0))c='good';else if(uL.orbPct<20&&(tL.orbPct??0)>=35)c='bad';}
-  rows.push({c,lab:'Naše útočné doskoky',val:uL.orbPct==null?'–':Math.round(uL.orbPct)+'%',was:'jejich '+(tL.orbPct==null?'–':Math.round(tL.orbPct)+' %')});
-  $('heroRows').innerHTML=rows.map(r=>`<div class="row ${r.c}"><span class="lab">${esc(r.lab)}</span><span class="val">${esc(r.val)}</span><span class="was">${esc(r.was)}</span></div>`).join('');
-  // verdikt
+  $('heroTitle').textContent='Posledních 5 min';
+  const a=Math.max(0,M.T-LAST), hasBefore=a>0, enough=M.T>=TREND_FROM;
+  const W={};
+  [THEM,US].forEach(t=>W[t]={L:windowStats(M.pbp,t,a,M.T),B:windowStats(M.pbp,t,-1,a)});
+  const f2=x=>x==null?'–':x.toFixed(2).replace('.',','), f0=x=>x==null?'–':String(Math.round(x));
+  const pc=x=>x==null?'–':Math.round(x)+'%';
+  const rate=(s)=>s.mins>0?s[0]/s.mins:0;
+  // sign: +1 = vyšší hodnota pomáhá týmu, který ji má; pak se barví z našeho pohledu
+  const up=(t,good)=>t===US?(good?'good':'bad'):(good?'bad':'good');
+  const defs=[
+    {lab:'Body / držení',val:s=>f2(s.ppp),was:s=>f2(s.ppp),
+     judge:(t,L,B)=>L.ppp==null||B.ppp==null?'':L.ppp-B.ppp>=.1?up(t,true):B.ppp-L.ppp>=.1?up(t,false):''},
+    {lab:'eFG %',val:s=>f0(s.efg),was:s=>f0(s.efg),
+     judge:(t,L,B)=>L.efg==null||B.efg==null?'':L.efg-B.efg>=8?up(t,true):B.efg-L.efg>=8?up(t,false):''},
+    {lab:'Trestné hody',val:s=>String(s.fta),was:s=>s.fta+'/'+Math.round(s.mins)+'′',
+     judge:(t,L,B)=>{const rl=L.fta/Math.max(L.mins,1),rb=B.mins>0?B.fta/B.mins:0;return L.fta>=4&&rl>=1.5*rb?up(t,true):'';}},
+    {lab:'Útočné doskoky',val:s=>pc(s.orbPct),was:s=>pc(s.orbPct),
+     judge:(t,L)=>L.orbPct==null?'':L.orbPct>=40?up(t,true):L.orbPct<15&&t===US?'bad':''},
+    {lab:'Ztráty',val:s=>String(s.to),was:s=>s.to+'/'+Math.round(s.mins)+'′',
+     judge:(t,L)=>L.to>=3?up(t,false):''},
+  ];
+  const res=defs.map(d=>({d,c:{[THEM]:enough?d.judge(THEM,W[THEM].L,W[THEM].B):'',[US]:enough?d.judge(US,W[US].L,W[US].B):''}}));
+  const cell=(d,t,c)=>`<div class="cell ${c}"><span class="val">${esc(d.val(W[t].L))}</span><span class="was">${hasBefore?'předtím '+esc(d.was(W[t].B)):'předtím –'}</span></div>`;
+  $('heroRows').innerHTML=`<div class="rhd"><span>${esc(shortTeam(THEM))}</span><span class="us">${esc(shortTeam(US))}</span></div>`+
+    res.map(r=>`<div class="row"><span class="lab">${esc(r.d.lab)}</span>${cell(r.d,THEM,r.c[THEM])}${cell(r.d,US,r.c[US])}</div>`).join('');
+  // verdikt podle priority (co stojí nejvíc bodů)
+  const [rP,rE,rF,rO,rT]=res;
   let flag='Trend beze změny';
-  if(!enough)flag='Málo dat pro trend';
-  else if(rows[2].c==='bad')flag='Chodí na čáru · faulujeme';
-  else if(rows[1].c==='bad')flag='Trefují · víc tlaku na střelce';
-  else if(uL.to>=3)flag='Ztrácíme míče · '+uL.to+' za 5 min';
-  else if((tL.orbPct??0)>=40)flag='Doskakují nás v obraně';
-  else if(rows[0].c==='bad')flag='Skórují snadno';
-  else if(rows[0].c==='good'||rows[1].c==='good')flag='Obrana drží';
+  if(!enough)flag='Trend od 8. minuty';
+  else if(rO.c[THEM]==='bad')flag='Doskakují nás v obraně';
+  else if(rT.c[US]==='bad')flag='Ztrácíme míče · '+W[US].L.to+' za 5 min';
+  else if(rF.c[THEM]==='bad')flag='Chodí na čáru · faulujeme';
+  else if(rE.c[THEM]==='bad')flag='Trefují · víc tlaku na střelce';
+  else if(rP.c[THEM]==='bad')flag='Skórují snadno';
+  else if(rP.c[US]==='bad'||rE.c[US]==='bad')flag='Útok vázne';
+  else if(rO.c[US]==='good')flag='Doskakujeme · druhé šance';
+  else if(rT.c[THEM]==='good')flag='Nutíme je ke ztrátám';
+  else if(rP.c[US]==='good'||rE.c[US]==='good')flag='Útok jede';
+  else if(rP.c[THEM]==='good'||rE.c[THEM]==='good')flag='Obrana drží';
   $('flag').textContent=flag;
-  $('hero').classList.toggle('alarm',rows.some(r=>r.c==='bad'));
+  $('hero').classList.toggle('alarm',res.some(r=>r.c[THEM]==='bad'||r.c[US]==='bad'));
 }
 
 function drawMatrix(M){
