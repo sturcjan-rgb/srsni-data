@@ -246,20 +246,30 @@ async function loadMatchList(){
 function autoLive(id){const f=MATCHES[id];if(!f){setLive(false);return;}const s=new Date(f.datetime).getTime(),n=Date.now();setLive(f.status!=='final'&&n>=s-15*60000&&n<=s+3*3600000);}
 function setLive(on){
   if(liveTimer){clearInterval(liveTimer);liveTimer=null;}
-  if(on)liveTimer=setInterval(()=>{if(currentId)loadById(currentId,true);},3000);
+  if(on)liveTimer=setInterval(async()=>{if(!currentId||polling)return;polling=true;try{await loadById(currentId,true);}finally{polling=false;}},3000);
   $('liveSeg').querySelectorAll('button').forEach(b=>b.classList.toggle('on',(b.dataset.l==='1')===on));
   $('status').classList.toggle('live',on);
 }
+// Vlastní přeposílač (workflow live-relay → větev „live“, viz highlights): okna po 5 s, jinak poslední stav.
+const RAW_LIVE='https://raw.githubusercontent.com/sturcjan-rgb/srsni-data/live/';
+let polling=false; // pomalý zdroj nesmí vrstvit souběžné dotazy
+async function getJson(u,ms){const ac=new AbortController(),t=setTimeout(()=>ac.abort(),ms);
+  try{const r=await fetch(u,{cache:'no-store',signal:ac.signal});if(!r.ok)throw 0;const j=decodeParse(await r.arrayBuffer());if(!j.tm||!j.tm[1]||!j.tm[2])throw 0;return j;}finally{clearTimeout(t);}}
+async function getRelay(id){const b=Math.floor(Date.now()/5000);
+  for(let k=2;k<=5;k++){try{return await getJson(RAW_LIVE+id+'/'+(b-k)+'.json',4000);}catch(e){}}
+  return await getJson(RAW_LIVE+id+'.json',6000);}
 async function loadById(id,silent){
   if(!/^\d+$/.test(id)){$('err').textContent='Neplatné ID';return;}
   currentId=id; if(!silent)$('err').textContent='';
   const archive=`https://sturcjan-rgb.github.io/srsni-truth/matches/${id}.json`;
   const live=`https://fibalivestats.dcd.shared.geniussports.com/data/${id}/data.json`;
-  const liveTries=['https://api.codetabs.com/v1/proxy/?quest='+live,live,'https://corsproxy.io/?url='+encodeURIComponent(live)];
-  const tries=silent?[...liveTries,archive]:[archive,...liveTries];
-  for(const u of tries){
-    try{const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw 0;const j=decodeParse(await r.arrayBuffer());if(!j.tm)throw 0;
-      render(j);$('stTxt').textContent=(u===archive?'archiv':'živě')+' · '+new Date().toLocaleTimeString('cs-CZ');$('err').textContent='';return;}catch(e){}
+  const liveTries=['relay',live,'https://api.codetabs.com/v1/proxy/?quest='+live,'https://corsproxy.io/?url='+encodeURIComponent(live),'https://api.allorigins.win/raw?url='+encodeURIComponent(live)];
+  const f=MATCHES[id], groups=silent||(f&&f.status!=='final')?[liveTries,[archive]]:[[archive],liveTries];
+  for(const g of groups){
+    try{const {j,u}=await Promise.any(g.map(u=>(u==='relay'?getRelay(id):getJson(u,8000)).then(j=>({j,u}))));
+      if(id!==currentId)return;
+      render(j);$('stTxt').textContent=(u===archive?'archiv':'živě')+' · '+new Date().toLocaleTimeString('cs-CZ');$('err').textContent='';return;
+    }catch(e){}
   }
   if(!silent){$('err').textContent='Zápas '+id+' se nepodařilo načíst.';$('loadScreen').textContent='Zápas se nepodařilo načíst (CORS / ještě nezačal).';}
 }
