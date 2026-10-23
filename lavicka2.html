@@ -178,7 +178,7 @@ select:focus-visible,.btn:focus-visible,input:focus-visible{outline:2px solid va
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const LAST=300, TO_WIN=120, MIN_SECS=180, TREND_FROM=480;
-let DATA=null, US=1, THEM=2, SNAP=null, liveTimer=null, currentId=null, lastSig='';
+let DATA=null, US=1, THEM=2, SNAP=null, liveTimer=null, armTimer=null, currentId=null, lastSig='';
 
 /* ---------- načítání (stejné zdroje jako Lavička 1) ---------- */
 function mojiScore(s){return (s.match(/Ã.|Å.|Â.|â€|Ä.|Ð/g)||[]).length;}
@@ -199,7 +199,13 @@ async function loadMatchList(){
   if(id){$('matchSelect').value=id;await loadById(id);autoLive(id);}
   else $('loadMsg').textContent='Vyber zápas nahoře, zadej FIBA ID nebo nahraj data.json.';
 }
-function autoLive(id){const f=MATCHES[id];if(!f){setLive(false);return;}const s=new Date(f.datetime).getTime(),n=Date.now();setLive(f.status!=='final'&&n>=s-15*60000&&n<=s+3*3600000);}
+function autoLive(id){
+  if(armTimer){clearTimeout(armTimer);armTimer=null;}
+  const f=MATCHES[id];if(!f){setLive(false);return;}const s=new Date(f.datetime).getTime(),n=Date.now(),from=s-15*60000;
+  setLive(f.status!=='final'&&n>=from&&n<=s+3*3600000);
+  // otevřeno dřív než 15 min před začátkem: živé obnovování se zapne samo
+  if(f.status!=='final'&&n<from&&from-n<24*3600000)armTimer=setTimeout(()=>{if(currentId===id)autoLive(id);},from-n);
+}
 function setLive(on){
   if(liveTimer){clearInterval(liveTimer);liveTimer=null;}
   if(on){SNAP=null;liveTimer=setInterval(()=>{if(currentId)loadById(currentId,true);},3000);}
@@ -213,7 +219,7 @@ async function loadById(id,silent){
   const liveTries=['https://api.codetabs.com/v1/proxy/?quest='+live,live,'https://corsproxy.io/?url='+encodeURIComponent(live)];
   const tries=silent?[...liveTries,archive]:[archive,...liveTries];
   for(const u of tries){
-    try{const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw 0;const j=decodeParse(await r.arrayBuffer());if(!j.tm||!j.pbp)throw 0;
+    try{const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw 0;const j=decodeParse(await r.arrayBuffer());if(!j.tm||!j.tm[1]||!j.tm[2])throw 0;
       render(j);return;}catch(e){}
   }
   if(!silent){$('err').textContent='Zápas '+id+' se nepodařilo načíst. Ještě nezačal, nebo neprošla proxy.';$('load').hidden=false;$('loadMsg').textContent='Zápas se nepodařilo načíst.';}
@@ -221,7 +227,7 @@ async function loadById(id,silent){
 $('matchSelect').onchange=()=>{const id=$('matchSelect').value;if(!id)return;lastSig='';SNAP=null;loadById(id);autoLive(id);};
 $('liveBtn').onclick=()=>setLive(!liveTimer);
 $('gidBtn').onclick=()=>{const id=$('gid').value.trim();lastSig='';SNAP=null;loadById(id);autoLive(id);};
-$('file').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{setLive(false);lastSig='';SNAP=null;currentId=null;render(decodeParse(await f.arrayBuffer()));}catch(x){$('err').textContent='Soubor není platný FIBA data.json.';}};
+$('file').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{setLive(false);if(armTimer){clearTimeout(armTimer);armTimer=null;}lastSig='';SNAP=null;currentId=null;render(decodeParse(await f.arrayBuffer()));}catch(x){$('err').textContent='Soubor není platný FIBA data.json.';}};
 $('fs').onclick=async()=>{
   try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();else await document.exitFullscreen();}catch(e){}
   try{if('wakeLock' in navigator)await navigator.wakeLock.request('screen');}catch(e){}
@@ -337,8 +343,9 @@ function draw(){
   const end=+$('tm').max, T=SNAP===null?end:Math.min(SNAP,end);
   const M=analyse(DATA,T);
   const per=M.period, perTxt=per>4?'P'+(per-4):per+'Q';
-  $('tmLab').textContent=perTxt+' '+String(M.gt).replace(/^0(\d)/,'$1')+' · '+M.s[US]+':'+M.s[THEM];
-  $('ctxTxt').textContent=code(THEM)+' · '+perTxt+' '+String(M.gt).replace(/^0(\d)/,'$1');
+  const pre=!M.pbp.length;
+  $('tmLab').textContent=pre?'Před zápasem':perTxt+' '+String(M.gt).replace(/^0(\d)/,'$1')+' · '+M.s[US]+':'+M.s[THEM];
+  $('ctxTxt').textContent=code(THEM)+' · '+(pre?'před zápasem':perTxt+' '+String(M.gt).replace(/^0(\d)/,'$1'));
   $('tmEnd').hidden=SNAP===null;
   drawChips(M);drawHero(M);drawMatrix(M);drawOpp(M);drawStints(M);drawTop(M);drawTO(M);drawFT(M);
 }
@@ -401,7 +408,7 @@ function drawHero(M){
 
 function drawMatrix(M){
   const five=[...M.on[US]].sort((a,b)=>(+shirt(US,a))-(+shirt(US,b)));
-  if(five.length!==5){$('mx').innerHTML='<div class="empty" style="grid-column:1/-1;grid-row:1/-1">Sestavu nejde z dat určit</div>';return;}
+  if(five.length!==5){$('mx').innerHTML=`<div class="empty" style="grid-column:1/-1;grid-row:1/-1">${M.pbp.length?'Sestavu nejde z dat určit':'Čeká se na základní pětku'}</div>`;return;}
   const v=(a,b)=>M.pair[+a<+b?a+'|'+b:b+'|'+a]||0;
   let h='<div></div>'+five.map(p=>`<div class="h">${esc(shirt(US,p))}</div>`).join('');
   five.forEach(r=>{h+=`<div class="h rh">${esc(nameOf(US,r))}</div>`+five.map(c=>{if(r===c)return '<div class="self"></div>';const x=v(r,c);const cls=x>0?'plus':x<0?'minus':'even';return `<div class="c ${cls}" style="--a:${Math.round(14+Math.min(Math.abs(x)/14,1)*26)}%">${sg(x)}</div>`;}).join('')});
