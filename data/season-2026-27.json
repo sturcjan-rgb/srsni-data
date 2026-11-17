@@ -5,14 +5,14 @@
     "nblId": 10110,
     "nblSlug": "srsni-photomate-pisek"
   },
-  "generatedAt": "2026-11-17T10:41:37.412Z",
+  "generatedAt": "2026-11-17T10:52:52.938Z",
   "source": "https://nbl.basketball/tym/srsni-photomate-pisek",
   "counts": {
     "total": 22,
     "home": 11,
     "away": 11,
-    "final": 5,
-    "scheduled": 17
+    "final": 11,
+    "scheduled": 11
   },
   "fixtures": [
     {
@@ -374,16 +374,73 @@
       "away": "Sršni Photomate Písek",
       "opponent": "BK Opava",
       "venue": "away",
-      "status": "scheduled",
+      "status": "final",
       "score": {
-        "home": null,
-        "away": null,
-        "us": null,
-        "them": null,
-        "result": null,
-        "margin": null
+        "home": 77,
+        "away": 88,
+        "us": 88,
+        "them": 77,
+        "result": "W",
+        "margin": 11
       },
-      "quarters": null,
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 16,
+            "away": 26
+          },
+          {
+            "home": 26,
+            "away": 17
+          },
+          {
+            "home": 11,
+            "away": 20
+          },
+          {
+            "home": 24,
+            "away": 25
+          }
+        ],
+        "regulation": [
+          {
+            "home": 16,
+            "away": 26
+          },
+          {
+            "home": 26,
+            "away": 17
+          },
+          {
+            "home": 11,
+            "away": 20
+          },
+          {
+            "home": 24,
+            "away": 25
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 16,
+            "away": 26
+          },
+          {
+            "home": 42,
+            "away": 43
+          },
+          {
+            "home": 53,
+            "away": 63
+          },
+          {
+            "home": 77,
+            "away": 88
+          }
+        ]
+      },
       "links": {
         "nbl": "https://nbl.basketball/zapas/544582",
         "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2910248/",
@@ -404,16 +461,73 @@
       "away": "SK Slavia Praha ERA NBK",
       "opponent": "SK Slavia Praha ERA NBK",
       "venue": "home",
-      "status": "scheduled",
+      "status": "final",
       "score": {
-        "home": null,
-        "away": null,
-        "us": null,
-        "them": null,
-        "result": null,
-        "margin": null
+        "home": 81,
+        "away": 89,
+        "us": 81,
+        "them": 89,
+        "result": "L",
+        "margin": -8
       },
-      "quarters": null,
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 23,
+            "away": 26
+          },
+          {
+            "home": 33,
+            "away": 25
+          },
+          {
+            "home": 11,
+            "away": 22
+          },
+          {
+            "home": 14,
+            "away": 16
+          }
+        ],
+        "regulation": [
+          {
+            "home": 23,
+            "away": 26
+          },
+          {
+            "home": 33,
+            "away": 25
+          },
+          {
+            "home": 11,
+            "away": 22
+          },
+          {
+            "home": 14,
+            "away": 16
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 23,
+            "away": 26
+          },
+          {
+            "home": 56,
+            "away": 51
+          },
+          {
+            "home": 67,
+            "away": 73
+          },
+          {
+            "home": 81,
+            "away": 89
+          }
+        ]
+      },
       "links": {
         "nbl": "https://nbl.basketball/zapas/544588",
         "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2921929/",
@@ -434,16 +548,73 @@
       "away": "Sršni Photomate Písek",
       "opponent": "PUMPA Basket Brno",
       "venue": "away",
-      "status": "scheduled",
+      "status": "final",
       "score": {
-        "home": null,
-        "away": null,
-        "us": null,
-        "them": null,
-        "result": null,
-        "margin": null
+        "home": 82,
+        "away": 95,
+        "us": 95,
+        "them": 82,
+        "result": "W",
+        "margin": 13
       },
-      "quarters": null,
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 28,
+            "away": 31
+          },
+          {
+            "home": 17,
+            "away": 21
+          },
+          {
+            "home": 20,
+            "away": 18
+          },
+          {
+            "home": 17,
+            "away": 25
+          }
+        ],
+        "regulation": [
+          {
+            "home": 28,
+            "away": 31
+          },
+          {
+            "home": 17,
+            "away": 21
+          },
+          {
+            "home": 20,
+            "away": 18
+          },
+          {
+            "home": 17,
+            "away": 25
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 28,
+            "away": 31
+          },
+          {
+            "home": 45,
+            "away": 52
+          },
+          {
+            "home": 65,
+            "away": 70
+          },
+          {
+            "home": 82,
+            "away": 95
+          }
+        ]
+      },
       "links": {
         "nbl": "https://nbl.basketball/zapas/544594",
         "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2927620/",
@@ -464,16 +635,73 @@
       "away": "BK ARMEX ENERGY Děčín",
       "opponent": "BK ARMEX ENERGY Děčín",
       "venue": "home",
-      "status": "scheduled",
+      "status": "final",
       "score": {
-        "home": null,
-        "away": null,
-        "us": null,
-        "them": null,
-        "result": null,
-        "margin": null
+        "home": 99,
+        "away": 84,
+        "us": 99,
+        "them": 84,
+        "result": "W",
+        "margin": 15
       },
-      "quarters": null,
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 22,
+            "away": 29
+          },
+          {
+            "home": 28,
+            "away": 17
+          },
+          {
+            "home": 27,
+            "away": 18
+          },
+          {
+            "home": 22,
+            "away": 20
+          }
+        ],
+        "regulation": [
+          {
+            "home": 22,
+            "away": 29
+          },
+          {
+            "home": 28,
+            "away": 17
+          },
+          {
+            "home": 27,
+            "away": 18
+          },
+          {
+            "home": 22,
+            "away": 20
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 22,
+            "away": 29
+          },
+          {
+            "home": 50,
+            "away": 46
+          },
+          {
+            "home": 77,
+            "away": 64
+          },
+          {
+            "home": 99,
+            "away": 84
+          }
+        ]
+      },
       "links": {
         "nbl": "https://nbl.basketball/zapas/544600",
         "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2932740/",
@@ -494,16 +722,73 @@
       "away": "Sršni Photomate Písek",
       "opponent": "BK Olomoucko",
       "venue": "away",
-      "status": "scheduled",
+      "status": "final",
       "score": {
-        "home": null,
-        "away": null,
-        "us": null,
-        "them": null,
-        "result": null,
-        "margin": null
+        "home": 65,
+        "away": 92,
+        "us": 92,
+        "them": 65,
+        "result": "W",
+        "margin": 27
       },
-      "quarters": null,
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 18,
+            "away": 17
+          },
+          {
+            "home": 7,
+            "away": 14
+          },
+          {
+            "home": 16,
+            "away": 27
+          },
+          {
+            "home": 24,
+            "away": 34
+          }
+        ],
+        "regulation": [
+          {
+            "home": 18,
+            "away": 17
+          },
+          {
+            "home": 7,
+            "away": 14
+          },
+          {
+            "home": 16,
+            "away": 27
+          },
+          {
+            "home": 24,
+            "away": 34
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 18,
+            "away": 17
+          },
+          {
+            "home": 25,
+            "away": 31
+          },
+          {
+            "home": 41,
+            "away": 58
+          },
+          {
+            "home": 65,
+            "away": 92
+          }
+        ]
+      },
       "links": {
         "nbl": "https://nbl.basketball/zapas/544606",
         "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2938921/",
@@ -524,16 +809,73 @@
       "away": "SLUNETA Ústí nad Labem",
       "opponent": "SLUNETA Ústí nad Labem",
       "venue": "home",
-      "status": "scheduled",
+      "status": "final",
       "score": {
-        "home": null,
-        "away": null,
-        "us": null,
-        "them": null,
-        "result": null,
-        "margin": null
+        "home": 107,
+        "away": 98,
+        "us": 107,
+        "them": 98,
+        "result": "W",
+        "margin": 9
       },
-      "quarters": null,
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 22,
+            "away": 24
+          },
+          {
+            "home": 24,
+            "away": 13
+          },
+          {
+            "home": 33,
+            "away": 34
+          },
+          {
+            "home": 28,
+            "away": 27
+          }
+        ],
+        "regulation": [
+          {
+            "home": 22,
+            "away": 24
+          },
+          {
+            "home": 24,
+            "away": 13
+          },
+          {
+            "home": 33,
+            "away": 34
+          },
+          {
+            "home": 28,
+            "away": 27
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 22,
+            "away": 24
+          },
+          {
+            "home": 46,
+            "away": 37
+          },
+          {
+            "home": 79,
+            "away": 71
+          },
+          {
+            "home": 107,
+            "away": 98
+          }
+        ]
+      },
       "links": {
         "nbl": "https://nbl.basketball/zapas/544612",
         "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2943577/",
