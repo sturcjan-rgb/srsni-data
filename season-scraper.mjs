@@ -161,7 +161,7 @@ function parseTeamPage(html, debug = false) {
 
     const nblId = (rowHtml.match(/\/zapas\/(\d+)/) || [])[1];
     if (!nblId) return; // not a fixture row
-    const fibaId = (rowHtml.match(/webcast\/CBFFE\/(\d+)/) || [])[1];
+    const fibaId = (rowHtml.match(/fibalivestats[^"'\s]*?\/(?:webcast|u)\/CBFFE\/(\d+)/) || [])[1];
 
     const cellText = (i) => (i != null && cells[i] ? cells[i].text().replace(/\s+/g, " ").trim() : "");
     const round = cellText(colIdx.round);
