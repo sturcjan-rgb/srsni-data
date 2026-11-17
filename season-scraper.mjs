@@ -198,6 +198,19 @@ function seasonKey(season) { // "2026/27" -> "2026-27"
   return `${a}-${b}`;
 }
 
+// Ligový rozpis z nbl2627 (GitHub Pages) — FIBA ID dohledává i bez nbl.basketball.
+const NBL2627_SCHEDULE = (key) => `https://sturcjan-rgb.github.io/nbl2627/data/${key}/schedule.json`;
+
+async function loadNbl2627Ids(season) {
+  try {
+    const res = await fetch(NBL2627_SCHEDULE(seasonKey(season)));
+    if (!res.ok) { console.warn(`WARN rozpis nbl2627: HTTP ${res.status}`); return {}; }
+    const out = {};
+    for (const f of (await res.json()).fixtures || []) if (f.nblId && f.fibaId) out[String(f.nblId)] = f.fibaId;
+    return out;
+  } catch (e) { console.warn(`WARN rozpis nbl2627: ${e.message}`); return {}; }
+}
+
 function loadOverrides() {
   if (!existsSync(OVERRIDES_FILE)) return {};
   return JSON.parse(readFileSync(OVERRIDES_FILE, "utf-8"));
@@ -334,6 +347,11 @@ async function main() {
     fixtures = readSeasonFixtures(season);
     console.warn(`NBL nedostupné — používám uložený rozpis ${season} (${fixtures.length} zápasů)`);
   }
+  // jen chybějící ID z nbl2627, ruční přepisy pak mají přednost
+  const fromLeague = await loadNbl2627Ids(season);
+  for (const f of fixtures) if (f.fibaMatchId != null) delete fromLeague[String(f.nblMatchId)];
+  const nLeague = applyOverrides(fixtures, fromLeague);
+  if (nLeague) console.log(`FIBA ID z nbl2627: ${nLeague}`);
   const nOv = applyOverrides(fixtures, loadOverrides());
   const nFiba = await fillResultsFromFiba(fixtures);
   console.log(`ruční FIBA ID: ${nOv}, výsledky z FIBA: ${nFiba}`);
