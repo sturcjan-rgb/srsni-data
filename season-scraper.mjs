@@ -9,13 +9,17 @@
 //       node season-scraper.mjs --html f  (parse a saved HTML file instead of fetching)
 
 import { load } from "cheerio";
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 
 const TEAM_URL = "https://nbl.basketball/tym/srsni-photomate-pisek";
 const TEAM = "Sršni Photomate Písek";
 const TEAM_ID = 10110;
 const OUT_DIR = resolve(process.cwd(), "data");
+// Ručně zadaná FIBA ID ({"<nblMatchId>": <fibaMatchId>}) — pojistka, když nbl.basketball
+// FIBA odkaz neukáže nebo je nedostupný (od 11/2026 vrací runnerům GitHub Actions HTTP 403).
+const OVERRIDES_FILE = resolve(OUT_DIR, "fiba-overrides.json");
+const FIBA_DATA = (id) => `https://fibalivestats.dcd.shared.geniussports.com/data/${id}/data.json`;
 const ALIASES = ["srsni", "sršni", "sokol", "pisek", "písek", "photomate"];
 
 // Canonical opponent names — used to split the "domácí / hosté" cell unambiguously.
@@ -194,14 +198,98 @@ function seasonKey(season) { // "2026/27" -> "2026-27"
   return `${a}-${b}`;
 }
 
+function loadOverrides() {
+  if (!existsSync(OVERRIDES_FILE)) return {};
+  return JSON.parse(readFileSync(OVERRIDES_FILE, "utf-8"));
+}
+
+// Doplní fibaMatchId z ručních přepisů (přepis má přednost).
+export function applyOverrides(fixtures, overrides) {
+  let n = 0;
+  for (const f of fixtures) {
+    const id = overrides[String(f.nblMatchId)];
+    if (!id || f.fibaMatchId === +id) continue;
+    f.fibaMatchId = +id;
+    f.links = { ...(f.links || {}), livestats: `https://www.fibalivestats.com/webcast/CBFFE/${id}/`, fibaData: FIBA_DATA(id) };
+    n++;
+  }
+  return n;
+}
+
+// Výsledek z FIBA data.json (když ho NBL web neukáže): skóre, čtvrtiny, stav.
+export function resultFromFiba(f, raw) {
+  const t1 = raw?.tm?.["1"], t2 = raw?.tm?.["2"];
+  if (!t1 || !t2) return null;
+  const ended = (raw.pbp || []).some((e) => e.actionType === "game" && e.subType === "end");
+  if (!ended) return null;
+  // tm 1 bývá domácí; kontrola podle jména (my vs. venue)
+  const swap = isUs(t1.name) !== (f.venue === "home");
+  const [H, A] = swap ? [t2, t1] : [t1, t2];
+  const hs = +H.score, as_ = +A.score;
+  if (!Number.isFinite(hs) || !Number.isFinite(as_)) return null;
+  const per = [1, 2, 3, 4].map((p) => [+H[`p${p}_score`] || 0, +A[`p${p}_score`] || 0]);
+  const cum = [];
+  let ch = 0, ca = 0;
+  for (const [h, a] of per) { ch += h; ca += a; cum.push(ch, ca); }
+  const nums = (ch === hs && ca === as_) ? cum.slice(0, 6) : cum; // bez prodloužení poslední čtvrtina = konečné skóre
+  const us = f.venue === "home" ? hs : as_, them = f.venue === "home" ? as_ : hs;
+  return {
+    status: "final",
+    score: { home: hs, away: as_, us, them, result: us > them ? "W" : "L", margin: us - them },
+    quarters: splitQuarters(nums, hs, as_),
+  };
+}
+
+async function fillResultsFromFiba(fixtures) {
+  const now = Date.now();
+  let n = 0;
+  for (const f of fixtures) {
+    if (!f.fibaMatchId || f.status === "final") continue;
+    if (new Date(f.datetime).getTime() + 2 * 3600000 > now) continue;
+    try {
+      const res = await fetch(FIBA_DATA(f.fibaMatchId), { headers: { "User-Agent": "srsni-agent/1.0" } });
+      if (!res.ok) { console.warn(`WARN FIBA ${f.fibaMatchId}: HTTP ${res.status}`); continue; }
+      const r = resultFromFiba(f, await res.json());
+      if (r) { Object.assign(f, r); n++; }
+    } catch (e) { console.warn(`WARN FIBA ${f.fibaMatchId}: ${e.message}`); }
+  }
+  return n;
+}
+
+function latestSeasonFromFiles() {
+  if (!existsSync(OUT_DIR)) return null;
+  const keys = readdirSync(OUT_DIR).map((n) => (n.match(/^season-(\d{4})-(\d{2})\.json$/) || []).slice(1)).filter((m) => m.length);
+  if (!keys.length) return null;
+  keys.sort();
+  const [a, b] = keys[keys.length - 1];
+  return `${a}/${b}`;
+}
+
+function readSeasonFixtures(season) {
+  const file = resolve(OUT_DIR, `season-${seasonKey(season)}.json`);
+  return existsSync(file) ? JSON.parse(readFileSync(file, "utf-8")).fixtures || [] : [];
+}
+
+// Merge-not-overwrite podle nblMatchId; prázdné hodnoty z NBL nemažou už známé.
+export function mergeFixtures(existing, fixtures) {
+  const byId = new Map(existing.map((f) => [f.nblMatchId, f]));
+  for (const f of fixtures) {
+    const old = byId.get(f.nblMatchId) || {};
+    const next = { ...old, ...f };
+    // NBL web někdy FIBA odkaz / výsledek neukáže — už známé hodnoty nemazat
+    if (next.fibaMatchId == null && old.fibaMatchId != null) { next.fibaMatchId = old.fibaMatchId; next.links = old.links; }
+    if (next.status !== "final" && old.status === "final") Object.assign(next, { status: old.status, score: old.score, quarters: old.quarters });
+    byId.set(f.nblMatchId, next);
+  }
+  return [...byId.values()].sort((a, b) => a.datetime.localeCompare(b.datetime));
+}
+
 function mergeWrite(season, fixtures) {
   if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true });
   const file = resolve(OUT_DIR, `season-${seasonKey(season)}.json`);
   let existing = { fixtures: [] };
   if (existsSync(file)) existing = JSON.parse(readFileSync(file, "utf-8"));
-  const byId = new Map((existing.fixtures || []).map((f) => [f.nblMatchId, f]));
-  for (const f of fixtures) byId.set(f.nblMatchId, { ...(byId.get(f.nblMatchId) || {}), ...f });
-  const merged = [...byId.values()].sort((a, b) => a.datetime.localeCompare(b.datetime));
+  const merged = mergeFixtures(existing.fixtures || [], fixtures);
   const out = {
     season,
     team: { name: TEAM, nblId: TEAM_ID, nblSlug: "srsni-photomate-pisek" },
@@ -224,18 +312,33 @@ async function main() {
   const args = process.argv.slice(2);
   const debug = args.includes("--debug");
   const htmlArg = args.indexOf("--html");
-  let html;
+  let html = null;
   if (htmlArg !== -1) html = readFileSync(args[htmlArg + 1], "utf-8");
   else {
-    const res = await fetch(TEAM_URL, { headers: { "User-Agent": "srsni-agent/1.0" } });
-    if (!res.ok) throw new Error(`fetch ${res.status}`);
-    html = await res.text();
+    try {
+      const res = await fetch(TEAM_URL, { headers: { "User-Agent": "srsni-agent/1.0" } });
+      if (res.ok) html = await res.text();
+      else console.warn(`WARN ${TEAM_URL} -> HTTP ${res.status}`);
+    } catch (e) { console.warn(`WARN ${TEAM_URL} -> ${e.message}`); }
   }
-  const { season, fixtures } = parseTeamPage(html, debug);
-  if (debug) return;
-  if (!season) { console.error("No season heading found — aborting (won't guess season file)."); process.exit(2); }
+  let season, fixtures;
+  if (html) {
+    ({ season, fixtures } = parseTeamPage(html, debug));
+    if (debug) return;
+    if (!season) { console.error("No season heading found — aborting (won't guess season file)."); process.exit(2); }
+    fixtures = mergeFixtures(readSeasonFixtures(season), fixtures);
+  } else {
+    // NBL web nedostupný: pokračovat s uloženým rozpisem (ruční FIBA ID + výsledky z FIBA)
+    season = latestSeasonFromFiles();
+    if (!season) { console.error("NBL nedostupné a žádný uložený rozpis — končím."); process.exit(1); }
+    fixtures = readSeasonFixtures(season);
+    console.warn(`NBL nedostupné — používám uložený rozpis ${season} (${fixtures.length} zápasů)`);
+  }
+  const nOv = applyOverrides(fixtures, loadOverrides());
+  const nFiba = await fillResultsFromFiba(fixtures);
+  console.log(`ruční FIBA ID: ${nOv}, výsledky z FIBA: ${nFiba}`);
   const { file, counts } = mergeWrite(season, fixtures);
-  console.log(`[${season}] ${fixtures.length} scraped → ${file}`);
+  console.log(`[${season}] ${fixtures.length} fixtures → ${file}`);
   console.log(counts);
 }
 

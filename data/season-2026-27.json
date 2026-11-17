@@ -5,7 +5,7 @@
     "nblId": 10110,
     "nblSlug": "srsni-photomate-pisek"
   },
-  "generatedAt": "2026-10-15T16:46:11.764Z",
+  "generatedAt": "2026-11-17T10:41:37.412Z",
   "source": "https://nbl.basketball/tym/srsni-photomate-pisek",
   "counts": {
     "total": 22,
@@ -512,7 +512,7 @@
     },
     {
       "nblMatchId": 544612,
-      "fibaMatchId": null,
+      "fibaMatchId": 2943577,
       "round": "12. kolo",
       "roundNum": 12,
       "phase": "Základní část",
@@ -536,8 +536,8 @@
       "quarters": null,
       "links": {
         "nbl": "https://nbl.basketball/zapas/544612",
-        "livestats": null,
-        "fibaData": null
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2943577/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2943577/data.json"
       }
     },
     {
