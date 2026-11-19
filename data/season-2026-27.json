@@ -5,7 +5,7 @@
     "nblId": 10110,
     "nblSlug": "srsni-photomate-pisek"
   },
-  "generatedAt": "2026-11-19T06:18:13.400Z",
+  "generatedAt": "2026-11-19T12:45:09.354Z",
   "source": "https://nbl.basketball/tym/srsni-photomate-pisek",
   "counts": {
     "total": 22,
@@ -971,7 +971,7 @@
     },
     {
       "nblMatchId": 544624,
-      "fibaMatchId": null,
+      "fibaMatchId": 2947894,
       "round": "14. kolo",
       "roundNum": 14,
       "phase": "Základní část",
@@ -995,13 +995,13 @@
       "quarters": null,
       "links": {
         "nbl": "https://nbl.basketball/zapas/544624",
-        "livestats": null,
-        "fibaData": null
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2947894/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2947894/data.json"
       }
     },
     {
       "nblMatchId": 544648,
-      "fibaMatchId": null,
+      "fibaMatchId": 2952391,
       "round": "18. kolo",
       "roundNum": 18,
       "phase": "Základní část",
@@ -1025,13 +1025,13 @@
       "quarters": null,
       "links": {
         "nbl": "https://nbl.basketball/zapas/544648",
-        "livestats": null,
-        "fibaData": null
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2952391/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2952391/data.json"
       }
     },
     {
       "nblMatchId": 544630,
-      "fibaMatchId": null,
+      "fibaMatchId": 2953273,
       "round": "15. kolo",
       "roundNum": 15,
       "phase": "Základní část",
@@ -1055,13 +1055,13 @@
       "quarters": null,
       "links": {
         "nbl": "https://nbl.basketball/zapas/544630",
-        "livestats": null,
-        "fibaData": null
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2953273/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2953273/data.json"
       }
     },
     {
       "nblMatchId": 544636,
-      "fibaMatchId": null,
+      "fibaMatchId": 2956213,
       "round": "16. kolo",
       "roundNum": 16,
       "phase": "Základní část",
@@ -1085,8 +1085,8 @@
       "quarters": null,
       "links": {
         "nbl": "https://nbl.basketball/zapas/544636",
-        "livestats": null,
-        "fibaData": null
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2956213/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2956213/data.json"
       }
     },
     {
