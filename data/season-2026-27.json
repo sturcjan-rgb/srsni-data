@@ -5,14 +5,14 @@
     "nblId": 10110,
     "nblSlug": "srsni-photomate-pisek"
   },
-  "generatedAt": "2026-11-19T03:05:37.849Z",
+  "generatedAt": "2026-11-19T06:18:13.400Z",
   "source": "https://nbl.basketball/tym/srsni-photomate-pisek",
   "counts": {
     "total": 22,
     "home": 11,
     "away": 11,
-    "final": 11,
-    "scheduled": 11
+    "final": 12,
+    "scheduled": 10
   },
   "fixtures": [
     {
@@ -884,7 +884,7 @@
     },
     {
       "nblMatchId": 544618,
-      "fibaMatchId": null,
+      "fibaMatchId": 2945549,
       "round": "13. kolo",
       "roundNum": 13,
       "phase": "Základní část",
@@ -896,20 +896,77 @@
       "away": "Sršni Photomate Písek",
       "opponent": "BK GAPA Hradec Králové",
       "venue": "away",
-      "status": "scheduled",
+      "status": "final",
       "score": {
-        "home": null,
-        "away": null,
-        "us": null,
-        "them": null,
-        "result": null,
-        "margin": null
+        "home": 53,
+        "away": 84,
+        "us": 84,
+        "them": 53,
+        "result": "W",
+        "margin": 31
       },
-      "quarters": null,
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 9,
+            "away": 25
+          },
+          {
+            "home": 18,
+            "away": 23
+          },
+          {
+            "home": 11,
+            "away": 18
+          },
+          {
+            "home": 15,
+            "away": 18
+          }
+        ],
+        "regulation": [
+          {
+            "home": 9,
+            "away": 25
+          },
+          {
+            "home": 18,
+            "away": 23
+          },
+          {
+            "home": 11,
+            "away": 18
+          },
+          {
+            "home": 15,
+            "away": 18
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 9,
+            "away": 25
+          },
+          {
+            "home": 27,
+            "away": 48
+          },
+          {
+            "home": 38,
+            "away": 66
+          },
+          {
+            "home": 53,
+            "away": 84
+          }
+        ]
+      },
       "links": {
         "nbl": "https://nbl.basketball/zapas/544618",
-        "livestats": null,
-        "fibaData": null
+        "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2945549/",
+        "fibaData": "https://fibalivestats.dcd.shared.geniussports.com/data/2945549/data.json"
       }
     },
     {
