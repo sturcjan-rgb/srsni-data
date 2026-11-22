@@ -5,14 +5,14 @@
     "nblId": 10110,
     "nblSlug": "srsni-photomate-pisek"
   },
-  "generatedAt": "2026-11-22T17:42:49.898Z",
+  "generatedAt": "2026-11-22T20:27:06.805Z",
   "source": "https://nbl.basketball/tym/srsni-photomate-pisek",
   "counts": {
     "total": 22,
     "home": 11,
     "away": 11,
-    "final": 12,
-    "scheduled": 10
+    "final": 13,
+    "scheduled": 9
   },
   "fixtures": [
     {
@@ -983,16 +983,73 @@
       "away": "BK Loko BaliMania Plzeň",
       "opponent": "BK Loko BaliMania Plzeň",
       "venue": "home",
-      "status": "scheduled",
+      "status": "final",
       "score": {
-        "home": null,
-        "away": null,
-        "us": null,
-        "them": null,
-        "result": null,
-        "margin": null
+        "home": 105,
+        "away": 83,
+        "us": 105,
+        "them": 83,
+        "result": "W",
+        "margin": 22
       },
-      "quarters": null,
+      "quarters": {
+        "byPeriod": [
+          {
+            "home": 30,
+            "away": 31
+          },
+          {
+            "home": 31,
+            "away": 10
+          },
+          {
+            "home": 33,
+            "away": 20
+          },
+          {
+            "home": 11,
+            "away": 22
+          }
+        ],
+        "regulation": [
+          {
+            "home": 30,
+            "away": 31
+          },
+          {
+            "home": 31,
+            "away": 10
+          },
+          {
+            "home": 33,
+            "away": 20
+          },
+          {
+            "home": 11,
+            "away": 22
+          }
+        ],
+        "overtimes": [],
+        "otCount": 0,
+        "cumulative": [
+          {
+            "home": 30,
+            "away": 31
+          },
+          {
+            "home": 61,
+            "away": 41
+          },
+          {
+            "home": 94,
+            "away": 61
+          },
+          {
+            "home": 105,
+            "away": 83
+          }
+        ]
+      },
       "links": {
         "nbl": "https://nbl.basketball/zapas/544624",
         "livestats": "https://www.fibalivestats.com/webcast/CBFFE/2947894/",
